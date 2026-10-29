@@ -1,0 +1,35 @@
+socket/
+│
+├── index.html                  <-- Point d'entrée ultra-léger
+├── css/
+│   ├── main.css                <-- Importe les autres fichiers CSS
+│   ├── variables.css           <-- Couleurs, polices (le design system)
+│   ├── layout.css              <-- Header, Nav, structure des pages
+│   └── components.css          <-- Cartes produits, boutons, formulaires
+│
+├── js/
+│   ├── main.js                 <-- Point d'entrée, lance l'application
+│   ├── config/
+│   │   └── api.js              <-- URLs de ton VPS, endpoints
+│   │
+│   ├── services/               <-- La logique de communication
+│   │   ├── telegram.js         <-- Gère l'init de Telegram et la vérif
+│   │   └── wallet.js           <-- Gère le solde, les achats
+│   │
+│   ├── store/                  <-- L'état de l'application (State)
+│   │   └── state.js            <-- Stockage des produits, panier, etc.
+│   │
+│   ├── utils/                  <-- Fonctions utilitaires
+│   │   ├── format.js           <-- Formatage (prix, dates)
+│   │   └── icons.js            <-- Tes icônes SVG (pour ne pas surcharger)
+│   │
+│   ├── routes/                 <-- Le "Routeur" (Navigation SPA)
+│   │   └── router.js           <-- Gère le clic sur les onglets et l'affichage
+│   │
+│   └── views/                  <-- L'affichage (Le HTML généré dynamiquement)
+│       ├── shop.js             <-- Génère la vue Boutique
+│       ├── cart.js             <-- Génère la vue Panier
+│       ├── purchase.js         <-- Génère la vue Achats
+│       └── ...
+│
+└── assets/                     <-- Images, logos (si tu en as)

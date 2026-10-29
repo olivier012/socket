@@ -1,0 +1,4 @@
+/* On importe les autres fichiers CSS */
+@import url('variables.css');
+@import url('layout.css');
+@import url('components.css');
