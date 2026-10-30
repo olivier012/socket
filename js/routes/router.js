@@ -65,6 +65,8 @@ export const router = {
 
         // 3. Mettre à jour le solde
         document.getElementById('walletHeader').textContent = formatMoneyShort(store.wallet);
+        document.getElementById('availableCards').textContent =
+            `${store.products.reduce((sum, product) => sum + Number(product.count || 0), 0)} cartes disponibles`;
 
         // 4. Attacher les événements spécifiques à la vue
         this.bindEvents(routeName);
@@ -74,6 +76,25 @@ export const router = {
 
     bindEvents(routeName) {
         if (routeName === 'shop') {
+            clearInterval(this.carouselTimer);
+            const slides = [...document.querySelectorAll('.promo-slide')];
+            const dots = [...document.querySelectorAll('.promo-dot')];
+            let slideIndex = 0;
+            const showSlide = (index) => {
+                slideIndex = (index + slides.length) % slides.length;
+                slides.forEach((slide, i) => slide.classList.toggle('active', i === slideIndex));
+                dots.forEach((dot, i) => dot.classList.toggle('active', i === slideIndex));
+            };
+            dots.forEach(dot => dot.addEventListener('click', () => {
+                showSlide(Number(dot.dataset.slide));
+                clearInterval(this.carouselTimer);
+                this.carouselTimer = setInterval(() => showSlide(slideIndex + 1), 4000);
+            }));
+            if (slides.length) {
+                showSlide(0);
+                this.carouselTimer = setInterval(() => showSlide(slideIndex + 1), 4000);
+            }
+
             const searchInput = document.getElementById('search');
             if (searchInput) {
                 searchInput.addEventListener('input', () => this.navigate('shop'));

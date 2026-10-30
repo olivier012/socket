@@ -11,7 +11,9 @@
     z-index: 30;
 }
 
-.brand { display: flex; align-items: center; gap: 12px; }
+.brand { display: flex; align-items: center; gap: 8px; }
+.brand-text { display: flex; flex-direction: column; gap: 1px; }
+.brand-stock { color: var(--muted); font-size: 10px; line-height: 1.1; }
 .brand-icon {
     width: 32px; height: 32px; border-radius: 8px;
     border: 1px solid rgba(255, 230, 0, .4);
