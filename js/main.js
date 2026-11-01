@@ -1,5 +1,5 @@
 import { telegramService } from './services/telegram.js';
-import { router } from './routes/router.js?v=20261101-socket-market-v2';
+import { router } from './routes/router.js?v=20261101-socket-market-v3';
 
 function hidePreloader() {
     const pre = document.getElementById('preloader');

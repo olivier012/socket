@@ -1,4 +1,4 @@
-import { store } from '../store/state.js?v=20261101-socket-market-v2';
+import { store } from '../store/state.js?v=20261101-socket-market-v3';
 
 const eur = value => value.toFixed(2).replace('.', ',') + ' €';
 

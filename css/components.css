@@ -122,6 +122,37 @@
     background:var(--bg); color:var(--text); font-weight:700;
 }
 
+/* PANIER STYLE CARTE */
+.cart-product {
+    position: relative; overflow: hidden; border: 1px solid var(--line);
+    border-radius: var(--r); background: linear-gradient(145deg, var(--surface-light), var(--panel));
+    padding: 16px;
+}
+.cart-product:after {
+    content: ''; position: absolute; width: 150px; height: 150px; right: -95px; top: -95px;
+    border-radius: 50%; border: 1px solid rgba(192,255,21,.12); pointer-events: none;
+}
+.cart-card-head { display: grid; grid-template-columns: 1fr auto auto; align-items: start; gap: 10px; }
+.cart-card-brand { display: flex; align-items: center; gap: 9px; }
+.cart-card-brand div { display: grid; }
+.cart-card-brand small { color: var(--muted); font-size: 9px; letter-spacing: 1px; }
+.cart-card-brand strong { font-family: var(--display); font-size: 16px; line-height: 1; }
+.cart-card-brand strong span { font-style: italic; }
+.cart-mini-chip { width: 38px; height: 27px; border-radius: 7px; background: linear-gradient(135deg, var(--lime), #91c900); box-shadow: inset 0 0 0 1px rgba(0,0,0,.18); }
+.cart-card-number { font-family: 'Courier New', monospace; font-size: 18px; font-weight: 800; letter-spacing: 1px; margin-top: 4px; }
+.cart-remove { width: 30px; height: 30px; border-radius: 50%; border: 1px solid var(--line); color: var(--muted); font-size: 18px; line-height: 1; }
+.cart-card-body { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 18px; }
+.cart-card-line { min-width: 0; height: 46px; padding: 7px 9px; border-radius: 10px; border: 1px solid var(--line); background: rgba(13,14,17,.28); display: flex; flex-direction: column; justify-content: center; }
+.cart-card-line span { color: var(--muted); font-size: 10px; }
+.cart-card-line strong { margin-top: 2px; font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cart-card-footer { display: flex; align-items: end; justify-content: space-between; gap: 12px; margin-top: 14px; padding-top: 13px; border-top: 1px solid var(--line); }
+.cart-card-price { display: grid; }
+.cart-card-price small { color: var(--muted); font-size: 10px; }
+.cart-card-price strong { color: var(--lime); font-family: var(--display); font-size: 22px; }
+.cart-qty { height: 40px; padding: 5px; border-radius: 20px; border: 1px solid var(--line); background: var(--bg); }
+.cart-qty button { background: var(--surface-light); }
+.cart-qty b { min-width: 18px; text-align: center; }
+
 /* CODE CADEAU */
 .code {
     margin-top:10px; padding:10px 12px; border-radius:12px; background:var(--bg);

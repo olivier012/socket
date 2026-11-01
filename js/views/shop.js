@@ -1,5 +1,5 @@
-import { store } from '../store/state.js?v=20261101-socket-market-v2';
-import { getIcon } from '../utils/icons.js?v=20261101-socket-market-v2';
+import { store } from '../store/state.js?v=20261101-socket-market-v3';
+import { getIcon } from '../utils/icons.js?v=20261101-socket-market-v3';
 
 const eur = value => value.toFixed(2).replace('.', ',') + ' €';
 const CAT = { jeux: 'Jeux', streaming: 'Streaming', recharge: 'Recharge téléphone' };

@@ -1,9 +1,9 @@
-import { renderShop } from '../views/shop.js?v=20261101-socket-market-v2';
-import { renderCart } from '../views/cart.js?v=20261101-socket-market-v2';
-import { renderPurchases } from '../views/purchase.js?v=20261101-socket-market-v2';
-import { renderReservation, renderAffiliate, renderRewards, renderSupport, renderBalance } from '../views/others.js?v=20261101-socket-market-v2';
-import { store } from '../store/state.js?v=20261101-socket-market-v2';
-import { getIcon } from '../utils/icons.js?v=20261101-socket-market-v2';
+import { renderShop } from '../views/shop.js?v=20261101-socket-market-v3';
+import { renderCart } from '../views/cart.js?v=20261101-socket-market-v3';
+import { renderPurchases } from '../views/purchase.js?v=20261101-socket-market-v3';
+import { renderReservation, renderAffiliate, renderRewards, renderSupport, renderBalance } from '../views/others.js?v=20261101-socket-market-v3';
+import { store } from '../store/state.js?v=20261101-socket-market-v3';
+import { getIcon } from '../utils/icons.js?v=20261101-socket-market-v3';
 
 export const router = {
     currentRoute: 'shop',
