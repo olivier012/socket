@@ -1,129 +1,94 @@
-/* --- HEADER --- */
-.topbar {
-    height: 72px;
-    padding: 0 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: rgba(13, 14, 17, 0.85); /* Fond semi-transparent */
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--border);
-    position: sticky;
-    top: 0;
-    z-index: 30;
+.app {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 16px 16px calc(112px + env(safe-area-inset-bottom,0px));
 }
 
-.brand {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+/* HEADER */
+.top { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:16px; }
+.top p { font-size:13px; color:var(--muted); }
+.top h2 { font-family:var(--display); font-size:22px; font-weight:700; line-height:1.1; }
+.wallet {
+    display:flex; align-items:center; gap:8px; height:44px; padding:0 14px;
+    border-radius:22px; background:var(--panel); border:1px solid var(--line);
+    font-weight:700; font-size:15px;
 }
+.wallet svg { width:18px; height:18px; color:var(--lime); }
 
-.brand-icon {
-    width: 36px;
-    height: 36px;
-    border-radius: 10px;
-    background: var(--accent);
-    color: #000;
-    display: grid;
-    place-items: center;
-    font-weight: 900;
-    font-size: 18px;
+/* NAV BASSE */
+.nav {
+    position:fixed; left:0; right:0; bottom:0; z-index:20;
+    padding:10px 14px calc(10px + env(safe-area-inset-bottom,0px));
+    background:linear-gradient(transparent,var(--bg) 38%);
 }
-
-.brand-text {
-    display: flex;
-    flex-direction: column;
+.nav-in { max-width:480px; margin:0 auto; display:flex; gap:10px; }
+.tabs {
+    flex:1; display:grid; grid-template-columns:repeat(4,1fr);
+    background:var(--panel); border-radius:26px; padding:6px; border:1px solid var(--line);
 }
-
-.brand-name {
-    font-size: 18px;
-    font-weight: 800;
-    color: var(--text-main);
-    letter-spacing: -0.5px;
+.tab {
+    position:relative; display:flex; flex-direction:column; align-items:center; gap:3px;
+    padding:7px 0 6px; border-radius:20px; color:var(--muted); font-size:11px; font-weight:500;
 }
-
-.brand-stock {
-    font-size: 11px;
-    color: var(--text-muted);
+.tab svg { width:22px; height:22px; }
+.tab.on { background:rgba(192,255,21,.12); color:var(--lime); }
+.tab .n {
+    position:absolute; top:2px; right:18%; min-width:16px; height:16px;
+    border-radius:8px; background:var(--lime); color:var(--bg);
+    font-size:10px; font-weight:700; display:grid; place-items:center; padding:0 4px;
 }
-
-/* Bouton Solde */
-.header-balance {
-    height: 40px;
-    padding: 0 14px;
-    border-radius: 20px; /* Forme pilule */
-    border: 1px solid var(--border);
-    background: var(--surface);
-    color: var(--text-main);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 14px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: border-color 0.2s;
+.plus {
+    width:64px; border-radius:26px; background:var(--lime); color:var(--bg);
+    display:grid; place-items:center;
 }
+.plus svg { width:28px; height:28px; transition:transform .25s; }
+.plus.open svg { transform:rotate(45deg); }
 
-.header-balance:hover {
-    border-color: var(--accent);
+/* MENU PLUS */
+.more {
+    position:fixed; left:0; right:0; bottom:calc(92px + env(safe-area-inset-bottom,0px));
+    z-index:19; padding:0 14px; display:none;
 }
-
-.header-balance svg {
-    width: 16px;
-    height: 16px;
-    color: var(--accent);
+.more.open { display:block; }
+.more-in {
+    max-width:480px; margin:0 auto; display:grid; grid-template-columns:repeat(4,1fr);
+    gap:6px; background:var(--panel); border:1px solid var(--line);
+    border-radius:22px; padding:8px; box-shadow:0 18px 40px rgba(0,0,0,.5);
 }
-
-.content {
-    width: min(100%, 760px);
-    margin: auto;
-    padding: 20px 16px;
-    min-height: 80vh;
+.more.open .more-in { animation:pop .2s ease-out; }
+@keyframes pop { from{opacity:0;transform:translateY(8px)} }
+.more button {
+    display:flex; flex-direction:column; align-items:center; gap:6px;
+    padding:12px 0 10px; border-radius:16px; color:var(--text); font-size:12px; font-weight:500;
 }
+.more button:active { background:var(--bg); }
+.more svg { width:24px; height:24px; color:var(--lime); }
 
-/* --- BOTTOM NAV --- */
-.bottom-nav {
-    position: fixed;
-    z-index: 50;
-    left: 12px;
-    right: 12px;
-    bottom: 12px; /* Effet flottant */
-    height: var(--nav-height);
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 8px;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+/* SHEET RECHARGE */
+.sheet { position:fixed; inset:0; z-index:40; background:rgba(0,0,0,.6); display:none; align-items:flex-end; }
+.sheet.open { display:flex; }
+.sheet-in {
+    width:100%; max-width:480px; margin:0 auto; background:var(--panel);
+    border-radius:26px 26px 0 0; padding:22px 20px calc(24px + env(safe-area-inset-bottom,0px));
 }
+.sheet h3 { font-family:var(--display); font-size:22px; margin-bottom:4px; }
+.sheet p { color:var(--muted); font-size:13px; margin-bottom:16px; }
+.amounts { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
+.amounts button { height:48px; border-radius:14px; background:var(--bg); font-weight:700; }
+.amounts button:active { background:var(--lime); color:var(--bg); }
+.close { width:100%; height:46px; margin-top:12px; color:var(--muted); }
 
-.nav-item {
-    border: 0;
-    background: transparent;
-    color: var(--text-muted);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
-    font-size: 9px;
-    cursor: pointer;
-    border-radius: 12px;
-    transition: all 0.2s;
+/* TOAST */
+.toast {
+    position:fixed; left:50%; bottom:calc(104px + env(safe-area-inset-bottom,0px));
+    transform:translate(-50%,20px); opacity:0; z-index:60;
+    background:var(--text); color:var(--bg); padding:11px 18px;
+    border-radius:22px; font-weight:700; font-size:14px;
+    transition:.25s; pointer-events:none; white-space:nowrap;
 }
+.toast.show { opacity:1; transform:translate(-50%,0); }
 
-.nav-item svg {
-    width: 20px;
-    height: 20px;
-}
-
-.nav-item.active {
-    color: var(--accent);
-    background: var(--accent-soft); /* Petit fond vert transparent */
-}
-
-.nav-item.active:before {
-    display: none; /* On retire la barre du haut, le fond suffit */
+@media (prefers-reduced-motion:reduce) {
+    * { animation:none!important; transition:none!important; }
+    .pre-bar:before { transform:scaleX(1); }
 }

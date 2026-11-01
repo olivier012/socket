@@ -1,309 +1,149 @@
-/* --- PRELOADER --- */
-.preloader {
-    background: var(--bg);
-    /* ... (garder le reste similaire ou simplifier) ... */
+/* PRELOADER */
+.pre {
+    position:fixed; inset:0; z-index:50; background:var(--bg);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:48px; padding:32px; transition:opacity .5s, visibility .5s;
 }
-.preloader-logo {
-    background: var(--accent);
-    color: #000;
+.pre.out { opacity:0; visibility:hidden; }
+.pre-card {
+    width:240px; height:150px; border-radius:20px; background:var(--lime); color:var(--bg);
+    padding:18px; display:flex; flex-direction:column; justify-content:space-between;
+    transform:rotate(-9deg); box-shadow:0 30px 60px rgba(192,255,21,.18);
+    animation:float 2.4s ease-in-out infinite;
+}
+.pre-card small { font-size:12px; font-weight:500; opacity:.7; }
+.pre-card b { font-family:var(--display); font-size:32px; display:block; line-height:1.1; }
+.pre-card i { font-family:var(--display); font-style:italic; font-weight:800; align-self:flex-end; font-size:20px; }
+@keyframes float { 50%{transform:rotate(-6deg) translateY(-10px)} }
+.pre h1 { font-family:var(--display); font-size:28px; line-height:1.15; text-align:left; max-width:280px; font-weight:700; }
+.pre-bar {
+    width:min(280px,100%); height:44px; border-radius:22px; border:1px solid var(--line);
+    background:var(--panel); position:relative; overflow:hidden;
+    display:grid; place-items:center; color:var(--muted); font-size:14px;
+}
+.pre-bar:before {
+    content:""; position:absolute; inset:0; background:rgba(192,255,21,.16);
+    transform-origin:left; transform:scaleX(0); animation:fill 1.7s ease-out forwards;
+}
+.pre-bar span { position:relative; }
+@keyframes fill { to{transform:scaleX(1)} }
+
+/* BANNIÈRE / CARROUSEL */
+.banner { position:relative; height:168px; border-radius:var(--r); overflow:hidden; background:var(--panel); }
+.slide {
+    position:absolute; inset:0; padding:20px; display:flex; flex-direction:column;
+    justify-content:flex-end; opacity:0; transition:opacity .5s;
+}
+.slide.on { opacity:1; }
+.slide h3 { font-family:var(--display); font-size:24px; line-height:1.1; max-width:230px; font-weight:800; }
+.slide p { color:var(--muted); font-size:13px; margin-top:6px; }
+.slide .art {
+    position:absolute; right:-18px; top:18px; width:132px; height:84px;
+    border-radius:14px; transform:rotate(10deg); display:grid; place-items:center;
+    font-family:var(--display); font-weight:800; font-size:26px; color:var(--bg);
+}
+.dots { position:absolute; right:14px; top:14px; display:flex; flex-direction:column; gap:5px; }
+.dots button { width:6px; height:6px; border-radius:3px; background:rgba(255,255,255,.35); transition:.25s; padding:0; }
+.dots button.on { height:18px; background:var(--lime); }
+
+/* NOUVEAUTÉS + RECHERCHE */
+.row { display:flex; gap:10px; margin-top:12px; }
+.news {
+    flex:1; display:flex; align-items:center; justify-content:space-between; gap:10px;
+    padding:12px 16px; border-radius:var(--r); background:var(--panel); text-align:left;
+}
+.news b { display:block; font-size:14px; }
+.news span { font-size:12px; color:var(--muted); }
+.news em { font-style:normal; color:var(--lime); font-weight:700; font-size:14px; }
+.sq { width:56px; border-radius:var(--r); background:var(--panel); display:grid; place-items:center; }
+.sq svg { width:22px; height:22px; }
+.searchbar { display:none; margin-top:10px; }
+.searchbar.open { display:block; }
+.searchbar input {
+    width:100%; height:46px; border-radius:14px; border:1px solid var(--line);
+    background:var(--panel); color:var(--text); padding:0 16px; font:inherit;
+}
+.searchbar input::placeholder { color:var(--muted); }
+
+/* FILTRE AFFICHAGE */
+.view { display:flex; align-items:center; gap:8px; margin:16px 0 12px; font-size:13px; color:var(--muted); }
+.view button {
+    height:32px; padding:0 13px; border-radius:16px; background:var(--panel);
+    color:var(--muted); font-size:13px; font-weight:500;
+}
+.view button.on { background:var(--lime); color:var(--bg); font-weight:700; }
+
+/* CARTES PRODUIT */
+.list { display:grid; gap:12px; }
+.card {
+    border-radius:var(--r); background:var(--panel); padding:16px;
+    display:grid; grid-template-columns:auto 1fr auto; gap:4px 14px; align-items:center;
+}
+.logo {
+    width:56px; height:56px; border-radius:14px; display:grid; place-items:center;
+    font-family:var(--display); font-weight:800; font-size:22px; color:var(--bg);
+}
+.card h4 { font-family:var(--display); font-size:18px; font-weight:700; line-height:1.15; }
+.card .sub { font-size:12px; color:var(--muted); margin-top:2px; }
+.buy {
+    height:40px; padding:0 14px; border-radius:20px; background:var(--lime);
+    color:var(--bg); font-weight:700; font-size:14px; white-space:nowrap;
+}
+.buy:active { transform:scale(.96); }
+.when { font-size:11px; color:var(--muted); text-align:center; margin-top:5px; }
+.info {
+    grid-column:1/-1; margin-top:10px; padding-top:12px; border-top:1px solid var(--line);
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    font-size:13px; color:var(--muted);
+}
+.info span { display:inline-flex; align-items:center; gap:6px; }
+.info svg { width:15px; height:15px; }
+.price { font-family:var(--display); font-weight:800; font-size:22px; color:var(--text); }
+.qty { display:inline-flex; align-items:center; gap:10px; }
+.qty button { width:30px; height:30px; border-radius:15px; background:var(--bg); font-weight:700; }
+
+/* TITRES / VUES VIDES */
+.title { font-family:var(--display); font-size:26px; font-weight:800; margin:6px 0 14px; }
+.empty { text-align:center; color:var(--muted); padding:56px 20px; }
+.empty b { display:block; color:var(--text); font-size:18px; margin-bottom:6px; font-family:var(--display); }
+.empty button { margin-top:18px; }
+
+/* PANIER */
+.summary {
+    position:sticky; bottom:calc(98px + env(safe-area-inset-bottom,0px));
+    margin-top:14px; padding:14px 16px; border-radius:var(--r);
+    background:var(--lime); color:var(--bg);
+    display:flex; align-items:center; justify-content:space-between;
+}
+.summary small { opacity:.7; font-size:12px; display:block; }
+.summary strong { font-family:var(--display); font-size:22px; }
+.summary button {
+    height:42px; padding:0 18px; border-radius:21px;
+    background:var(--bg); color:var(--text); font-weight:700;
 }
 
-/* --- RECHERCHE --- */
-.search-box {
-    height: 48px;
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    background: var(--surface);
-    padding: 0 16px;
+/* CODE CADEAU */
+.code {
+    margin-top:10px; padding:10px 12px; border-radius:12px; background:var(--bg);
+    font-family:"Courier New",monospace; letter-spacing:1px; font-size:14px;
+    display:flex; justify-content:space-between; align-items:center; grid-column:1/-1;
 }
-.search-box input {
-    color: var(--text-main);
-    font-size: 14px;
-}
-.search-box svg {
-    color: var(--text-muted);
+.code button {
+    color:var(--lime); font-family:var(--body); font-size:13px; font-weight:700; letter-spacing:0;
 }
 
-/* --- CARROUSEL (Nouveau Design) --- */
-.promo-carousel {
-    height: 140px;
-    border-radius: 16px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    margin-bottom: 20px;
-    position: relative;
+/* FORMULAIRE RÉSERVATION */
+.rsv { display:grid; gap:10px; }
+.rsv label { font-size:13px; color:var(--muted); }
+.rsv select, .rsv input {
+    width:100%; height:46px; margin-top:6px; border-radius:14px;
+    border:1px solid var(--line); background:var(--panel); color:var(--text);
+    padding:0 14px; font:inherit;
 }
 
-.promo-slide {
-    /* On va utiliser le HTML/CSS custom qu'on a défini avant, 
-       mais adapté à la nouvelle palette */
-    display: flex;
-    align-items: center;
-    padding: 20px;
-    background: linear-gradient(135deg, var(--surface) 0%, #15171A 100%);
-}
-
-.promo-badge {
-    background: var(--accent);
-    color: #000;
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    font-size: 28px;
-}
-
-.promo-card-visual {
-    background: var(--accent);
-    /* ... */
-}
-
-/* --- CARTES PRODUITS (Le gros changement) --- */
-.product-card {
-    position: relative;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 16px;
-    margin-bottom: 12px;
-    box-shadow: none; /* On retire les grosses ombres pour un look plat */
-    transition: transform 0.2s, border-color 0.2s;
-}
-
-.product-card:hover {
-    border-color: var(--text-muted);
-}
-
-/* Bordures colorées subtiles en haut */
-.product-card.credit { border-top: 2px solid var(--accent); }
-.product-card.debit { border-top: 2px solid var(--text-muted); }
-
-.card-head {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 16px;
-}
-
-/* Puce de carte */
-.chip {
-    width: 40px;
-    height: 28px;
-    border-radius: 6px;
-    background: linear-gradient(135deg, #2a2d33, #1C1E22);
-    border: 1px solid #333;
-    position: relative;
-}
-/* Petit reflet sur la puce */
-.chip::after {
-    content: '';
-    position: absolute;
-    top: 4px; left: 4px; right: 4px; bottom: 4px;
-    border: 1px solid rgba(255,255,255,0.05);
-    border-radius: 3px;
-}
-
-.last4 {
-    font-family: "Courier New", monospace;
-    font-size: 20px;
-    font-weight: 700;
-    color: var(--text-main);
-    letter-spacing: 2px;
-}
-
-.product-price {
-    font-size: 22px;
-    font-weight: 800;
-    color: var(--accent);
-}
-
-.old-price {
-    font-size: 12px;
-    color: var(--text-muted);
-    text-decoration: line-through;
-}
-
-/* Métadonnées (Grid) */
-.card-meta {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
-    margin-bottom: 16px;
-}
-
-.meta {
-    background: rgba(255,255,255,0.03); /* Fond très subtil */
-    border: 1px solid transparent;
-    border-radius: 8px;
-    padding: 8px;
-    display: flex;
-    flex-direction: column; /* Icône au dessus du texte pour gagner de la place */
-    align-items: flex-start;
-    gap: 4px;
-    font-size: 10px;
-    color: var(--text-muted);
-}
-
-.meta svg {
-    width: 14px;
-    height: 14px;
-    color: var(--accent);
-}
-
-.meta.highlight {
-    background: var(--accent-soft);
-    color: var(--text-main);
-    border-color: rgba(192, 255, 21, 0.2);
-}
-
-.meta.flag svg { color: var(--text-main); }
-
-/* Pied de carte (Bouton Ajouter) */
-.card-footer-separate {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-top: 12px;
-    border-top: 1px solid var(--border);
-    /* On enlève le position absolute pour que ça coule naturellement */
-    position: static;
-    height: auto;
-    background: transparent;
-}
-
-.type-footer {
-    font-size: 12px;
-    color: var(--text-muted);
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
-
-.add {
-    width: 40px;
-    height: 40px;
-    border-radius: 12px; /* Carré arrondi au lieu de rond */
-    background: var(--accent);
-    color: #000;
-    font-size: 24px;
-    font-weight: 800;
-    border: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: transform 0.1s;
-}
-
-.add:active {
-    transform: scale(0.95);
-}
-
-/* --- BOUTONS D'ACTION --- */
-.validate-btn, .cart-add-btn {
-    background: var(--accent);
-    color: #000;
-    border-radius: 10px;
-    font-weight: 800;
-    height: 44px;
-    border: none;
-    padding: 0 20px;
-    cursor: pointer;
-}
-
-.remove-btn {
-    background: transparent;
-    border: 1px solid var(--border);
-    color: var(--text-muted);
-    border-radius: 10px;
-    height: 44px;
-    padding: 0 20px;
-    font-weight: 700;
-    cursor: pointer;
-}
-.remove-btn:hover { border-color: #ff4444; color: #ff4444; }
-
-/* --- PANIER RESUME --- */
-.cart-summary {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 20px;
-    bottom: 90px; /* Au dessus de la nav */
-}
-
-/* Style spécifique pour le carrousel dessiné */
-.promo-slide {
-    background: var(--surface); /* Fond sombre */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 15px;
-}
-
-.promo-content {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    width: 100%;
-}
-
-.promo-badge {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background: var(--accent); /* Vert acide */
-    color: #000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 24px;
-    font-weight: 900;
-    flex-shrink: 0;
-}
-
-.promo-text h3 {
-    font-size: 16px;
-    color: var(--text-main);
-    margin: 0;
-    font-weight: 700;
-}
-
-.promo-text p {
-    font-size: 11px;
-    color: var(--text-muted);
-    margin: 2px 0 0;
-}
-
-/* La petite carte jaune à droite */
-.promo-card-visual {
-    width: 80px;
-    height: 50px;
-    background: var(--accent); /* Vert acide, comme sur votre dessin */
-    border-radius: 8px;
-    position: relative;
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
-    padding-bottom: 6px;
-    box-shadow: 0 4px 12px rgba(192, 255, 21, 0.2);
-    flex-shrink: 0;
-    margin-left: auto; /* Pousse la carte à droite */
-}
-
-.mini-chip {
-    position: absolute;
-    top: 8px;
-    left: 8px;
-    width: 22px;
-    height: 16px;
-    background: #333;
-    border-radius: 3px;
-    opacity: 0.8;
-}
-
-.promo-card-visual span {
-    font-size: 8px;
-    font-weight: 900;
-    color: #000;
-    letter-spacing: 0.5px;
-}
+/* FAQ */
+.faq { padding:14px 16px; border-radius:var(--r); background:var(--panel); }
+.faq summary { font-weight:700; cursor:pointer; }
+.faq p { color:var(--muted); font-size:13px; margin-top:8px; line-height:1.5; }
+.stat { display:block; }
+.stat .sub { font-size:12px; color:var(--muted); }

@@ -1,110 +1,68 @@
 import { store } from '../store/state.js';
 import { getIcon } from '../utils/icons.js';
+import { eur } from '../utils/format.js';
+
+const CAT = { jeux: 'Jeux', streaming: 'Streaming', recharge: 'Recharge téléphone' };
+
+function productCard(p) {
+    return `<article class="card">
+        <div class="logo" style="background:${p.color}">${p.ini}</div>
+        <div><h4>${p.name}</h4><div class="sub">${CAT[p.cat] || p.cat}, valeur ${eur(p.value)}</div></div>
+        <div><button class="buy" data-add="${p.id}">+ Ajouter</button><div class="when">${p.ago}</div></div>
+        <div class="info">
+            <span>${getIcon('globe')}${p.zone}</span>
+            <span>${getIcon('bolt')}Livraison immédiate</span>
+            <span class="price">${eur(p.price)}</span>
+        </div>
+    </article>`;
+}
 
 export function renderShop() {
-    const q = document.getElementById('search')?.value.toLowerCase().trim() || '';
-    
-    const list = store.products.filter(p => {
-        const matchFilter = store.currentFilter === 'all' || String(p.count) === store.currentFilter;
-        const matchSearch = `${p.card} ${p.network} ${p.user} ${p.country} ${p.type}`.toLowerCase().includes(q);
-        return matchFilter && matchSearch;
-    });
-
-    const productsHtml = list.map(p => `
-        <article class="product-card ${p.type.toLowerCase()}">
-            <div class="card-head">
-                <div class="chip"></div>
-                <div class="visa-line"><small>VISA</small><span class="last4">${p.card}</span></div>
-                <div class="price">
-                    <span class="old-price">${p.old}.00€</span>
-                    <strong class="product-price">${p.price.toFixed(2)}€</strong>
-                </div>
-            </div>
-            <div class="card-meta">
-                <div class="meta">${getIcon('bank')}<span>${p.network}</span></div>
-                <div class="meta">${getIcon('user')}<span>${p.user}</span></div>
-                <div class="meta">${getIcon('clock')}<span>${p.age}</span></div>
-                <div class="meta flag"><span class="fr"></span><span>${p.country}</span></div>
-                <div class="meta highlight">${getIcon('building')}<span>${p.bank2}</span></div>
-                <div class="meta">${getIcon('phone')}<span>${p.device}</span></div>
-                <div class="meta highlight">${getIcon('shield')}<span>${p.os}</span></div>
-            </div>
-            <div class="card-footer-separate">
-                <div class="type-footer">${p.type} ${getIcon('time')} 13 h</div>
-                <button class="add" data-id="${p.id}">+</button>
-            </div>
-        </article>
-    `).join('') || '<div class="empty"><strong>Aucun résultat</strong>Essayez une autre recherche.</div>';
+    const q = store.q.toLowerCase().trim();
+    const all = store.products.filter(p =>
+        (p.name + ' ' + p.cat + ' ' + p.zone).toLowerCase().includes(q)
+    );
+    const list = all.slice(0, store.limit);
 
     return `
-        <section id="page-shop" class="page">
-            <div class="page-heading">
-                <div>
-                    <span>Marché disponible</span>
-                    <h1>Cartes</h1>
-                </div>
-                <span>${list.length} résultat${list.length > 1 ? 's' : ''}</span>
-            </div>
-            // Dans shop.js, remplacez la section <div class="promo-carousel">...</div> par :
+        <div class="top">
+            <div><p>Bienvenue sur</p><h2>Socket Market</h2></div>
+            <button class="wallet" id="walletBtn" aria-label="Recharger mon solde">
+                ${getIcon('wallet')}<span>${eur(store.wallet)}</span>
+            </button>
+        </div>
 
-<div class="promo-carousel" aria-label="Promotions">
-    <div class="promo-track">
-        <!-- Slide 1 -->
-        <article class="promo-slide active">
-            <div class="promo-content">
-                <div class="promo-badge">%</div>
-                <div class="promo-text">
-                    <h3>Cartes Premium</h3>
-                    <p>Disponible maintenant</p>
+        <div class="banner">
+            ${store.slides.map((x, i) => `
+                <div class="slide ${i === store.slide ? 'on' : ''}">
+                    <div class="art" style="background:${x.c}">${x.a}</div>
+                    <h3>${x.t}</h3><p>${x.p}</p>
                 </div>
-                <div class="promo-card-visual">
-                    <div class="mini-chip"></div>
-                    <span>SOCKET</span>
-                </div>
+            `).join('')}
+            <div class="dots">
+                ${store.slides.map((_, i) => `<button class="${i === store.slide ? 'on' : ''}" data-slide="${i}" aria-label="Annonce ${i + 1}"></button>`).join('')}
             </div>
-        </article>
-        <!-- Slide 2 -->
-        <article class="promo-slide">
-            <div class="promo-content">
-                <div class="promo-badge">%</div>
-                <div class="promo-text">
-                    <h3>Livraison Rapide</h3>
-                    <p>Disponible maintenant</p>
-                </div>
-                <div class="promo-card-visual">
-                    <div class="mini-chip"></div>
-                    <span>SOCKET</span>
-                </div>
-            </div>
-        </article>
-        <!-- Slide 3 -->
-        <article class="promo-slide">
-            <div class="promo-content">
-                <div class="promo-badge">%</div>
-                <div class="promo-text">
-                    <h3>Offres Exclusives</h3>
-                    <p>Disponible maintenant</p>
-                </div>
-                <div class="promo-card-visual">
-                    <div class="mini-chip"></div>
-                    <span>SOCKET</span>
-                </div>
-            </div>
-        </article>
-    </div>
-    <div class="promo-dots" aria-label="Choisir une publicité">
-        <button class="promo-dot active" data-slide="0"></button>
-        <button class="promo-dot" data-slide="1"></button>
-        <button class="promo-dot" data-slide="2"></button>
-    </div>
-</div>
-            <div class="search-row">
-                <label class="search-box">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
-                    <input id="search" type="search" placeholder="Filtrer les cartes..." value="${q}">
-                </label>
-            </div>
-            <div class="products">${productsHtml}</div>
-        </section>
+        </div>
+
+        <div class="row">
+            <button class="news" id="seeNew">
+                <div><b>Nouvelles cartes</b><span>${store.products.length} cartes disponibles</span></div>
+                <em>Voir</em>
+            </button>
+            <button class="sq" id="searchBtn" aria-label="Rechercher">${getIcon('search')}</button>
+        </div>
+
+        <div class="searchbar ${store.open ? 'open' : ''}" id="sbar">
+            <input id="q" type="search" placeholder="Steam, Netflix, Orange…" value="${store.q.replace(/"/g, '&quot;')}">
+        </div>
+
+        <div class="view">
+            <span>Affichage</span>
+            ${[30, 60, 100, 0].map(n => `<button class="${store.limit === (n || 999) ? 'on' : ''}" data-limit="${n || 999}">${n || 'Tout'}</button>`).join('')}
+        </div>
+
+        <div class="list" id="plist">
+            ${list.map(productCard).join('') || `<div class="empty"><b>Aucun résultat</b>Essayez le nom d’une marque ou d’un opérateur.</div>`}
+        </div>
     `;
 }

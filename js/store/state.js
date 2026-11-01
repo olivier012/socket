@@ -1,46 +1,61 @@
 export const store = {
-    wallet: 2.80,
-    cart: [],
-    purchases: [],
-    currentFilter: 'all',
+    wallet: 24,
+    limit: 30,
+    q: '',
+    open: false,
+    cart: [],       // [{id, qty}]
+    orders: [],     // [{id, code, time}]
+    rsv: [],        // [{id, date}]
+    slide: 0,
+    timer: null,
+
     products: [
-        { id: 1, card: '446623', network: 'AMZ-PRIME', user: 'louka', age: '18 ans', bank2: 'REVOLUT', country: 'France', device: 'iPhone', os: 'iOS 18.7', old: 15, price: 4.50, type: 'Credit', count: 30 },
-        { id: 2, card: '446623', network: 'AMZ-PRIME', user: 'Rouan', age: '22 ans', bank2: 'BFDBANK, S.A.', country: 'France', device: 'iPhone', os: 'iOS 18.7', old: 15, price: 1.20, type: 'Debit', count: 60 },
-        { id: 3, card: '497669', network: 'AMZ-PRIME', user: 'marie', age: '27 ans', bank2: 'CLASSIC', country: 'France', device: 'iPhone', os: 'iOS 18.7', old: 16, price: 5.20, type: 'Credit', count: 120 }
+        { id:1, name:'Steam', cat:'jeux', value:20, price:20, color:'#C0FF15', ini:'S', zone:'France', ago:'il y a 3 min' },
+        { id:2, name:'PlayStation Store', cat:'jeux', value:25, price:25, color:'#FFFFFF', ini:'P', zone:'France', ago:'il y a 7 min' },
+        { id:3, name:'Netflix', cat:'streaming', value:15, price:15, color:'#8E929A', ini:'N', zone:'Europe', ago:'il y a 16 min' },
+        { id:4, name:'Spotify Premium', cat:'streaming', value:30, price:29, color:'#C0FF15', ini:'S', zone:'Europe', ago:'il y a 21 min' },
+        { id:5, name:'Orange recharge', cat:'recharge', value:10, price:10, color:'#FFFFFF', ini:'O', zone:'Mali', ago:'il y a 28 min' },
+        { id:6, name:'Moov Africa recharge', cat:'recharge', value:5, price:5, color:'#8E929A', ini:'M', zone:'Mali', ago:'il y a 35 min' },
+        { id:7, name:'Google Play', cat:'jeux', value:50, price:48, color:'#C0FF15', ini:'G', zone:'International', ago:'il y a 42 min' },
+        { id:8, name:'Disney+', cat:'streaming', value:25, price:24, color:'#FFFFFF', ini:'D', zone:'Europe', ago:'il y a 1 h' }
     ],
 
-    addToCart(product) {
-        const cartTotal = this.cart.reduce((sum, item) => sum + item.price, 0);
-        if (product.price + cartTotal > this.wallet) {
-            return { success: false, message: 'Solde portefeuille insuffisant' };
-        }
-        if (!this.cart.find(p => p.id === product.id)) {
-            this.cart.push(product);
-            return { success: true, message: 'Carte ajoutée au panier' };
-        }
-        return { success: false, message: 'Déjà dans le panier' };
+    slides: [
+        { t:'Cartes cadeaux officielles', p:'Codes livrés tout de suite après l’achat', c:'#C0FF15', a:'Socket' },
+        { t:'Recharges téléphone', p:'Orange et Moov Africa, sans frais cachés', c:'#FFFFFF', a:'+10 €' },
+        { t:'Jeux et streaming', p:'Steam, PlayStation, Netflix, Spotify', c:'#8E929A', a:'Play' }
+    ],
+
+    addToCart(id) {
+        const item = this.cart.find(c => c.id === id);
+        if (item) item.qty++;
+        else this.cart.push({ id, qty: 1 });
+        return { success: true, message: 'Ajouté au panier' };
     },
 
-    removeFromCart(index) {
-        this.cart.splice(index, 1);
+    removeFromCart(id) {
+        const item = this.cart.find(c => c.id === id);
+        if (item && --item.qty <= 0) {
+            this.cart = this.cart.filter(c => c !== item);
+        }
     },
 
-    validatePurchase(index = null) {
-        const itemsToBuy = index !== null ? [this.cart[index]] : [...this.cart];
-        const total = itemsToBuy.reduce((sum, p) => sum + p.price, 0);
+    validatePurchase() {
+        const total = this.cart.reduce((s, i) => s + this.products.find(p => p.id === i.id).price * i.qty, 0);
+        if (total > this.wallet) return { success: false, message: 'Solde insuffisant' };
 
-        if (total > this.wallet) return { success: false };
-
+        const time = new Date().toLocaleTimeString('fr-FR', { hour:'2-digit', minute:'2-digit' });
+        this.cart.forEach(i => {
+            for (let k = 0; k < i.qty; k++) {
+                this.orders.unshift({ id: i.id, code: this.generateCode(), time });
+            }
+        });
         this.wallet -= total;
-        const now = new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
-        
-        itemsToBuy.forEach(p => this.purchases.unshift({ ...p, time: now }));
-
-        if (index !== null) {
-            this.cart.splice(index, 1);
-        } else {
-            this.cart = [];
-        }
+        this.cart = [];
         return { success: true };
+    },
+
+    generateCode() {
+        return Array.from({ length: 3 }, () => Math.random().toString(36).slice(2, 6).toUpperCase()).join('-');
     }
 };

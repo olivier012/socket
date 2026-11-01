@@ -1,26 +1,22 @@
 import { store } from '../store/state.js';
+import { eur } from '../utils/format.js';
 
 export function renderPurchases() {
-    if (!store.purchases.length) {
-        return `
-            <section id="page-purchase" class="page">
-                <div class="empty"><strong>Aucun achat</strong>Vos cartes validées apparaîtront ici.</div>
-            </section>
-        `;
+    if (!store.orders.length) {
+        return `<h1 class="title">Achats</h1>
+        <div class="empty"><b>Aucun achat pour l’instant</b>Vos codes apparaîtront ici après le paiement.<br>
+        <button class="buy" data-go="shop">Voir les cartes</button></div>`;
     }
-
-    const itemsHtml = store.purchases.map(p => `
-        <article class="product-card ${p.type.toLowerCase()}" style="min-height:190px;margin-bottom:10px">
-            <div class="card-head">
-                <div class="chip"></div>
-                <div class="visa-line"><small>VISA</small><span class="last4">${p.card}</span></div>
-                <div class="price"><strong class="product-price">${p.price.toFixed(2)}€</strong></div>
-            </div>
-            <div class="cart-item-actions">
-                <span class="validate-btn" style="display:flex;align-items:center;height:38px">Validé • ${p.time}</span>
-            </div>
-        </article>
-    `).join('');
-
-    return `<section id="page-purchase" class="page">${itemsHtml}</section>`;
+    return `<h1 class="title">Achats</h1>
+    <div class="list">
+        ${store.orders.map(o => {
+            const p = store.products.find(p => p.id === o.id);
+            return `<article class="card">
+                <div class="logo" style="background:${p.color}">${p.ini}</div>
+                <div><h4>${p.name}</h4><div class="sub">${eur(p.value)}, acheté à ${o.time}</div></div>
+                <div class="price">${eur(p.price)}</div>
+                <div class="code"><span>${o.code}</span><button data-copy="${o.code}">Copier</button></div>
+            </article>`;
+        }).join('')}
+    </div>`;
 }

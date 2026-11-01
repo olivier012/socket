@@ -5,3 +5,5 @@ export function formatMoney(value) {
 export function formatMoneyShort(value) {
     return value.toFixed(2).replace('.', ',') + '€';
 }
+
+export const eur = formatMoney;

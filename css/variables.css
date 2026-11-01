@@ -1,43 +1,42 @@
 :root {
-    /* NOUVELLE PALETTE */
-    --bg: #0D0E11;          /* Fond très sombre */
-    --surface: #1C1E22;     /* Cartes et conteneurs */
-    --surface-light: #25282D; /* Pour les éléments imbriqués */
-    
-    --accent: #C0FF15;      /* Vert acide principal */
-    --accent-soft: rgba(192, 255, 21, 0.15); /* Pour les fonds transparents */
-    
+    /* PALETTE SOCKET MARKET */
+    --bg: #0D0E11;
+    --panel: #1C1E22;
+    --surface: #1C1E22;
+    --surface-light: #25282D;
+    --text: #FFFFFF;
     --text-main: #FFFFFF;
+    --muted: #8E929A;
     --text-muted: #8E929A;
-    
-    --border: #2A2D33;      /* Bordures subtiles */
-    
-    --radius: 12px;         /* Coins plus arrondis pour le moderne */
+    --line: rgba(255,255,255,.08);
+    --border: rgba(255,255,255,.08);
+    --lime: #C0FF15;
+    --accent: #C0FF15;
+    --accent-soft: rgba(192,255,21,.15);
+    --r: 18px;
+    --radius: 18px;
     --nav-height: 72px;
-    
-    /* Anciennes variables mappées pour éviter de tout casser */
+
+    /* TYPO */
+    --display: "Bricolage Grotesque","Trebuchet MS",sans-serif;
+    --body: "DM Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+
+    /* ALIAS ANCIENS */
     --yellow: var(--accent);
-    --line: var(--border);
-    --muted: var(--text-muted);
 }
 
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: "Manrope", Inter, -apple-system, sans-serif;
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--body);
+    -webkit-tap-highlight-color: transparent;
 }
-
 body {
     min-height: 100vh;
-    color: var(--text-main);
-    background-color: var(--bg);
-    padding-bottom: calc(var(--nav-height) + 20px);
+    padding-top: env(safe-area-inset-top,0px);
     overflow-x: hidden;
-    -webkit-font-smoothing: antialiased;
+    padding-bottom: calc(var(--nav-height) + 40px);
 }
-
-/* Utilitaires */
-.text-accent { color: var(--accent); }
-.text-muted { color: var(--text-muted); }
-.bg-surface { background-color: var(--surface); }
+button { font: inherit; color: inherit; border: 0; background: none; cursor: pointer; }
+button:focus-visible, input:focus-visible { outline: 2px solid var(--lime); outline-offset: 2px; }
