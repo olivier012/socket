@@ -77,12 +77,12 @@
 .list { display:grid; gap:12px; }
 .card {
     border-radius:var(--r); background:var(--panel); padding:16px;
-    display:grid; grid-template-columns:auto 1fr auto; gap:4px 14px; align-items:center;
+    display:grid; grid-template-columns:64px minmax(0,1fr) auto; gap:4px 14px; align-items:center;
 }
 .card-main { min-width:0; }
 .card-actions { display:flex; flex-direction:column; align-items:flex-end; }
 .logo {
-    width:56px; height:56px; border-radius:14px; display:grid; place-items:center;
+    width:64px; height:64px; border-radius:16px; display:grid; place-items:center;
     font-family:var(--display); font-weight:800; font-size:22px; color:var(--bg);
 }
 .card h4 { font-family:var(--display); font-size:18px; font-weight:700; line-height:1.15; }
@@ -98,8 +98,8 @@
     display:flex; align-items:center; justify-content:space-between; gap:10px;
     font-size:13px; color:var(--muted);
 }
-.info span:first-child { min-width:82px; }
-.info span { display:inline-flex; align-items:center; gap:6px; }
+.card-meta { display:flex; flex-direction:column; gap:7px; }
+.card-meta span, .info > span { display:inline-flex; align-items:center; gap:6px; }
 .info svg { width:15px; height:15px; }
 .price { font-family:var(--display); font-weight:800; font-size:22px; color:var(--text); }
 .qty { display:inline-flex; align-items:center; gap:10px; }

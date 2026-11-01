@@ -1,5 +1,5 @@
-import { store } from '../store/state.js?v=20261101-socket-market-v3';
-import { getIcon } from '../utils/icons.js?v=20261101-socket-market-v3';
+import { store } from '../store/state.js?v=20261101-socket-market-v4';
+import { getIcon } from '../utils/icons.js?v=20261101-socket-market-v4';
 
 const eur = value => value.toFixed(2).replace('.', ',') + ' €';
 const CAT = { jeux: 'Jeux', streaming: 'Streaming', recharge: 'Recharge téléphone' };
@@ -10,8 +10,10 @@ function productCard(p) {
         <div class="card-main"><h4>${p.name}</h4><div class="sub">${CAT[p.cat] || p.cat}, valeur ${eur(p.value)}</div></div>
         <div class="card-actions"><button class="buy" data-add="${p.id}">+ Ajouter</button><div class="when">${p.ago}</div></div>
         <div class="info">
-            <span>${getIcon('globe')}${p.zone}</span>
-            <span>${getIcon('bolt')}Livraison immédiate</span>
+            <div class="card-meta">
+                <span>${getIcon('globe')}${p.zone}</span>
+                <span>${getIcon('bolt')}Livraison immédiate</span>
+            </div>
             <span class="price">${eur(p.price)}</span>
         </div>
     </article>`;
