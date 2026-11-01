@@ -1,0 +1,42 @@
+:root {
+    /* PALETTE SOCKET MARKET */
+    --bg: #0D0E11;
+    --panel: #1C1E22;
+    --surface: #1C1E22;
+    --surface-light: #25282D;
+    --text: #FFFFFF;
+    --text-main: #FFFFFF;
+    --muted: #8E929A;
+    --text-muted: #8E929A;
+    --line: rgba(255,255,255,.08);
+    --border: rgba(255,255,255,.08);
+    --lime: #C0FF15;
+    --accent: #C0FF15;
+    --accent-soft: rgba(192,255,21,.15);
+    --r: 18px;
+    --radius: 18px;
+    --nav-height: 72px;
+
+    /* TYPO */
+    --display: "Bricolage Grotesque","Trebuchet MS",sans-serif;
+    --body: "DM Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+
+    /* ALIAS ANCIENS */
+    --yellow: var(--accent);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--body);
+    -webkit-tap-highlight-color: transparent;
+}
+body {
+    min-height: 100vh;
+    padding-top: env(safe-area-inset-top,0px);
+    overflow-x: hidden;
+    padding-bottom: calc(var(--nav-height) + 40px);
+}
+button { font: inherit; color: inherit; border: 0; background: none; cursor: pointer; }
+button:focus-visible, input:focus-visible { outline: 2px solid var(--lime); outline-offset: 2px; }

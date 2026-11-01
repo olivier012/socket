@@ -1,0 +1,180 @@
+/* PRELOADER */
+.pre {
+    position:fixed; inset:0; z-index:50; background:var(--bg);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:48px; padding:32px; transition:opacity .5s, visibility .5s;
+}
+.pre.out { opacity:0; visibility:hidden; }
+.pre-card {
+    width:240px; height:150px; border-radius:20px; background:var(--lime); color:var(--bg);
+    padding:18px; display:flex; flex-direction:column; justify-content:space-between;
+    transform:rotate(-9deg); box-shadow:0 30px 60px rgba(192,255,21,.18);
+    animation:float 2.4s ease-in-out infinite;
+}
+.pre-card small { font-size:12px; font-weight:500; opacity:.7; }
+.pre-card b { font-family:var(--display); font-size:32px; display:block; line-height:1.1; }
+.pre-card i { font-family:var(--display); font-style:italic; font-weight:800; align-self:flex-end; font-size:20px; }
+@keyframes float { 50%{transform:rotate(-6deg) translateY(-10px)} }
+.pre h1 { font-family:var(--display); font-size:28px; line-height:1.15; text-align:left; max-width:280px; font-weight:700; }
+.pre-bar {
+    width:min(280px,100%); height:44px; border-radius:22px; border:1px solid var(--line);
+    background:var(--panel); position:relative; overflow:hidden;
+    display:grid; place-items:center; color:var(--muted); font-size:14px;
+}
+.pre-bar:before {
+    content:""; position:absolute; inset:0; background:rgba(192,255,21,.16);
+    transform-origin:left; transform:scaleX(0); animation:fill 1.7s ease-out forwards;
+}
+.pre-bar span { position:relative; }
+@keyframes fill { to{transform:scaleX(1)} }
+
+/* BANNIÈRE / CARROUSEL */
+.banner { position:relative; height:168px; border-radius:var(--r); overflow:hidden; background:var(--panel); }
+.slide {
+    position:absolute; inset:0; padding:20px; display:flex; flex-direction:column;
+    justify-content:flex-end; opacity:0; transition:opacity .5s;
+}
+.slide.on { opacity:1; }
+.slide h3 { font-family:var(--display); font-size:24px; line-height:1.1; max-width:230px; font-weight:800; }
+.slide p { color:var(--muted); font-size:13px; margin-top:6px; }
+.slide .art {
+    position:absolute; right:-18px; top:18px; width:132px; height:84px;
+    border-radius:14px; transform:rotate(10deg); display:grid; place-items:center;
+    font-family:var(--display); font-weight:800; font-size:26px; color:var(--bg);
+}
+.dots { position:absolute; right:14px; top:14px; display:flex; flex-direction:column; gap:5px; }
+.dots button { width:6px; height:6px; border-radius:3px; background:rgba(255,255,255,.35); transition:.25s; padding:0; }
+.dots button.on { height:18px; background:var(--lime); }
+
+/* NOUVEAUTÉS + RECHERCHE */
+.row { display:flex; gap:10px; margin-top:12px; }
+.news {
+    flex:1; display:flex; align-items:center; justify-content:space-between; gap:10px;
+    padding:12px 16px; border-radius:var(--r); background:var(--panel); text-align:left;
+}
+.news b { display:block; font-size:14px; }
+.news span { font-size:12px; color:var(--muted); }
+.news em { font-style:normal; color:var(--lime); font-weight:700; font-size:14px; }
+.sq { width:56px; border-radius:var(--r); background:var(--panel); display:grid; place-items:center; }
+.sq svg { width:22px; height:22px; }
+.searchbar { display:none; margin-top:10px; }
+.searchbar.open { display:block; }
+.searchbar input {
+    width:100%; height:46px; border-radius:14px; border:1px solid var(--line);
+    background:var(--panel); color:var(--text); padding:0 16px; font:inherit;
+}
+.searchbar input::placeholder { color:var(--muted); }
+
+/* FILTRE AFFICHAGE */
+.view { display:flex; align-items:center; gap:8px; margin:16px 0 12px; font-size:13px; color:var(--muted); }
+.view button {
+    height:32px; padding:0 13px; border-radius:16px; background:var(--panel);
+    color:var(--muted); font-size:13px; font-weight:500;
+}
+.view button.on { background:var(--lime); color:var(--bg); font-weight:700; }
+
+/* CARTES PRODUIT */
+.list { display:grid; gap:12px; }
+.card {
+    border-radius:var(--r); background:var(--panel); padding:16px;
+    display:grid; grid-template-columns:auto 1fr auto; gap:4px 14px; align-items:center;
+}
+.logo {
+    width:56px; height:56px; border-radius:14px; display:grid; place-items:center;
+    font-family:var(--display); font-weight:800; font-size:22px; color:var(--bg);
+}
+.card h4 { font-family:var(--display); font-size:18px; font-weight:700; line-height:1.15; }
+.card .sub { font-size:12px; color:var(--muted); margin-top:2px; }
+.buy {
+    height:40px; padding:0 14px; border-radius:20px; background:var(--lime);
+    color:var(--bg); font-weight:700; font-size:14px; white-space:nowrap;
+}
+.buy:active { transform:scale(.96); }
+.when { font-size:11px; color:var(--muted); text-align:center; margin-top:5px; }
+.info {
+    grid-column:1/-1; margin-top:10px; padding-top:12px; border-top:1px solid var(--line);
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    font-size:13px; color:var(--muted);
+}
+.info span { display:inline-flex; align-items:center; gap:6px; }
+.info svg { width:15px; height:15px; }
+.price { font-family:var(--display); font-weight:800; font-size:22px; color:var(--text); }
+.qty { display:inline-flex; align-items:center; gap:10px; }
+.qty button { width:30px; height:30px; border-radius:15px; background:var(--bg); font-weight:700; }
+
+/* TITRES / VUES VIDES */
+.title { font-family:var(--display); font-size:26px; font-weight:800; margin:6px 0 14px; }
+.empty { text-align:center; color:var(--muted); padding:56px 20px; }
+.empty b { display:block; color:var(--text); font-size:18px; margin-bottom:6px; font-family:var(--display); }
+.empty button { margin-top:18px; }
+
+/* PANIER */
+.summary {
+    position:sticky; bottom:calc(98px + env(safe-area-inset-bottom,0px));
+    margin-top:14px; padding:14px 16px; border-radius:var(--r);
+    background:var(--lime); color:var(--bg);
+    display:flex; align-items:center; justify-content:space-between;
+}
+.summary small { opacity:.7; font-size:12px; display:block; }
+.summary strong { font-family:var(--display); font-size:22px; }
+.summary button {
+    height:42px; padding:0 18px; border-radius:21px;
+    background:var(--bg); color:var(--text); font-weight:700;
+}
+
+/* PANIER STYLE CARTE */
+.cart-product {
+    position: relative; overflow: hidden; border: 1px solid var(--line);
+    border-radius: var(--r); background: linear-gradient(145deg, var(--surface-light), var(--panel));
+    padding: 16px;
+}
+.cart-product:after {
+    content: ''; position: absolute; width: 150px; height: 150px; right: -95px; top: -95px;
+    border-radius: 50%; border: 1px solid rgba(192,255,21,.12); pointer-events: none;
+}
+.cart-card-head { display: grid; grid-template-columns: 1fr auto auto; align-items: start; gap: 10px; }
+.cart-card-brand { display: flex; align-items: center; gap: 9px; }
+.cart-card-brand div { display: grid; }
+.cart-card-brand small { color: var(--muted); font-size: 9px; letter-spacing: 1px; }
+.cart-card-brand strong { font-family: var(--display); font-size: 16px; line-height: 1; }
+.cart-card-brand strong span { font-style: italic; }
+.cart-mini-chip { width: 38px; height: 27px; border-radius: 7px; background: linear-gradient(135deg, var(--lime), #91c900); box-shadow: inset 0 0 0 1px rgba(0,0,0,.18); }
+.cart-card-number { font-family: 'Courier New', monospace; font-size: 18px; font-weight: 800; letter-spacing: 1px; margin-top: 4px; }
+.cart-remove { width: 30px; height: 30px; border-radius: 50%; border: 1px solid var(--line); color: var(--muted); font-size: 18px; line-height: 1; }
+.cart-card-body { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 18px; }
+.cart-card-line { min-width: 0; height: 46px; padding: 7px 9px; border-radius: 10px; border: 1px solid var(--line); background: rgba(13,14,17,.28); display: flex; flex-direction: column; justify-content: center; }
+.cart-card-line span { color: var(--muted); font-size: 10px; }
+.cart-card-line strong { margin-top: 2px; font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cart-card-footer { display: flex; align-items: end; justify-content: space-between; gap: 12px; margin-top: 14px; padding-top: 13px; border-top: 1px solid var(--line); }
+.cart-card-price { display: grid; }
+.cart-card-price small { color: var(--muted); font-size: 10px; }
+.cart-card-price strong { color: var(--lime); font-family: var(--display); font-size: 22px; }
+.cart-qty { height: 40px; padding: 5px; border-radius: 20px; border: 1px solid var(--line); background: var(--bg); }
+.cart-qty button { background: var(--surface-light); }
+.cart-qty b { min-width: 18px; text-align: center; }
+
+/* CODE CADEAU */
+.code {
+    margin-top:10px; padding:10px 12px; border-radius:12px; background:var(--bg);
+    font-family:"Courier New",monospace; letter-spacing:1px; font-size:14px;
+    display:flex; justify-content:space-between; align-items:center; grid-column:1/-1;
+}
+.code button {
+    color:var(--lime); font-family:var(--body); font-size:13px; font-weight:700; letter-spacing:0;
+}
+
+/* FORMULAIRE RÉSERVATION */
+.rsv { display:grid; gap:10px; }
+.rsv label { font-size:13px; color:var(--muted); }
+.rsv select, .rsv input {
+    width:100%; height:46px; margin-top:6px; border-radius:14px;
+    border:1px solid var(--line); background:var(--panel); color:var(--text);
+    padding:0 14px; font:inherit;
+}
+
+/* FAQ */
+.faq { padding:14px 16px; border-radius:var(--r); background:var(--panel); }
+.faq summary { font-weight:700; cursor:pointer; }
+.faq p { color:var(--muted); font-size:13px; margin-top:8px; line-height:1.5; }
+.stat { display:block; }
+.stat .sub { font-size:12px; color:var(--muted); }

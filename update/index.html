@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<title>Socket Market</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+
+<!-- PRELOADER -->
+<div class="pre" id="preloader" role="status" aria-label="Chargement">
+  <div class="pre-card"><div><small>Solde de la carte</small><b>€ 3 200,00</b></div><i>Socket</i></div>
+  <h1>Le bon deal commence sur Socket Market</h1>
+  <div class="pre-bar"><span>Chargement…</span></div>
+</div>
+
+<!-- CONTENU PRINCIPAL -->
+<div class="app" id="app-content"></div>
+
+<!-- MENU PLUS -->
+<div class="more" id="more" role="menu" aria-label="Plus d’options"><div class="more-in"></div></div>
+
+<!-- NAVIGATION BASSE -->
+<div class="nav"><div class="nav-in">
+  <div class="tabs" id="app-nav"></div>
+  <button class="plus" id="plusBtn" aria-label="Recharger mon solde"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
+</div></div>
+
+<!-- SHEET RECHARGE -->
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-label="Recharger mon solde">
+  <div class="sheet-in">
+    <h3>Recharger mon solde</h3>
+    <p>Choisissez un montant à ajouter à votre portefeuille.</p>
+    <div class="amounts" id="amounts"></div>
+    <button class="close" id="closeSheet">Fermer</button>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script type="module" src="js/main.js?v=20261101-socket-market-v3"></script>
+</body>
+</html>
