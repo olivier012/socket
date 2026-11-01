@@ -12,17 +12,17 @@
 </head>
 <body>
 
-<!-- PRELOADER (utilisé par main.js) -->
+<!-- PRELOADER -->
 <div class="pre" id="preloader" role="status" aria-label="Chargement">
   <div class="pre-bar"><span>Chargement…</span></div>
   <div class="pre-card"><div><small>Solde de la carte</small><b>€ 3 200,00</b></div><i>Socket</i></div>
   <h1>Le bon deal commence sur Socket Market</h1>
 </div>
 
-<!-- CONTENU PRINCIPAL (router.js injecte ici) -->
+<!-- CONTENU PRINCIPAL -->
 <div class="app" id="app-content"></div>
 
-<!-- MENU "PLUS" -->
+<!-- MENU PLUS -->
 <div class="more" id="more" role="menu" aria-label="Plus d’options"><div class="more-in"></div></div>
 
 <!-- NAVIGATION BASSE -->
@@ -42,14 +42,8 @@
 </div>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
-<script>
-  // filet de sécurité si main.js ne démarre jamais (import introuvable, etc.)
-  setTimeout(() => {
-    const s = document.querySelector('#preloader .pre-bar span');
-    if (s) s.textContent = 'Chargement impossible, ouvrez la console';
-  }, 8000);
-</script>
 <script type="module" src="js/main.js"></script>
 </body>
 </html>

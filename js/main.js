@@ -12,14 +12,20 @@ async function startApp() {
     try {
         telegramService.init();
         const ok = await telegramService.verifyUser();
-        if (!ok) return;
+        if (!ok) {
+            // L'erreur est déjà affichée par telegramService.showError()
+            // On cache quand même le preloader pour ne pas rester bloqué
+            hidePreloader();
+            return;
+        }
         router.init();
     } catch (err) {
         console.error('Erreur au démarrage :', err);
         telegramService.showError('Une erreur est survenue au démarrage. Réessayez.');
-        return;
+    } finally {
+        // Quoi qu'il arrive, on retire le preloader
+        hidePreloader();
     }
-    hidePreloader();
 }
 
 startApp();

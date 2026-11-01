@@ -11,6 +11,7 @@ export const telegramService = {
     },
 
     async verifyUser() {
+        // Si on n'est pas dans Telegram
         if (!this.tg || !this.tg.initData) {
             this.showError("Veuillez ouvrir cette page depuis Telegram.");
             return false;
@@ -44,11 +45,23 @@ export const telegramService = {
     },
 
     showError(message) {
-        document.body.innerHTML = `
-            <div style="color:white; text-align:center; padding:50px; font-family:'DM Sans',sans-serif; display:flex; flex-direction:column; justify-content:center; height:100vh; background:#0D0E11;">
-                <h2 style="margin-bottom:10px; font-family:'Bricolage Grotesque',sans-serif;">Erreur</h2>
-                <p style="color:#8E929A;">${message}</p>
-            </div>
+        // On crée un overlay au-dessus de tout, sans écraser le body
+        let overlay = document.getElementById('tg-error-overlay');
+        if (!overlay) {
+            overlay = document.createElement('div');
+            overlay.id = 'tg-error-overlay';
+            overlay.style.cssText = `
+                position: fixed; inset: 0; z-index: 9999;
+                background: #0D0E11; color: white;
+                display: flex; flex-direction: column; align-items: center; justify-content: center;
+                padding: 40px; text-align: center;
+                font-family: 'DM Sans', sans-serif;
+            `;
+            document.body.appendChild(overlay);
+        }
+        overlay.innerHTML = `
+            <h2 style="margin-bottom:10px; font-family:'Bricolage Grotesque',sans-serif;">Erreur</h2>
+            <p style="color:#8E929A; max-width:320px; line-height:1.5;">${message}</p>
         `;
     }
 };
