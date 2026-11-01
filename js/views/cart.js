@@ -1,5 +1,6 @@
-import { store } from '../store/state.js';
-import { eur } from '../utils/format.js';
+import { store } from '../store/state.js?v=20261101-socket-market-v2';
+
+const eur = value => value.toFixed(2).replace('.', ',') + ' €';
 
 export function renderCart() {
     if (!store.cart.length) {

@@ -1,7 +1,7 @@
-import { store } from '../store/state.js';
-import { getIcon } from '../utils/icons.js';
-import { eur } from '../utils/format.js';
+import { store } from '../store/state.js?v=20261101-socket-market-v2';
+import { getIcon } from '../utils/icons.js?v=20261101-socket-market-v2';
 
+const eur = value => value.toFixed(2).replace('.', ',') + ' €';
 const CAT = { jeux: 'Jeux', streaming: 'Streaming', recharge: 'Recharge téléphone' };
 
 function productCard(p) {

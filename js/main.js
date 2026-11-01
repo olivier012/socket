@@ -1,5 +1,5 @@
 import { telegramService } from './services/telegram.js';
-import { router } from './router.js';
+import { router } from './routes/router.js?v=20261101-socket-market-v2';
 
 function hidePreloader() {
     const pre = document.getElementById('preloader');
@@ -11,12 +11,13 @@ function hidePreloader() {
 async function startApp() {
     try {
         telegramService.init();
-        const ok = await telegramService.verifyUser();
-        if (!ok) {
-            // L'erreur est déjà affichée par telegramService.showError()
-            // On cache quand même le preloader pour ne pas rester bloqué
-            hidePreloader();
-            return;
+        const isLocalPreview = ['localhost', '127.0.0.1'].includes(window.location.hostname);
+        if (!isLocalPreview) {
+            const ok = await telegramService.verifyUser();
+            if (!ok) {
+                hidePreloader();
+                return;
+            }
         }
         router.init();
     } catch (err) {

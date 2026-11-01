@@ -1,5 +1,6 @@
-import { store } from '../store/state.js';
-import { eur } from '../utils/format.js';
+import { store } from '../store/state.js?v=20261101-socket-market-v2';
+
+const eur = value => value.toFixed(2).replace('.', ',') + ' €';
 
 export function renderReservation() {
     return `<h1 class="title">Réservation</h1>
@@ -31,7 +32,7 @@ export function renderAffiliate() {
             </div>
             <div><h4>Invitez vos amis</h4><div class="sub">Gagnez 5 % sur chaque achat de vos filleuls</div></div>
             <span></span>
-            <div class="code"><span>KADO-7K2Q</span><button data-copy="KADO-7K2Q">Copier</button></div>
+            <div class="code"><span>SOCKET-7K2Q</span><button data-copy="SOCKET-7K2Q">Copier</button></div>
         </article>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
             <article class="card stat"><div class="sub">Filleuls</div><div class="price">0</div></article>

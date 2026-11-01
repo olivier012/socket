@@ -11,6 +11,9 @@ export const telegramService = {
     },
 
     async verifyUser() {
+        const isLocalPreview = ['localhost', '127.0.0.1'].includes(window.location.hostname);
+        if (isLocalPreview) return true;
+
         // Si on n'est pas dans Telegram
         if (!this.tg || !this.tg.initData) {
             this.showError("Veuillez ouvrir cette page depuis Telegram.");
