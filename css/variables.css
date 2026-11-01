@@ -1,47 +1,43 @@
 :root {
-    --bg: #090b0c;
-    --surface: #111415;
-    --surface-2: #171b1c;
-    --surface-3: #202627;
-    --line: #293031;
-    --line-soft: rgba(255,255,255,.07);
-    --acid: #d7ff37;
-    --acid-soft: rgba(215,255,55,.13);
-    --lime: #b8ef2d;
-    --cyan: #8ed7d0;
-    --violet: #a98cff;
-    --coral: #ff8b71;
-    --text: #f7f8f4;
-    --muted: #9da7a4;
-    --yellow: var(--acid);
-    --purple: var(--violet);
-    --panel: var(--surface);
-    --panel2: var(--surface-2);
-
-    --radius: 8px;
+    /* NOUVELLE PALETTE */
+    --bg: #0D0E11;          /* Fond très sombre */
+    --surface: #1C1E22;     /* Cartes et conteneurs */
+    --surface-light: #25282D; /* Pour les éléments imbriqués */
+    
+    --accent: #C0FF15;      /* Vert acide principal */
+    --accent-soft: rgba(192, 255, 21, 0.15); /* Pour les fonds transparents */
+    
+    --text-main: #FFFFFF;
+    --text-muted: #8E929A;
+    
+    --border: #2A2D33;      /* Bordures subtiles */
+    
+    --radius: 12px;         /* Coins plus arrondis pour le moderne */
     --nav-height: 72px;
+    
+    /* Anciennes variables mappées pour éviter de tout casser */
+    --yellow: var(--accent);
+    --line: var(--border);
+    --muted: var(--text-muted);
 }
 
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: "Manrope", Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-family: "Manrope", Inter, -apple-system, sans-serif;
 }
 
 body {
     min-height: 100vh;
-    color: var(--text);
-    background:
-        radial-gradient(circle at 85% 12%, rgba(142,215,208,.055), transparent 22rem),
-        var(--bg);
-    padding-bottom: calc(var(--nav-height) + 12px);
+    color: var(--text-main);
+    background-color: var(--bg);
+    padding-bottom: calc(var(--nav-height) + 20px);
     overflow-x: hidden;
-    transition: opacity 0.3s ease;
+    -webkit-font-smoothing: antialiased;
 }
 
-body.is-loading .topbar,
-body.is-loading .content,
-body.is-loading .bottom-nav {
-    visibility: hidden;
-}
+/* Utilitaires */
+.text-accent { color: var(--accent); }
+.text-muted { color: var(--text-muted); }
+.bg-surface { background-color: var(--surface); }

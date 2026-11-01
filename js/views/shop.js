@@ -45,27 +45,59 @@ export function renderShop() {
                 </div>
                 <span>${list.length} résultat${list.length > 1 ? 's' : ''}</span>
             </div>
-            <div class="promo-carousel" aria-label="Promotions">
-                <div class="promo-track">
-                    <article class="promo-slide active">
-                        <img src="assets/promo-1.gif" alt="Cartes premium disponibles">
-                        <div class="promo-info"><strong>Cartes Premium</strong><span>Stock renouvelé</span></div>
-                    </article>
-                    <article class="promo-slide">
-                        <img src="assets/promo-2.gif" alt="Livraison rapide">
-                        <div class="promo-info"><strong>Livraison rapide</strong><span>Accès immédiat</span></div>
-                    </article>
-                    <article class="promo-slide">
-                        <img src="assets/promo-3.gif" alt="Offres exclusives">
-                        <div class="promo-info"><strong>Offres exclusives</strong><span>Prix avantageux</span></div>
-                    </article>
+            // Dans shop.js, remplacez la section <div class="promo-carousel">...</div> par :
+
+<div class="promo-carousel" aria-label="Promotions">
+    <div class="promo-track">
+        <!-- Slide 1 -->
+        <article class="promo-slide active">
+            <div class="promo-content">
+                <div class="promo-badge">%</div>
+                <div class="promo-text">
+                    <h3>Cartes Premium</h3>
+                    <p>Disponible maintenant</p>
                 </div>
-                <div class="promo-dots" aria-label="Choisir une publicité">
-                    <button class="promo-dot active" data-slide="0" aria-label="Publicité 1"></button>
-                    <button class="promo-dot" data-slide="1" aria-label="Publicité 2"></button>
-                    <button class="promo-dot" data-slide="2" aria-label="Publicité 3"></button>
+                <div class="promo-card-visual">
+                    <div class="mini-chip"></div>
+                    <span>SOCKET</span>
                 </div>
             </div>
+        </article>
+        <!-- Slide 2 -->
+        <article class="promo-slide">
+            <div class="promo-content">
+                <div class="promo-badge">%</div>
+                <div class="promo-text">
+                    <h3>Livraison Rapide</h3>
+                    <p>Disponible maintenant</p>
+                </div>
+                <div class="promo-card-visual">
+                    <div class="mini-chip"></div>
+                    <span>SOCKET</span>
+                </div>
+            </div>
+        </article>
+        <!-- Slide 3 -->
+        <article class="promo-slide">
+            <div class="promo-content">
+                <div class="promo-badge">%</div>
+                <div class="promo-text">
+                    <h3>Offres Exclusives</h3>
+                    <p>Disponible maintenant</p>
+                </div>
+                <div class="promo-card-visual">
+                    <div class="mini-chip"></div>
+                    <span>SOCKET</span>
+                </div>
+            </div>
+        </article>
+    </div>
+    <div class="promo-dots" aria-label="Choisir une publicité">
+        <button class="promo-dot active" data-slide="0"></button>
+        <button class="promo-dot" data-slide="1"></button>
+        <button class="promo-dot" data-slide="2"></button>
+    </div>
+</div>
             <div class="search-row">
                 <label class="search-box">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
