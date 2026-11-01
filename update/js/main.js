@@ -1,10 +1,10 @@
-import { telegramService } from './services/telegram.js?v=20261101-auto-refresh-v1';
+import { telegramService } from './services/telegram.js?v=20261101-auto-refresh-v3';
 
 async function clearLegacyCaches() {
     if (!('caches' in window)) return;
     const cacheNames = await caches.keys();
     await Promise.all(cacheNames
-        .filter(name => name.startsWith('socket-market-') && name !== 'socket-market-network-only-v1')
+        .filter(name => name.startsWith('socket-market-') && name !== 'socket-market-network-only-v3')
         .map(name => caches.delete(name)));
 }
 
@@ -13,7 +13,7 @@ async function prepareAppUpdates() {
     if (!('serviceWorker' in navigator)) return;
 
     try {
-        const registration = await navigator.serviceWorker.register('./sw.js?v=20261101-auto-refresh-v1');
+        const registration = await navigator.serviceWorker.register('./sw.js?v=20261101-auto-refresh-v3');
         await registration.update();
     } catch (error) {
         console.warn('Mise à jour automatique non disponible:', error);

@@ -6,7 +6,7 @@ export const store = {
     cart: [],       // [{id, qty}]
     orders: [],     // [{id, code, time}]
     rsv: [],        // [{id, date}]
-    slide: 0,
+    slide: 2,
     timer: null,
 
     products: [

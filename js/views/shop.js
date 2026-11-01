@@ -7,8 +7,8 @@ const CAT = { jeux: 'Jeux', streaming: 'Streaming', recharge: 'Recharge téléph
 function productCard(p) {
     return `<article class="card">
         <div class="logo" style="background:${p.color}">${p.ini}</div>
-        <div><h4>${p.name}</h4><div class="sub">${CAT[p.cat] || p.cat}, valeur ${eur(p.value)}</div></div>
-        <div><button class="buy" data-add="${p.id}">+ Ajouter</button><div class="when">${p.ago}</div></div>
+        <div class="card-main"><h4>${p.name}</h4><div class="sub">${CAT[p.cat] || p.cat}, valeur ${eur(p.value)}</div></div>
+        <div class="card-actions"><button class="buy" data-add="${p.id}">+ Ajouter</button><div class="when">${p.ago}</div></div>
         <div class="info">
             <span>${getIcon('globe')}${p.zone}</span>
             <span>${getIcon('bolt')}Livraison immédiate</span>
