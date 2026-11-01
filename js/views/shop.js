@@ -5,17 +5,74 @@ const eur = value => value.toFixed(2).replace('.', ',') + ' €';
 const CAT = { jeux: 'Jeux', streaming: 'Streaming', recharge: 'Recharge téléphone' };
 
 function productCard(p) {
-    return `<article class="card">
-        <div class="logo" style="background:${p.color}">${p.ini}</div>
-        <div class="card-main"><h4>${p.name}</h4><div class="sub">${CAT[p.cat] || p.cat}, valeur ${eur(p.value)}</div></div>
-        <div class="card-actions"><button class="buy" data-add="${p.id}">+ Ajouter</button><div class="when">${p.ago}</div></div>
-        <div class="info">
-            <div class="card-meta">
-                <span>${getIcon('globe')}${p.zone}</span>
-                <span>${getIcon('bolt')}Livraison immédiate</span>
+    const cardNum = `44 ${6262 + p.id}`;
+    
+    return `<article class="sketch-card">
+        
+        <!-- COLONNE GAUCHE -->
+        <div class="sketch-col-left">
+            
+            <!-- CARTE BANCAIRE DESIGN PREMIUM -->
+            <div class="real-visa-card">
+                <div class="visa-top">
+                    <div class="visa-chip">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <rect x="3" y="6" width="18" height="12" rx="2"/>
+                            <path d="M3 10h18M7 6v12M17 6v12"/>
+                        </svg>
+                    </div>
+                    <span class="visa-logo">VISA</span>
+                </div>
+                <div class="visa-bottom">
+                    <span class="visa-num">•••• •••• •••• ${cardNum}</span>
+                </div>
             </div>
-            <span class="price">${eur(p.price)}</span>
+
+            <!-- Les infos à gauche -->
+            <div class="sketch-list">
+                <div class="sketch-row">
+                    <span class="sketch-icon">▤</span> <strong>${p.name}</strong>
+                </div>
+                <div class="sketch-row">
+                    <span class="sketch-icon">≡</span> <span>BANQUE</span>
+                </div>
+                <div class="sketch-row">
+                    <span class="sketch-icon">⬟</span> <span>GOLD</span>
+                </div>
+                <div class="sketch-row">
+                    <span class="sketch-icon">⌂</span> <span>${p.zone.toUpperCase()}</span>
+                </div>
+            </div>
         </div>
+
+        <!-- COLONNE DROITE -->
+        <div class="sketch-col-right">
+            <!-- Bouton + Acheter et temps -->
+            <div class="sketch-top-right">
+                <button class="sketch-buy" data-add="${p.id}">+ Acheter</button>
+                <div class="sketch-when">${p.ago}</div>
+            </div>
+
+            <!-- Prix -->
+            <div class="sketch-price">${eur(p.price)}</div>
+
+            <!-- Infos à droite -->
+            <div class="sketch-list">
+                <div class="sketch-row">
+                    <span class="sketch-icon">👤</span> <span>Client - Age</span>
+                </div>
+                <div class="sketch-row">
+                    <span class="sketch-icon">⌂</span> <span>Ville</span>
+                </div>
+                <div class="sketch-row">
+                    <span class="sketch-icon">▢</span> <span>PC</span>
+                </div>
+                <div class="sketch-row">
+                    <span class="sketch-icon">○</span> <span>Système</span>
+                </div>
+            </div>
+        </div>
+
     </article>`;
 }
 
