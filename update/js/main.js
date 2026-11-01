@@ -1,5 +1,24 @@
-import { telegramService } from './services/telegram.js';
-import { router } from './routes/router.js?v=20261101-socket-market-v3';
+import { telegramService } from './services/telegram.js?v=20261101-auto-refresh-v1';
+
+async function clearLegacyCaches() {
+    if (!('caches' in window)) return;
+    const cacheNames = await caches.keys();
+    await Promise.all(cacheNames
+        .filter(name => name.startsWith('socket-market-') && name !== 'socket-market-network-only-v1')
+        .map(name => caches.delete(name)));
+}
+
+async function prepareAppUpdates() {
+    await clearLegacyCaches();
+    if (!('serviceWorker' in navigator)) return;
+
+    try {
+        const registration = await navigator.serviceWorker.register('./sw.js?v=20261101-auto-refresh-v1');
+        await registration.update();
+    } catch (error) {
+        console.warn('Mise à jour automatique non disponible:', error);
+    }
+}
 
 function hidePreloader() {
     const pre = document.getElementById('preloader');
@@ -10,6 +29,8 @@ function hidePreloader() {
 
 async function startApp() {
     try {
+        await prepareAppUpdates();
+        const { router } = await import(`./routes/router.js?v=${Date.now()}`);
         telegramService.init();
         const isLocalPreview = ['localhost', '127.0.0.1'].includes(window.location.hostname);
         if (!isLocalPreview) {
