@@ -1,59 +1,327 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <title>Socket — Boutique</title>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    
-    <link rel="stylesheet" href="css/main.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<title>Kado Market</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--lime:#C0FF15;--bg:#0D0E11;--panel:#1C1E22;--text:#FFFFFF;--muted:#8E929A;--line:rgba(255,255,255,.08);--r:18px;
+--display:"Bricolage Grotesque","Trebuchet MS",sans-serif;--body:"DM Sans",system-ui,-apple-system,"Segoe UI",sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--text);font-family:var(--body);-webkit-tap-highlight-color:transparent}
+body{min-height:100vh;padding-top:env(safe-area-inset-top,0px);overflow-x:hidden}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+button:focus-visible,input:focus-visible{outline:2px solid var(--lime);outline-offset:2px}
+.app{max-width:480px;margin:0 auto;padding:16px 16px calc(112px + env(safe-area-inset-bottom,0px))}
+
+/* preloader */
+.pre{position:fixed;inset:0;z-index:50;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:48px;padding:32px;transition:opacity .5s,visibility .5s}
+.pre.out{opacity:0;visibility:hidden}
+.pre-card{width:240px;height:150px;border-radius:20px;background:var(--lime);color:var(--bg);padding:18px;display:flex;flex-direction:column;justify-content:space-between;transform:rotate(-9deg);box-shadow:0 30px 60px rgba(192,255,21,.18);animation:float 2.4s ease-in-out infinite}
+.pre-card small{font-size:12px;font-weight:500;opacity:.7}
+.pre-card b{font-family:var(--display);font-size:32px;display:block;line-height:1.1}
+.pre-card i{font-family:var(--display);font-style:italic;font-weight:800;align-self:flex-end;font-size:20px}
+@keyframes float{50%{transform:rotate(-6deg) translateY(-10px)}}
+.pre h1{font-family:var(--display);font-size:28px;line-height:1.15;text-align:left;max-width:280px;font-weight:700}
+.pre-bar{width:min(280px,100%);height:44px;border-radius:22px;border:1px solid var(--line);background:var(--panel);position:relative;overflow:hidden;display:grid;place-items:center;color:var(--muted);font-size:14px}
+.pre-bar:before{content:"";position:absolute;inset:0;background:rgba(192,255,21,.16);transform-origin:left;transform:scaleX(0);animation:fill 1.7s ease-out forwards}
+.pre-bar span{position:relative}
+@keyframes fill{to{transform:scaleX(1)}}
+
+/* en-tête */
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}
+.top p{font-size:13px;color:var(--muted)}
+.top h2{font-family:var(--display);font-size:22px;font-weight:700;line-height:1.1}
+.wallet{display:flex;align-items:center;gap:8px;height:44px;padding:0 14px;border-radius:22px;background:var(--panel);border:1px solid var(--line);font-weight:700;font-size:15px}
+.wallet svg{width:18px;height:18px;color:var(--lime)}
+
+/* bannière */
+.banner{position:relative;height:168px;border-radius:var(--r);overflow:hidden;background:var(--panel)}
+.slide{position:absolute;inset:0;padding:20px;display:flex;flex-direction:column;justify-content:flex-end;opacity:0;transition:opacity .5s}
+.slide.on{opacity:1}
+.slide h3{font-family:var(--display);font-size:24px;line-height:1.1;max-width:230px;font-weight:800}
+.slide p{color:var(--muted);font-size:13px;margin-top:6px}
+.slide .art{position:absolute;right:-18px;top:18px;width:132px;height:84px;border-radius:14px;transform:rotate(10deg);display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:26px;color:var(--bg)}
+.dots{position:absolute;right:14px;top:14px;display:flex;flex-direction:column;gap:5px}
+.dots button{width:6px;height:6px;border-radius:3px;background:rgba(255,255,255,.35);transition:.25s;padding:0}
+.dots button.on{height:18px;background:var(--lime)}
+
+/* nouveautés + recherche */
+.row{display:flex;gap:10px;margin-top:12px}
+.news{flex:1;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 16px;border-radius:var(--r);background:var(--panel);text-align:left}
+.news b{display:block;font-size:14px}
+.news span{font-size:12px;color:var(--muted)}
+.news em{font-style:normal;color:var(--lime);font-weight:700;font-size:14px}
+.sq{width:56px;border-radius:var(--r);background:var(--panel);display:grid;place-items:center}
+.sq svg{width:22px;height:22px}
+.searchbar{display:none;margin-top:10px}
+.searchbar.open{display:block}
+.searchbar input{width:100%;height:46px;border-radius:14px;border:1px solid var(--line);background:var(--panel);color:var(--text);padding:0 16px;font:inherit}
+.searchbar input::placeholder{color:var(--muted)}
+
+/* affichage */
+.view{display:flex;align-items:center;gap:8px;margin:16px 0 12px;font-size:13px;color:var(--muted)}
+.view button{height:32px;padding:0 13px;border-radius:16px;background:var(--panel);color:var(--muted);font-size:13px;font-weight:500}
+.view button.on{background:var(--lime);color:var(--bg);font-weight:700}
+
+/* cartes produit */
+.list{display:grid;gap:12px}
+.card{border-radius:var(--r);background:var(--panel);padding:16px;display:grid;grid-template-columns:auto 1fr auto;gap:4px 14px;align-items:center}
+.logo{width:56px;height:56px;border-radius:14px;display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:22px;color:var(--bg)}
+.card h4{font-family:var(--display);font-size:18px;font-weight:700;line-height:1.15}
+.card .sub{font-size:12px;color:var(--muted);margin-top:2px}
+.buy{height:40px;padding:0 14px;border-radius:20px;background:var(--lime);color:var(--bg);font-weight:700;font-size:14px;white-space:nowrap}
+.buy:active{transform:scale(.96)}
+.when{font-size:11px;color:var(--muted);text-align:center;margin-top:5px}
+.info{grid-column:1/-1;margin-top:10px;padding-top:12px;border-top:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:13px;color:var(--muted)}
+.info span{display:inline-flex;align-items:center;gap:6px}
+.info svg{width:15px;height:15px}
+.price{font-family:var(--display);font-weight:800;font-size:22px;color:var(--text)}
+.qty{display:inline-flex;align-items:center;gap:10px}
+.qty button{width:30px;height:30px;border-radius:15px;background:var(--bg);font-weight:700}
+
+/* panier, achats, vues vides */
+.title{font-family:var(--display);font-size:26px;font-weight:800;margin:6px 0 14px}
+.empty{text-align:center;color:var(--muted);padding:56px 20px}
+.empty b{display:block;color:var(--text);font-size:18px;margin-bottom:6px;font-family:var(--display)}
+.empty button{margin-top:18px}
+.summary{position:sticky;bottom:calc(98px + env(safe-area-inset-bottom,0px));margin-top:14px;padding:14px 16px;border-radius:var(--r);background:var(--lime);color:var(--bg);display:flex;align-items:center;justify-content:space-between}
+.summary small{opacity:.7;font-size:12px;display:block}
+.summary strong{font-family:var(--display);font-size:22px}
+.summary button{height:42px;padding:0 18px;border-radius:21px;background:var(--bg);color:var(--text);font-weight:700}
+.code{margin-top:10px;padding:10px 12px;border-radius:12px;background:var(--bg);font-family:"Courier New",monospace;letter-spacing:1px;font-size:14px;display:flex;justify-content:space-between;align-items:center;grid-column:1/-1}
+.code button{color:var(--lime);font-family:var(--body);font-size:13px;font-weight:700;letter-spacing:0}
+.rsv{display:grid;gap:10px}
+.rsv label{font-size:13px;color:var(--muted)}
+.rsv select,.rsv input{width:100%;height:46px;margin-top:6px;border-radius:14px;border:1px solid var(--line);background:var(--panel);color:var(--text);padding:0 14px;font:inherit}
+
+/* navigation */
+.nav{position:fixed;left:0;right:0;bottom:0;z-index:20;padding:10px 14px calc(10px + env(safe-area-inset-bottom,0px));background:linear-gradient(transparent,var(--bg) 38%)}
+.nav-in{max-width:480px;margin:0 auto;display:flex;gap:10px}
+.tabs{flex:1;display:grid;grid-template-columns:repeat(4,1fr);background:var(--panel);border-radius:26px;padding:6px;border:1px solid var(--line)}
+.tab{position:relative;display:flex;flex-direction:column;align-items:center;gap:3px;padding:7px 0 6px;border-radius:20px;color:var(--muted);font-size:11px;font-weight:500}
+.tab svg{width:22px;height:22px}
+.tab.on{background:rgba(192,255,21,.12);color:var(--lime)}
+.tab .n{position:absolute;top:2px;right:18%;min-width:16px;height:16px;border-radius:8px;background:var(--lime);color:var(--bg);font-size:10px;font-weight:700;display:grid;place-items:center;padding:0 4px}
+.plus{width:64px;border-radius:26px;background:var(--lime);color:var(--bg);display:grid;place-items:center}
+.plus svg{width:28px;height:28px;transition:transform .25s}
+.plus.open svg{transform:rotate(45deg)}
+.more{position:fixed;left:0;right:0;bottom:calc(92px + env(safe-area-inset-bottom,0px));z-index:19;padding:0 14px;display:none}
+.more.open{display:block}
+.more-in{max-width:480px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:6px;background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:8px;box-shadow:0 18px 40px rgba(0,0,0,.5)}
+.more.open .more-in{animation:pop .2s ease-out}
+@keyframes pop{from{opacity:0;transform:translateY(8px)}}
+.more button{display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 0 10px;border-radius:16px;color:var(--text);font-size:12px;font-weight:500}
+.more button:active{background:var(--bg)}
+.more svg{width:24px;height:24px;color:var(--lime)}
+.faq{padding:14px 16px;border-radius:var(--r);background:var(--panel)}
+.faq summary{font-weight:700;cursor:pointer}
+.faq p{color:var(--muted);font-size:13px;margin-top:8px;line-height:1.5}
+.stat{display:block}
+.stat .sub{font-size:12px;color:var(--muted)}
+
+/* recharge */
+.sheet{position:fixed;inset:0;z-index:40;background:rgba(0,0,0,.6);display:none;align-items:flex-end}
+.sheet.open{display:flex}
+.sheet-in{width:100%;max-width:480px;margin:0 auto;background:var(--panel);border-radius:26px 26px 0 0;padding:22px 20px calc(24px + env(safe-area-inset-bottom,0px))}
+.sheet h3{font-family:var(--display);font-size:22px;margin-bottom:4px}
+.sheet p{color:var(--muted);font-size:13px;margin-bottom:16px}
+.amounts{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.amounts button{height:48px;border-radius:14px;background:var(--bg);font-weight:700}
+.amounts button:active{background:var(--lime);color:var(--bg)}
+.close{width:100%;height:46px;margin-top:12px;color:var(--muted)}
+
+.toast{position:fixed;left:50%;bottom:calc(104px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);opacity:0;z-index:60;background:var(--text);color:var(--bg);padding:11px 18px;border-radius:22px;font-weight:700;font-size:14px;transition:.25s;pointer-events:none;white-space:nowrap}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.pre-bar:before{transform:scaleX(1)}}
+</style>
 </head>
 <body>
-    <div class="preloader" id="preloader" role="status" aria-label="Chargement de Socket">
-        <div class="preloader-mark" aria-hidden="true">
-            <span class="preloader-orbit"></span>
-            <span class="preloader-logo">S</span>
-        </div>
-        <div class="preloader-copy">
-            <strong>SOCKET</strong>
-            <span>Préparation de votre espace</span>
-        </div>
-        <div class="preloader-progress"><span></span></div>
-    </div>
 
-    <!-- HEADER -->
-    <header class="topbar">
-        <div class="brand">
-            <div class="brand-icon">S</div>
-            <div class="brand-text">
-                <div class="brand-name">Soc<span>ket</span></div>
-                <div class="brand-stock" id="availableCards">0 cartes disponibles</div>
-            </div>
-        </div>
-        <button class="header-balance" id="headerBalanceBtn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M16 12h.01M3 10h18"/></svg>
-            <b id="walletHeader">0.00€</b>
-        </button>
-    </header>
+<div class="pre" id="pre" role="status" aria-label="Chargement">
+  <div class="pre-card"><div><small>Solde de la carte</small><b>€ 3 200,00</b></div><i>Kado</i></div>
+  <h1>Le bon deal commence sur Kado Market</h1>
+  <div class="pre-bar"><span>Chargement…</span></div>
+</div>
 
-    <!-- CONTENU DYNAMIQUE -->
-    <main class="content" id="app-content">
-        <!-- Les vues seront injectées ici par le routeur -->
-    </main>
+<div class="app" id="app"></div>
 
-    <!-- TOAST -->
-    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="more" id="more" role="menu" aria-label="Plus d’options"><div class="more-in"></div></div>
 
-    <!-- NAVIGATION -->
-    <nav class="bottom-nav" id="app-nav">
-        <!-- Les boutons seront injectés par le routeur -->
-    </nav>
+<div class="nav"><div class="nav-in">
+  <div class="tabs" id="tabs"></div>
+  <button class="plus" id="plusBtn" aria-label="Recharger mon solde"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
+</div></div>
 
-    <!-- POINT D'ENTREE JS -->
-    <script type="module" src="js/main.js"></script>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-label="Recharger mon solde">
+  <div class="sheet-in">
+    <h3>Recharger mon solde</h3>
+    <p>Choisissez un montant à ajouter à votre portefeuille.</p>
+    <div class="amounts" id="amounts"></div>
+    <button class="close" id="closeSheet">Fermer</button>
+  </div>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+const ICON={
+ cards:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3 10h18"/></svg>',
+ cart:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.2"/><circle cx="18" cy="20" r="1.2"/><path d="M2 3h3l2.6 12h10.6l2-8.5H6"/></svg>',
+ bag:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14l-1 12H6zM9 8a3 3 0 0 1 6 0"/></svg>',
+ cal:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M16 3v4M8 3v4M3 11h18"/></svg>',
+ search:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>',
+ wallet:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M16 12h.01M3 10h18"/></svg>',
+ tag:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="8.5" r="1"/></svg>',
+ globe:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18"/></svg>',
+ bolt:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg>'
+};
+ICON.users='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="9" cy="8" r="3.5"/><circle cx="17" cy="10" r="2.5"/><path d="M3 20c0-3.6 2.7-6 6-6s6 2.4 6 6M16 14.5c2.9 0 5 1.8 5 5"/></svg>';
+ICON.gift='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="9" width="18" height="4" rx="1"/><path d="M5 13v8h14v-8M12 9v12M12 9c-3 0-4.5-1-4.5-2.5S9 4 10.5 5 12 9 12 9zm0 0c3 0 4.5-1 4.5-2.5S15 4 13.5 5 12 9 12 9z"/></svg>';
+ICON.help='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14v-2a8 8 0 0 1 16 0v2M4 14H3v4h3v-4zM20 14h1v4h-3v-4zM18 18c0 2-2 3-5 3"/></svg>';
+const CAT={jeux:'Jeux',streaming:'Streaming',recharge:'Recharge téléphone'};
+const PRODUCTS=[
+ {id:1,name:'Steam',cat:'jeux',value:20,price:20,color:'#C0FF15',ini:'S',zone:'France',ago:'il y a 3 min'},
+ {id:2,name:'PlayStation Store',cat:'jeux',value:25,price:25,color:'#FFFFFF',ini:'P',zone:'France',ago:'il y a 7 min'},
+ {id:3,name:'Netflix',cat:'streaming',value:15,price:15,color:'#8E929A',ini:'N',zone:'Europe',ago:'il y a 16 min'},
+ {id:4,name:'Spotify Premium',cat:'streaming',value:30,price:29,color:'#C0FF15',ini:'S',zone:'Europe',ago:'il y a 21 min'},
+ {id:5,name:'Orange recharge',cat:'recharge',value:10,price:10,color:'#FFFFFF',ini:'O',zone:'Mali',ago:'il y a 28 min'},
+ {id:6,name:'Moov Africa recharge',cat:'recharge',value:5,price:5,color:'#8E929A',ini:'M',zone:'Mali',ago:'il y a 35 min'},
+ {id:7,name:'Google Play',cat:'jeux',value:50,price:48,color:'#C0FF15',ini:'G',zone:'International',ago:'il y a 42 min'},
+ {id:8,name:'Disney+',cat:'streaming',value:25,price:24,color:'#FFFFFF',ini:'D',zone:'Europe',ago:'il y a 1 h'}
+];
+const SLIDES=[
+ {t:'Cartes cadeaux officielles',p:'Codes livrés tout de suite après l’achat',c:'#C0FF15',a:'Kado'},
+ {t:'Recharges téléphone',p:'Orange et Moov Africa, sans frais cachés',c:'#FFFFFF',a:'+10 €'},
+ {t:'Jeux et streaming',p:'Steam, PlayStation, Netflix, Spotify',c:'#8E929A',a:'Play'}
+];
+const S={tab:'cards',wallet:24,limit:30,q:'',open:false,cart:[],orders:[],rsv:[],slide:0,timer:null};
+const $=s=>document.querySelector(s);
+const eur=v=>v.toFixed(2).replace('.',',')+' €';
+const code=()=>Array.from({length:3},()=>Math.random().toString(36).slice(2,6).toUpperCase()).join('-');
+const prod=id=>PRODUCTS.find(p=>p.id===id);
+let tt;
+function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),2200)}
+
+function head(){return `<div class="top"><div><p>Bienvenue sur</p><h2>Kado Market</h2></div><button class="wallet" id="walletBtn" aria-label="Recharger mon solde">${ICON.wallet}<span>${eur(S.wallet)}</span></button></div>`}
+
+function productCard(p){return `<article class="card">
+ <div class="logo" style="background:${p.color}">${p.ini}</div>
+ <div><h4>${p.name}</h4><div class="sub">${CAT[p.cat]}, valeur ${eur(p.value)}</div></div>
+ <div><button class="buy" data-add="${p.id}">+ Ajouter</button><div class="when">${p.ago}</div></div>
+ <div class="info"><span>${ICON.globe}${p.zone}</span><span>${ICON.bolt}Livraison immédiate</span><span class="price">${eur(p.price)}</span></div>
+</article>`}
+
+function viewCards(){
+ const q=S.q.toLowerCase().trim();
+ const all=PRODUCTS.filter(p=>(p.name+' '+CAT[p.cat]+' '+p.zone).toLowerCase().includes(q));
+ const list=all.slice(0,S.limit);
+ const s=SLIDES[S.slide];
+ return head()+`
+ <div class="banner">${SLIDES.map((x,i)=>`<div class="slide ${i===S.slide?'on':''}"><div class="art" style="background:${x.c}">${x.a}</div><h3>${x.t}</h3><p>${x.p}</p></div>`).join('')}
+  <div class="dots">${SLIDES.map((_,i)=>`<button class="${i===S.slide?'on':''}" data-slide="${i}" aria-label="Annonce ${i+1}"></button>`).join('')}</div></div>
+ <div class="row"><button class="news" id="seeNew"><div><b>Nouvelles cartes</b><span>${PRODUCTS.length} cartes disponibles</span></div><em>Voir</em></button>
+  <button class="sq" id="searchBtn" aria-label="Rechercher">${ICON.search}</button></div>
+ <div class="searchbar ${S.open?'open':''}" id="sbar"><input id="q" type="search" placeholder="Steam, Netflix, Orange…" value="${S.q.replace(/"/g,'&quot;')}"></div>
+ <div class="view"><span>Affichage</span>${[30,60,100,0].map(n=>`<button class="${S.limit===(n||999)?'on':''}" data-limit="${n||999}">${n||'Tout'}</button>`).join('')}</div>
+ <div class="list" id="plist">${list.map(productCard).join('')||`<div class="empty"><b>Aucun résultat</b>Essayez le nom d’une marque ou d’un opérateur.</div>`}</div>`;
+}
+
+function viewCart(){
+ if(!S.cart.length)return `<h1 class="title">Panier</h1><div class="empty"><b>Votre panier est vide</b>Ajoutez une carte cadeau depuis l’onglet Cartes.<br><button class="buy" data-go="cards">Voir les cartes</button></div>`;
+ const total=S.cart.reduce((s,i)=>s+prod(i.id).price*i.qty,0);
+ return `<h1 class="title">Panier</h1><div class="list">${S.cart.map(i=>{const p=prod(i.id);return `<article class="card"><div class="logo" style="background:${p.color}">${p.ini}</div><div><h4>${p.name}</h4><div class="sub">${eur(p.price)} l’unité</div></div><div class="qty"><button data-dec="${p.id}" aria-label="Retirer une unité">−</button><b>${i.qty}</b><button data-inc="${p.id}" aria-label="Ajouter une unité">+</button></div></article>`}).join('')}</div>
+ <div class="summary"><div><small>Total</small><strong>${eur(total)}</strong></div><button id="pay">Payer avec mon solde</button></div>`;
+}
+
+function viewOrders(){
+ if(!S.orders.length)return `<h1 class="title">Achats</h1><div class="empty"><b>Aucun achat pour l’instant</b>Vos codes apparaîtront ici après le paiement.<br><button class="buy" data-go="cards">Voir les cartes</button></div>`;
+ return `<h1 class="title">Achats</h1><div class="list">${S.orders.map(o=>{const p=prod(o.id);return `<article class="card"><div class="logo" style="background:${p.color}">${p.ini}</div><div><h4>${p.name}</h4><div class="sub">${eur(p.value)}, acheté à ${o.time}</div></div><div class="price">${eur(p.price)}</div><div class="code"><span>${o.code}</span><button data-copy="${o.code}">Copier</button></div></article>`}).join('')}</div>`;
+}
+
+function viewRsv(){
+ return `<h1 class="title">Réservation</h1>
+ <form class="rsv" id="rsvForm"><div><label for="rp">Carte à réserver</label><select id="rp">${PRODUCTS.map(p=>`<option value="${p.id}">${p.name}, ${eur(p.value)}</option>`).join('')}</select></div>
+ <div><label for="rd">Date souhaitée</label><input id="rd" type="date" required></div>
+ <button class="buy" style="height:48px;border-radius:24px;margin-top:6px" type="submit">Réserver</button></form>
+ ${S.rsv.length?`<div class="list" style="margin-top:18px">${S.rsv.map(r=>{const p=prod(r.id);return `<article class="card"><div class="logo" style="background:${p.color}">${p.ini}</div><div><h4>${p.name}</h4><div class="sub">Pour le ${r.date}</div></div><div class="price">${eur(p.price)}</div></article>`}).join('')}</div>`:`<div class="empty" style="padding-top:36px"><b>Aucune réservation</b>Réservez une carte pour la recevoir à la date choisie.</div>`}`;
+}
+
+function viewAff(){
+ return `<h1 class="title">Affilié</h1><div class="list">
+ <article class="card"><div class="logo" style="background:var(--lime)"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="9" cy="8" r="3.5"/><circle cx="17" cy="10" r="2.5"/><path d="M3 20c0-3.6 2.7-6 6-6s6 2.4 6 6M16 14.5c2.9 0 5 1.8 5 5"/></svg></div><div><h4>Invitez vos amis</h4><div class="sub">Gagnez 5 % sur chaque achat de vos filleuls</div></div><span></span>
+ <div class="code"><span>KADO-7K2Q</span><button data-copy="KADO-7K2Q">Copier</button></div></article>
+ <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px"><article class="card stat"><div class="sub">Filleuls</div><div class="price">0</div></article><article class="card stat"><div class="sub">Gains</div><div class="price">${eur(0)}</div></article></div></div>`;
+}
+function viewRew(){
+ const pts=S.orders.length*10,next=100;
+ return `<h1 class="title">Récompenses</h1><div class="list"><article class="card stat"><div class="sub">Vos points</div><div class="price">${pts} pts</div>
+ <div style="height:8px;border-radius:4px;background:var(--bg);margin-top:12px;overflow:hidden"><div style="height:100%;width:${Math.min(100,pts/next*100)}%;background:var(--lime)"></div></div>
+ <div class="sub" style="margin-top:8px">${Math.max(0,next-pts)} pts avant votre prochain bon de 2 €</div></article>
+ <article class="faq"><b>Comment gagner des points ?</b><p>Chaque achat rapporte 10 points. Les points se cumulent et s’échangent contre des bons d’achat.</p></article></div>`;
+}
+function viewSup(){
+ return `<h1 class="title">Support</h1><div class="list">
+ <details class="faq"><summary>Mon code ne fonctionne pas</summary><p>Vérifiez la zone de la carte, puis copiez le code depuis l’onglet Achats sans espace. Si le problème continue, écrivez-nous.</p></details>
+ <details class="faq"><summary>Quand je reçois ma carte ?</summary><p>Le code apparaît dans Achats dès que le paiement est validé.</p></details>
+ <details class="faq"><summary>Comment recharger mon solde ?</summary><p>Touchez le bouton + puis Solde, et choisissez un montant.</p></details>
+ <button class="buy" style="height:48px;border-radius:24px" data-support>Écrire au support</button></div>`;
+}
+function closeMore(){$('#more').classList.remove('open');$('#plusBtn').classList.remove('open');$('#plusBtn').setAttribute('aria-expanded','false')}
+function toggleMore(){const o=$('#more').classList.toggle('open');$('#plusBtn').classList.toggle('open',o);$('#plusBtn').setAttribute('aria-expanded',o)}
+$('#more').firstElementChild.innerHTML=[['balance','Solde','wallet'],['aff','Affilié','users'],['rew','Récompenses','gift'],['sup','Support','help']].map(([id,l,ic])=>`<button role="menuitem" data-more="${id}">${ICON[ic]}<span>${l}</span></button>`).join('');
+const TABS=[['cards','Cartes','cards'],['cart','Panier','cart'],['orders','Achats','bag'],['rsv','Réservation','cal']];
+function renderTabs(){
+ const n=S.cart.reduce((s,i)=>s+i.qty,0);
+ $('#tabs').innerHTML=TABS.map(([id,l,ic])=>`<button class="tab ${S.tab===id?'on':''}" data-tab="${id}" ${S.tab===id?'aria-current="page"':''}>${ICON[ic]}<span>${l}</span>${id==='cart'&&n?`<span class="n">${n}</span>`:''}</button>`).join('');
+}
+function render(keepFocus){
+ const v={cards:viewCards,cart:viewCart,orders:viewOrders,rsv:viewRsv,aff:viewAff,rew:viewRew,sup:viewSup}[S.tab]();
+ $('#app').innerHTML=v;renderTabs();
+ if(keepFocus){const i=$('#q');if(i){i.focus();i.setSelectionRange(i.value.length,i.value.length)}}
+ if(S.tab==='rsv'){const d=$('#rd');if(d)d.min=new Date().toISOString().slice(0,10)}
+}
+function go(t){closeMore();S.tab=t;render();window.scrollTo({top:0})}
+function addToCart(id){const i=S.cart.find(c=>c.id===id);i?i.qty++:S.cart.push({id,qty:1});toast('Ajouté au panier');renderTabs()}
+
+document.addEventListener('click',e=>{
+ const t=e.target.closest('button');if(!e.target.closest('#more')&&!(t&&t.id==='plusBtn'))closeMore();if(!t)return;
+ if(t.dataset.tab)return go(t.dataset.tab);
+ if(t.dataset.go)return go(t.dataset.go);
+ if(t.dataset.add)return addToCart(+t.dataset.add);
+ if(t.dataset.limit){S.limit=+t.dataset.limit;return render()}
+ if(t.dataset.slide){S.slide=+t.dataset.slide;startCarousel();return render()}
+ if(t.dataset.inc){addToCart(+t.dataset.inc);return render()}
+ if(t.dataset.dec){const i=S.cart.find(c=>c.id===+t.dataset.dec);if(i&&--i.qty<=0)S.cart=S.cart.filter(c=>c!==i);return render()}
+ if(t.dataset.copy){navigator.clipboard?.writeText(t.dataset.copy).catch(()=>{});return toast('Code copié')}
+ if(t.id==='searchBtn'){S.open=!S.open;render(true);return}
+ if(t.id==='seeNew'){document.getElementById('plist')?.scrollIntoView({behavior:'smooth',block:'start'});return}
+ if(t.id==='walletBtn')return $('#sheet').classList.add('open');
+ if(t.id==='plusBtn')return toggleMore();
+ if(t.dataset.more){closeMore();return t.dataset.more==='balance'?$('#sheet').classList.add('open'):go(t.dataset.more)}
+ if(t.dataset.support)return toast('Le support sera branché dans la version finale');
+ if(t.id==='closeSheet')return $('#sheet').classList.remove('open');
+ if(t.id==='pay'){
+  const total=S.cart.reduce((s,i)=>s+prod(i.id).price*i.qty,0);
+  if(total>S.wallet)return toast('Solde insuffisant, rechargez votre portefeuille');
+  const time=new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
+  S.cart.forEach(i=>{for(let k=0;k<i.qty;k++)S.orders.unshift({id:i.id,code:code(),time})});
+  S.wallet-=total;S.cart=[];toast('Paiement effectué');go('orders');
+ }
+});
+$('#sheet').addEventListener('click',e=>{if(e.target.id==='sheet')e.currentTarget.classList.remove('open')});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){$('#sheet').classList.remove('open');closeMore()}});
+document.addEventListener('input',e=>{if(e.target.id==='q'){S.q=e.target.value;const list=PRODUCTS.filter(p=>(p.name+' '+CAT[p.cat]+' '+p.zone).toLowerCase().includes(S.q.toLowerCase().trim())).slice(0,S.limit);$('#plist').innerHTML=list.map(productCard).join('')||`<div class="empty"><b>Aucun résultat</b>Essayez le nom d’une marque ou d’un opérateur.</div>`}});
+document.addEventListener('submit',e=>{if(e.target.id==='rsvForm'){e.preventDefault();const d=new Date($('#rd').value).toLocaleDateString('fr-FR');S.rsv.unshift({id:+$('#rp').value,date:d});toast('Réservation enregistrée');render()}});
+$('#amounts').innerHTML=[5,10,20,50].map(a=>`<button data-top="${a}">${a} €</button>`).join('');
+$('#amounts').addEventListener('click',e=>{const b=e.target.closest('[data-top]');if(!b)return;S.wallet+=+b.dataset.top;$('#sheet').classList.remove('open');toast(`${b.dataset.top} € ajoutés à votre solde`);render()});
+
+function startCarousel(){clearInterval(S.timer);S.timer=setInterval(()=>{if(S.tab!=='cards')return;S.slide=(S.slide+1)%SLIDES.length;document.querySelectorAll('.slide').forEach((el,i)=>el.classList.toggle('on',i===S.slide));document.querySelectorAll('.dots button').forEach((el,i)=>el.classList.toggle('on',i===S.slide))},4000)}
+render();startCarousel();
+setTimeout(()=>{$('#pre').classList.add('out');setTimeout(()=>$('#pre').remove(),600)},1900);
+</script>
 </body>
 </html>
