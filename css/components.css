@@ -22,22 +22,11 @@
     display:grid; place-items:center; color:var(--muted); font-size:14px;
 }
 .pre-bar:before {
-    content: ""; 
-    position: absolute; 
-    inset: 0; 
-    background: var(--lime);
-    transform-origin: left; 
-    transform: scaleX(0); 
-    animation: fill 10s linear forwards; /* Changé en linear pour un effet plus réaliste */
+    content:""; position:absolute; inset:0; background:rgba(192,255,21,.16);
+    transform-origin:left; transform:scaleX(0); animation:fill 1.7s ease-out forwards;
 }
 .pre-bar span { position:relative; }
 @keyframes fill { to{transform:scaleX(1)} }
-
-/* CHARGEMENT EN HAUT */
-.pre { justify-content:center; }
-.pre-bar { position:fixed; top:0; left:0; width:100%; height:4px; border:0; border-radius:0; background:var(--line); z-index:51; }
-.pre-bar:before { height:100%; background:var(--lime); animation-duration:10s; animation-timing-function:linear; }
-.pre-bar span { position:absolute; top:16px; left:16px; color:var(--muted); font-size:11px; }
 
 /* BANNIÈRE / CARROUSEL */
 .banner { position:relative; height:168px; border-radius:var(--r); overflow:hidden; background:var(--panel); }
@@ -90,25 +79,8 @@
     border-radius:var(--r); background:var(--panel); padding:16px;
     display:grid; grid-template-columns:auto 1fr auto; gap:4px 14px; align-items:center;
 }
-.market-card { display:block; border:1px solid var(--line); overflow:hidden; padding:14px; }
-.market-card-top { display:flex; justify-content:space-between; align-items:flex-start; gap:10px; padding-bottom:12px; }
-.market-network { display:flex; align-items:center; gap:10px; min-width:0; }
-.market-network small { display:block; color:var(--muted); font-size:9px; font-weight:700; letter-spacing:.8px; }
-.market-network h4 { max-width:155px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-.market-buy { display:flex; flex-direction:column; align-items:flex-end; gap:6px; }
-.market-buy strong { font-family:var(--display); font-size:20px; }
-.market-card-grid { display:grid; grid-template-columns:1.1fr .9fr; gap:12px; border-top:1px solid var(--line); border-bottom:1px solid var(--line); padding:12px 0; }
-.market-info, .market-meta { display:flex; flex-direction:column; gap:7px; }
-.market-info span { display:flex; align-items:center; gap:7px; min-width:0; color:var(--text-muted); font-size:12px; }
-.market-info svg { width:16px; height:16px; flex:none; color:var(--lime); }
-.market-info b { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-.market-meta span { display:flex; justify-content:flex-end; color:var(--muted); font-size:11px; }
-.market-meta b { color:var(--text); margin-right:4px; }
-.market-status { color:var(--lime)!important; align-items:center; gap:4px; }
-.market-status svg { width:13px; height:13px; }
-.market-card-foot { display:flex; justify-content:space-between; padding-top:10px; color:var(--muted); font-size:10px; }
 .logo {
-    width:56px; height:56px; border-radius:14px; display:grid; place-items:center; flex:none;
+    width:56px; height:56px; border-radius:14px; display:grid; place-items:center;
     font-family:var(--display); font-weight:800; font-size:22px; color:var(--bg);
 }
 .card h4 { font-family:var(--display); font-size:18px; font-weight:700; line-height:1.15; }
@@ -175,100 +147,3 @@
 .faq p { color:var(--muted); font-size:13px; margin-top:8px; line-height:1.5; }
 .stat { display:block; }
 .stat .sub { font-size:12px; color:var(--muted); }
-
-/* ... (garder le reste) ... */
-
-/* CARTES PRODUIT (Nouveau Design) */
-.list { display: grid; gap: 12px; }
-
-.card {
-    border-radius: var(--r); 
-    background: var(--panel); 
-    padding: 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    border: 1px solid var(--line);
-}
-
-/* En-tête de la carte */
-.card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 12px;
-}
-
-/* Visuel de la carte bancaire */
-.card-visual {
-    width: 120px; height: 70px;
-    background: #25282D; /* Fond gris métallique */
-    border-radius: 8px;
-    padding: 8px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    border: 1px solid rgba(255,255,255,.1);
-    position: relative;
-}
-.card-visual .chip {
-    width: 20px; height: 14px;
-    background: linear-gradient(135deg, #C0FF15, #a8e010);
-    border-radius: 3px;
-    opacity: 0.8;
-}
-.card-visual .visa-logo {
-    font-family: var(--display); font-style: italic; font-weight: 900; font-size: 14px;
-    color: #fff; text-align: right;
-}
-.card-visual .card-number {
-    font-family: "Courier New", monospace; font-size: 11px; color: var(--muted);
-    letter-spacing: 1px; margin-top: 4px;
-}
-
-/* Bloc Achat (Droite) */
-.card-action {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 4px;
-}
-.card-action .btn-buy {
-    background: var(--lime); color: var(--bg);
-    height: 40px; padding: 0 16px; border-radius: 12px;
-    font-weight: 800; font-size: 14px;
-    display: flex; align-items: center; gap: 6px;
-    transition: transform 0.1s;
-}
-.card-action .btn-buy:active { transform: scale(0.95); }
-.card-action .time { font-size: 11px; color: var(--muted); }
-
-/* Grille d'informations (Bas) */
-.card-details {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-    border-top: 1px solid var(--line);
-    padding-top: 12px;
-    font-size: 12px;
-    color: var(--muted);
-}
-.card-details div {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
-.card-details svg { width: 14px; height: 14px; color: var(--lime); }
-
-/* Prix mis en évidence */
-.card-price {
-    grid-column: 1 / -1;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 4px;
-    font-family: var(--display); font-size: 20px; font-weight: 800; color: var(--text);
-}
-.card-price .old-price {
-    font-size: 12px; color: var(--muted); text-decoration: line-through; font-weight: 400;
-}
