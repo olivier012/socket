@@ -42,6 +42,9 @@ function productCard(p) {
                 <div class="sketch-row">
                     <span class="sketch-icon">⌂</span> <span>${p.zone.toUpperCase()}</span>
                 </div>
+                <div class="sketch-row">
+                    <span class="sketch-icon">⌂</span> <span>Ville</span>
+                </div>
             </div>
         </div>
 
@@ -60,9 +63,6 @@ function productCard(p) {
             <div class="sketch-list">
                 <div class="sketch-row">
                     <span class="sketch-icon">👤</span> <span>Client - Age</span>
-                </div>
-                <div class="sketch-row">
-                    <span class="sketch-icon">⌂</span> <span>Ville</span>
                 </div>
                 <div class="sketch-row">
                     <span class="sketch-icon">▢</span> <span>PC</span>
