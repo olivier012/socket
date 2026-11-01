@@ -1,25 +1,25 @@
 import { telegramService } from './services/telegram.js';
 import { router } from './router.js';
 
+function hidePreloader() {
+    const pre = document.getElementById('preloader');
+    if (!pre) return;
+    pre.classList.add('out');
+    setTimeout(() => pre.remove(), 600);
+}
+
 async function startApp() {
-    // 1. Initialiser Telegram
-    telegramService.init();
-
-    // 2. Vérifier l'utilisateur auprès du serveur VPS
-    const isAuthorized = await telegramService.verifyUser();
-    if (!isAuthorized) return;
-
-    // 3. Lancer l'application
-    router.init();
-
-    // 4. Retirer le preloader
-    requestAnimationFrame(() => {
-        const preloader = document.getElementById('preloader');
-        if (preloader) {
-            preloader.classList.add('out');
-            setTimeout(() => preloader.remove(), 600);
-        }
-    });
+    try {
+        telegramService.init();
+        const ok = await telegramService.verifyUser();
+        if (!ok) return;
+        router.init();
+    } catch (err) {
+        console.error('Erreur au démarrage :', err);
+        telegramService.showError('Une erreur est survenue au démarrage. Réessayez.');
+        return;
+    }
+    hidePreloader();
 }
 
 startApp();
