@@ -12,7 +12,7 @@ function productCard(p) {
         <!-- COLONNE GAUCHE -->
         <div class="sketch-col-left">
             
-            <!-- CARTE BANCAIRE DESIGN PREMIUM -->
+            <!-- VRAIE CARTE BANCAIRE DESIGN -->
             <div class="real-visa-card">
                 <div class="visa-top">
                     <div class="visa-chip">
