@@ -22,8 +22,13 @@
     display:grid; place-items:center; color:var(--muted); font-size:14px;
 }
 .pre-bar:before {
-    content:""; position:absolute; inset:0; background:rgba(192,255,21,.16);
-    transform-origin:left; transform:scaleX(0); animation:fill 1.7s ease-out forwards;
+    content: ""; 
+    position: absolute; 
+    inset: 0; 
+    background: var(--lime);
+    transform-origin: left; 
+    transform: scaleX(0); 
+    animation: fill 10s linear forwards; /* Changé en linear pour un effet plus réaliste */
 }
 .pre-bar span { position:relative; }
 @keyframes fill { to{transform:scaleX(1)} }

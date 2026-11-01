@@ -10,13 +10,14 @@ export const telegramService = {
         }
     },
 
-    async verifyUser() {
-        // La page est cachée par défaut dans le CSS (opacity: 0)
-        
+       async verifyUser() {
+        // --- MODE TEST LOCAL ---
+        // Si pas de Telegram, on simule une connexion réussie pour voir le design
         if (!this.tg || !this.tg.initData) {
-            this.showError("Veuillez ouvrir cette page depuis Telegram.");
-            return false;
+            console.warn("Mode hors-ligne : Simulation de connexion.");
+            return true; // <--- Autorise l'accès pour tester
         }
+        // -----------------------
 
         try {
             const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.VERIFY_USER}`, {
@@ -26,20 +27,16 @@ export const telegramService = {
             });
             
             const data = await response.json();
-            
             if (!data.authorized) {
-                this.showError("Accès refusé. Retournez sur le bot Telegram et répondez aux questions via /start.");
+                this.showError("Accès refusé.");
                 return false;
             }
-            
             return true;
-            
         } catch (error) {
-            this.showError("Erreur de connexion au serveur. Veuillez réessayer plus tard.");
+            this.showError("Erreur de connexion au serveur.");
             return false;
         }
     },
-
     showError(message) {
         document.body.innerHTML = `
             <div style="color:white; text-align:center; padding:50px; font-family:sans-serif; display:flex; flex-direction:column; justify-content:center; height:100vh; background:#08070c;">
