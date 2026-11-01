@@ -1,11 +1,11 @@
 import { store } from '../store/state.js';
-import { eur } from '../utils/format.js';
+import { formatMoney } from '../utils/format.js?v=20261101-card3';
 
 export function renderReservation() {
     return `<h1 class="title">Réservation</h1>
     <form class="rsv" id="rsvForm">
         <div><label for="rp">Carte à réserver</label>
-            <select id="rp">${store.products.map(p => `<option value="${p.id}">${p.name}, ${eur(p.value)}</option>`).join('')}</select>
+            <select id="rp">${store.products.map(p => `<option value="${p.id}">${p.name}, ${formatMoney(p.value)}</option>`).join('')}</select>
         </div>
         <div><label for="rd">Date souhaitée</label><input id="rd" type="date" required></div>
         <button class="buy" style="height:48px;border-radius:24px;margin-top:6px" type="submit">Réserver</button>
@@ -16,7 +16,7 @@ export function renderReservation() {
             return `<article class="card">
                 <div class="logo" style="background:${p.color}">${p.ini}</div>
                 <div><h4>${p.name}</h4><div class="sub">Pour le ${r.date}</div></div>
-                <div class="price">${eur(p.price)}</div>
+                <div class="price">${formatMoney(p.price)}</div>
             </article>`;
         }).join('')}</div>`
         : `<div class="empty" style="padding-top:36px"><b>Aucune réservation</b>Réservez une carte pour la recevoir à la date choisie.</div>`}`;
@@ -35,7 +35,7 @@ export function renderAffiliate() {
         </article>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
             <article class="card stat"><div class="sub">Filleuls</div><div class="price">0</div></article>
-            <article class="card stat"><div class="sub">Gains</div><div class="price">${eur(0)}</div></article>
+            <article class="card stat"><div class="sub">Gains</div><div class="price">${formatMoney(0)}</div></article>
         </div>
     </div>`;
 }
@@ -70,7 +70,7 @@ export function renderBalance() {
     <div class="list">
         <article class="card stat">
             <div class="sub">Solde disponible</div>
-            <div class="price">${eur(store.wallet)}</div>
+            <div class="price">${formatMoney(store.wallet)}</div>
         </article>
     </div>`;
 }

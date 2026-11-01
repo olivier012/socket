@@ -2,17 +2,39 @@ import { store } from '../store/state.js';
 import { getIcon } from '../utils/icons.js';
 import { eur } from '../utils/format.js';
 
-const CAT = { jeux: 'Jeux', streaming: 'Streaming', recharge: 'Recharge téléphone' };
-
-function productCard(p) {
+// Nouveau composant HTML de la carte
+export function productCardHTML(p) {
     return `<article class="card">
-        <div class="logo" style="background:${p.color}">${p.ini}</div>
-        <div><h4>${p.name}</h4><div class="sub">${CAT[p.cat] || p.cat}, valeur ${eur(p.value)}</div></div>
-        <div><button class="buy" data-add="${p.id}">+ Ajouter</button><div class="when">${p.ago}</div></div>
-        <div class="info">
-            <span>${getIcon('globe')}${p.zone}</span>
-            <span>${getIcon('bolt')}Livraison immédiate</span>
-            <span class="price">${eur(p.price)}</span>
+        <!-- En-tête : Carte + Bouton -->
+        <div class="card-header">
+            <div class="card-visual">
+                <div class="chip"></div>
+                <div class="visa-logo">VISA</div>
+                <div class="card-number">44 6628</div>
+            </div>
+            <div class="card-action">
+                <button class="btn-buy" data-add="${p.id}">
+                    ${getIcon('cart')} Acheter
+                </button>
+                <span class="time">${p.ago}</span>
+            </div>
+        </div>
+
+        <!-- Détails (Grille) -->
+        <div class="card-details">
+            <div>${getIcon('tag')} ${p.network || 'AMZ-PRIME'}</div>
+            <div>${getIcon('wallet')} ${p.bank2 || 'BANQUE'}</div>
+            <div>${getIcon('globe')} ${p.country || 'FRANCE'}</div>
+            <div>${getIcon('bolt')} ${p.type || 'GOLD'}</div>
+            <div>${getIcon('users')} Client - ${p.user || 'Age'}</div>
+            <div>${getIcon('phone')} ${p.device || 'PC'}</div>
+            <div>${getIcon('shield')} ${p.os || 'Système'}</div>
+        </div>
+
+        <!-- Prix -->
+        <div class="card-price">
+            <span>${eur(p.price)}</span>
+            ${p.old ? `<span class="old-price">${eur(p.old)}</span>` : ''}
         </div>
     </article>`;
 }
@@ -62,7 +84,7 @@ export function renderShop() {
         </div>
 
         <div class="list" id="plist">
-            ${list.map(productCard).join('') || `<div class="empty"><b>Aucun résultat</b>Essayez le nom d’une marque ou d’un opérateur.</div>`}
+            ${list.map(productCardHTML).join('') || `<div class="empty"><b>Aucun résultat</b>Essayez le nom d’une marque ou d’un opérateur.</div>`}
         </div>
     `;
 }
