@@ -4,7 +4,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: var(--bg);
+    background: rgba(9,11,12,.96); backdrop-filter: blur(18px);
     border-bottom: 1px solid rgba(255, 230, 0, .08);
     position: sticky;
     top: 0;
@@ -39,8 +39,8 @@
     position: fixed; z-index: 50; left: 0; bottom: 0;
     width: 100%; height: var(--nav-height);
     display: grid; grid-template-columns: repeat(7, 1fr);
-    background: #15121a; border-top: 1px solid var(--line);
-    padding: 5px 1px;
+    background: rgba(17,20,21,.97); border-top: 1px solid var(--line);
+    padding: 7px 4px calc(7px + env(safe-area-inset-bottom));
 }
 .nav-item {
     border: 0; background: transparent; color: #8f8799;

@@ -2,6 +2,8 @@ import { telegramService } from './services/telegram.js';
 import { router } from './routes/router.js';
 
 async function startApp() {
+    document.body.classList.add('is-loading');
+
     // 1. Initialiser Telegram
     telegramService.init();
 
@@ -9,11 +11,14 @@ async function startApp() {
     const isAuthorized = await telegramService.verifyUser();
     if (!isAuthorized) return; // Si refusé, la fonction showError a déjà affiché l'écran
 
-    // 3. Afficher la page (enlevé l'opacité 0 du CSS)
-    document.body.style.opacity = '1';
-
-    // 4. Lancer l'application (le routeur va injecter la nav et la page boutique)
+    // 3. Lancer l'application, puis libérer le preloader
     router.init();
+    requestAnimationFrame(() => {
+        document.body.classList.remove('is-loading');
+        const preloader = document.getElementById('preloader');
+        preloader?.classList.add('is-leaving');
+        setTimeout(() => preloader?.remove(), 500);
+    });
 }
 
 // Démarrage

@@ -1,15 +1,25 @@
 :root {
-    --bg: #08070c;
-    --panel: #120f1a;
-    --panel2: #18131f;
-    --line: #302840;
-    --yellow: #ffe600;
-    --purple: #9c4dff;
-    --text: #fbfafc;
-    --muted: #aaa3b5;
-    
-    --radius: 10px;
-    --nav-height: 66px;
+    --bg: #090b0c;
+    --surface: #111415;
+    --surface-2: #171b1c;
+    --surface-3: #202627;
+    --line: #293031;
+    --line-soft: rgba(255,255,255,.07);
+    --acid: #d7ff37;
+    --acid-soft: rgba(215,255,55,.13);
+    --lime: #b8ef2d;
+    --cyan: #8ed7d0;
+    --violet: #a98cff;
+    --coral: #ff8b71;
+    --text: #f7f8f4;
+    --muted: #9da7a4;
+    --yellow: var(--acid);
+    --purple: var(--violet);
+    --panel: var(--surface);
+    --panel2: var(--surface-2);
+
+    --radius: 8px;
+    --nav-height: 72px;
 }
 
 * {
@@ -22,9 +32,16 @@
 body {
     min-height: 100vh;
     color: var(--text);
-    background: linear-gradient(180deg, #0b0910, var(--bg));
-    padding-bottom: calc(var(--nav-height) + 10px);
+    background:
+        radial-gradient(circle at 85% 12%, rgba(142,215,208,.055), transparent 22rem),
+        var(--bg);
+    padding-bottom: calc(var(--nav-height) + 12px);
     overflow-x: hidden;
-    opacity: 0; /* Caché jusqu'à la validation */
     transition: opacity 0.3s ease;
+}
+
+body.is-loading .topbar,
+body.is-loading .content,
+body.is-loading .bottom-nav {
+    visibility: hidden;
 }

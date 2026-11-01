@@ -38,6 +38,13 @@ export function renderShop() {
 
     return `
         <section id="page-shop" class="page">
+            <div class="page-heading">
+                <div>
+                    <span>Marché disponible</span>
+                    <h1>Cartes</h1>
+                </div>
+                <span>${list.length} résultat${list.length > 1 ? 's' : ''}</span>
+            </div>
             <div class="promo-carousel" aria-label="Promotions">
                 <div class="promo-track">
                     <article class="promo-slide active">
