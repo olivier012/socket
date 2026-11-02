@@ -10,14 +10,14 @@ export const store = {
     timer: null,
 
     products: [
-        { id:1, name:'Steam', cat:'jeux', value:20, price:20, color:'#C0FF15', ini:'S', zone:'France', ago:'il y a 3 min' },
-        { id:2, name:'PlayStation Store', cat:'jeux', value:25, price:25, color:'#FFFFFF', ini:'P', zone:'France', ago:'il y a 7 min' },
-        { id:3, name:'Netflix', cat:'streaming', value:15, price:15, color:'#8E929A', ini:'N', zone:'Europe', ago:'il y a 16 min' },
-        { id:4, name:'Spotify Premium', cat:'streaming', value:30, price:29, color:'#C0FF15', ini:'S', zone:'Europe', ago:'il y a 21 min' },
-        { id:5, name:'Orange recharge', cat:'recharge', value:10, price:10, color:'#FFFFFF', ini:'O', zone:'Mali', ago:'il y a 28 min' },
-        { id:6, name:'Moov Africa recharge', cat:'recharge', value:5, price:5, color:'#8E929A', ini:'M', zone:'Mali', ago:'il y a 35 min' },
-        { id:7, name:'Google Play', cat:'jeux', value:50, price:48, color:'#C0FF15', ini:'G', zone:'International', ago:'il y a 42 min' },
-        { id:8, name:'Disney+', cat:'streaming', value:25, price:24, color:'#FFFFFF', ini:'D', zone:'Europe', ago:'il y a 1 h' }
+        { id:1, name:'Steam', cat:'jeux', value:20, price:20, color:'#C0FF15', ini:'S', zone:'France', ago:'il y a 3 min', isNew:true, card:{ bank:'BNP Paribas', network:'Visa', firstSix:'426881', image:'assets/cards/bnp-parubas.jpg', tier:'Premium' } },
+        { id:2, name:'PlayStation Store', cat:'jeux', value:25, price:25, color:'#FFFFFF', ini:'P', zone:'France', ago:'il y a 7 min', isNew:true, card:{ bank:'Revolut', network:'Mastercard', firstSix:'535205', image:'assets/cards/revolut.jpg', tier:'Classic' } },
+        { id:3, name:'Netflix', cat:'streaming', value:15, price:15, color:'#8E929A', ini:'N', zone:'Europe', ago:'il y a 16 min', card:{ bank:'Fortuneo', network:'Mastercard', firstSix:'554025', image:'assets/cards/fortuneo-classic.jpg', tier:'Classic' } },
+        { id:4, name:'Spotify Premium', cat:'streaming', value:30, price:29, color:'#C0FF15', ini:'S', zone:'Europe', ago:'il y a 21 min', card:{ bank:'Monabanq', network:'Visa', firstSix:'497010', image:'assets/cards/monabanq-silver.jpg', tier:'Silver' } },
+        { id:5, name:'Orange recharge', cat:'recharge', value:10, price:10, color:'#FFFFFF', ini:'O', zone:'Mali', ago:'il y a 28 min', card:{ bank:'UAB', network:'UnionPay', firstSix:'621094', image:'assets/cards/uab-classic.jpg', tier:'Classic' } },
+        { id:6, name:'Moov Africa recharge', cat:'recharge', value:5, price:5, color:'#8E929A', ini:'M', zone:'Mali', ago:'il y a 35 min', card:{ bank:'Crédit Agricole', network:'Mastercard', firstSix:'541234', image:'assets/cards/ca.jpg', tier:'Classic' } },
+        { id:7, name:'Google Play', cat:'jeux', value:50, price:48, color:'#C0FF15', ini:'G', zone:'International', ago:'il y a 42 min', card:{ bank:'Banque Populaire', network:'Visa', firstSix:'497970', image:'assets/cards/bp.jpg', tier:'Gold' } },
+        { id:8, name:'Disney+', cat:'streaming', value:25, price:24, color:'#FFFFFF', ini:'D', zone:'Europe', ago:'il y a 1 h', card:{ bank:'Fortuneo', network:'Mastercard', firstSix:'554026', image:'assets/cards/fortuneo-gold.jpg', tier:'Gold' } }
     ],
 
     slides: [

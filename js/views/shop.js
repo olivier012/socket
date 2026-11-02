@@ -1,78 +1,62 @@
-import { store } from '../store/state.js?v=20261101-socket-market-v4';
-import { getIcon } from '../utils/icons.js?v=20261101-socket-market-v4';
+
+import { store } from '../store/state.js?v=20261102-card-v10';
+import { getIcon } from '../utils/icons.js?v=20261102-card-v10';
 
 const eur = value => value.toFixed(2).replace('.', ',') + ' €';
 const CAT = { jeux: 'Jeux', streaming: 'Streaming', recharge: 'Recharge téléphone' };
 
 function productCard(p) {
-    const cardNum = `44 ${6262 + p.id}`;
+    const card = p.card || { bank:'Unknown', network:'Unknown', firstSix:'000000', image:'', tier:'Unknown' };
     
     return `<article class="sketch-card">
-        
-        <!-- COLONNE GAUCHE -->
-        <div class="sketch-col-left">
-            
-            <!-- VRAIE CARTE BANCAIRE DESIGN -->
-            <div class="real-visa-card">
-                <div class="visa-top">
-                    <div class="visa-chip">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                            <rect x="3" y="6" width="18" height="12" rx="2"/>
-                            <path d="M3 10h18M7 6v12M17 6v12"/>
-                        </svg>
-                    </div>
-                    <span class="visa-logo">VISA</span>
-                </div>
-                <div class="visa-bottom">
-                    <span class="visa-num">•••• •••• •••• ${cardNum}</span>
-                </div>
+        <div class="sketch-card-header">
+            <div class="real-bank-card">
+                ${card.image ? `<img src="${card.image}" alt="Carte ${card.bank} ${card.network}" class="bank-card-image">` : ''}
             </div>
-
-            <!-- Les infos à gauche -->
-            <div class="sketch-list">
-                <div class="sketch-row">
-                    <span class="sketch-icon">▤</span> <strong>${p.name}</strong>
-                </div>
-                <div class="sketch-row">
-                    <span class="sketch-icon">≡</span> <span>BANQUE</span>
-                </div>
-                <div class="sketch-row">
-                    <span class="sketch-icon">⬟</span> <span>GOLD</span>
-                </div>
-                <div class="sketch-row">
-                    <span class="sketch-icon">⌂</span> <span>${p.zone.toUpperCase()}</span>
-                </div>
+            <div class="card-network-info">
+                <span class="network-badge ${card.network.toLowerCase().replace(/[^a-z0-9]/g, '')}">${card.network.toUpperCase()}</span>
+                <strong class="card-bin">${card.firstSix}</strong>
             </div>
-        </div>
-
-        <!-- COLONNE DROITE -->
-        <div class="sketch-col-right">
-            <!-- Bouton + Acheter et temps -->
             <div class="sketch-top-right">
                 <button class="sketch-buy" data-add="${p.id}">+ Acheter</button>
                 <div class="sketch-when">${p.ago}</div>
             </div>
+        </div>
 
-            <!-- Prix -->
-            <div class="sketch-price">${eur(p.price)}</div>
-
-            <!-- Infos à droite -->
-            <div class="sketch-list">
+        <div class="sketch-card-body">
+            <div class="sketch-col-left sketch-list">
                 <div class="sketch-row">
-                    <span class="sketch-icon">👤</span> <span>Client - Age</span>
+                    <span class="sketch-icon">${getIcon('product')}</span> <strong>${p.name}</strong>
                 </div>
                 <div class="sketch-row">
-                    <span class="sketch-icon">⌂</span> <span>Ville</span>
+                    <span class="sketch-icon">${getIcon('building')}</span> <span>${card.bank.toUpperCase()}</span>
                 </div>
                 <div class="sketch-row">
-                    <span class="sketch-icon">▢</span> <span>PC</span>
+                    <span class="sketch-icon">${getIcon('diamond')}</span> <span>${card.tier.toUpperCase()}</span>
                 </div>
                 <div class="sketch-row">
-                    <span class="sketch-icon">○</span> <span>Système</span>
+                    <span class="sketch-icon">${getIcon('location')}</span> <span>${p.zone.toUpperCase()}</span>
+                </div>
+            </div>
+            <div class="sketch-col-right sketch-list">
+                <div class="sketch-row">
+                    <span class="sketch-icon">${getIcon('users')}</span> <span>Client - Age</span>
+                </div>
+                <div class="sketch-row">
+                    <span class="sketch-icon">${getIcon('monitor')}</span> <span>PC</span>
+                </div>
+                <div class="sketch-row">
+                    <span class="sketch-icon">${getIcon('cards')}</span> <span>Système</span>
+                </div>
+                <div class="sketch-row">
+                    <span class="sketch-icon">${getIcon('location')}</span> <span>Ville</span>
                 </div>
             </div>
         </div>
-
+        <div class="sketch-card-footer">
+            ${p.isNew ? '<span class="new-badge">Nouveau</span>' : '<span></span>'}
+            <strong class="sketch-price">${eur(p.price)}</strong>
+        </div>
     </article>`;
 }
 

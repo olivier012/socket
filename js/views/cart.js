@@ -1,5 +1,5 @@
-import { store } from '../store/state.js';
-import { getIcon } from '../utils/icons.js';
+import { store } from '../store/state.js?v=20261102-card-v10';
+import { getIcon } from '../utils/icons.js?v=20261102-card-v10';
 
 const eur = value => value.toFixed(2).replace('.', ',') + ' €';
 
@@ -15,53 +15,44 @@ export function renderCart() {
     <div class="list">
         ${store.cart.map(i => {
             const p = store.products.find(product => product.id === i.id);
-            // On génère des données factices pour coller au dessin
-            const cardNumber = `44 6628`;
+            const card = p.card || { bank:'Unknown', network:'Unknown', firstSix:'000000', image:'', tier:'Unknown' };
             const price = eur(p.price * i.qty);
             
-            return `<article class="cart-visual-card">
-                
-                <!-- HAUT : Carte & Bouton Acheter -->
-                <div class="cv-top">
-                    <div class="cv-bank-card">
-                        <div class="cv-card-top">
-                            <span class="cv-card-logo">VISA</span>
-                            <span class="cv-card-num">${cardNumber}</span>
-                        </div>
-                        <div class="cv-card-chip">
-                            <span class="chip-line"></span>
-                        </div>
-                        <div class="cv-card-bottom">
-                            <span class="cv-card-brand">VISA</span>
-                        </div>
+            return `<article class="sketch-card cart-sketch-card">
+                <div class="sketch-card-header">
+                    <div class="real-bank-card">
+                        ${card.image ? `<img src="${card.image}" alt="Carte ${card.bank} ${card.network}" class="bank-card-image">` : ''}
                     </div>
-                    
-                    <div class="cv-actions">
-                        <button class="cv-buy-btn" data-inc="${p.id}">+ Acheter</button>
-                        <div class="cv-time">il y a 16h</div>
+                    <div class="card-network-info">
+                        <span class="network-badge ${card.network.toLowerCase().replace(/[^a-z0-9]/g, '')}">${card.network.toUpperCase()}</span>
+                        <strong class="card-bin">${card.firstSix}</strong>
+                    </div>
+                    <div class="cart-price-top">${price}</div>
+                </div>
+
+                <div class="sketch-card-body">
+                    <div class="sketch-col-left sketch-list">
+                        <div class="sketch-row"><span class="sketch-icon">${getIcon('product')}</span><strong>${p.name}</strong></div>
+                        <div class="sketch-row"><span class="sketch-icon">${getIcon('building')}</span><span>${card.bank.toUpperCase()}</span></div>
+                        <div class="sketch-row"><span class="sketch-icon">${getIcon('diamond')}</span><span>${card.tier.toUpperCase()}</span></div>
+                        <div class="sketch-row"><span class="sketch-icon">${getIcon('location')}</span><span>${p.zone.toUpperCase()}</span></div>
+                    </div>
+                    <div class="sketch-col-right sketch-list">
+                        <div class="sketch-row"><span class="sketch-icon">${getIcon('users')}</span><span>Client - Age</span></div>
+                        <div class="sketch-row"><span class="sketch-icon">${getIcon('monitor')}</span><span>PC</span></div>
+                        <div class="sketch-row"><span class="sketch-icon">${getIcon('cards')}</span><span>Système</span></div>
+                        <div class="sketch-row"><span class="sketch-icon">${getIcon('location')}</span><span>Ville</span></div>
                     </div>
                 </div>
 
-                <!-- BAS : Grille d'informations -->
-                <div class="cv-info-grid">
-                    <!-- Colonne 1 -->
-                    <div class="cv-info-col">
-                        <div class="cv-info-row"><span class="cv-icon">≡</span> ${p.name}</div>
-                        <div class="cv-info-row"><span class="cv-icon">▤</span> BANQUE</div>
-                        <div class="cv-info-row"><span class="cv-icon">⬟</span> GOLD</div>
-                        <div class="cv-info-row"><span class="cv-icon">⌂</span> ${p.zone}</div>
-                    </div>
-                    
-                    <!-- Colonne 2 -->
-                    <div class="cv-info-col cv-info-right">
-                        <div class="cv-info-row"><span class="cv-price">${price}</span></div>
-                        <div class="cv-info-row"><span class="cv-icon">👤</span> Client - Age</div>
-                        <div class="cv-info-row"><span class="cv-icon">🏠</span> Ville</div>
-                        <div class="cv-info-row"><span class="cv-icon">💻</span> PC</div>
-                        <div class="cv-info-row"><span class="cv-icon">○</span> Systeme</div>
+                <div class="sketch-card-footer cart-card-footer">
+                    ${p.isNew ? '<span class="new-badge">Nouveau</span>' : '<span></span>'}
+                    <div class="cart-qty" aria-label="Quantité">
+                        <button data-dec="${p.id}" aria-label="Retirer une carte">−</button>
+                        <strong>${i.qty}</strong>
+                        <button data-inc="${p.id}" aria-label="Ajouter une carte">+</button>
                     </div>
                 </div>
-
             </article>`;
         }).join('')}
     </div>

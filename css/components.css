@@ -155,95 +155,192 @@
 
 .sketch-card {
     display: grid;
-    grid-template-columns: 1fr 1fr; 
-    gap: 16px;
+    gap: 12px;
     background: var(--panel);
     border: 1px solid var(--line);
-    border-radius: 16px;
-    padding: 16px;
+    border-radius: 14px;
+    padding: 12px;
     position: relative;
+}
+
+.sketch-card-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.sketch-card-header .sketch-top-right {
+    margin-left: auto;
+    align-self: flex-start;
+}
+
+.sketch-card-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-top: 1px solid var(--line);
+    padding-top: 10px;
+}
+
+.sketch-card-body .sketch-col-left {
+    padding-right: 10px;
+}
+
+.sketch-card-body .sketch-col-right {
+    border-left: 1px solid var(--line);
+    padding-left: 12px;
+}
+
+.sketch-card-footer {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+}
+
+.new-badge {
+    display: inline-flex;
+    align-items: center;
+    min-height: 22px;
+    padding: 4px 8px;
+    border-radius: 999px;
+    background: #4D9FFF;
+    color: #FFFFFF;
+    font-size: 10px;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: 0.25px;
+}
+
+.cart-price-top {
+    margin-left: auto;
+    align-self: flex-start;
+    font-family: var(--display);
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--text);
+}
+
+.cart-card-footer {
+    align-items: center;
+}
+
+.cart-qty {
+    height: 36px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px;
+    border-radius: 18px;
+    background: var(--bg);
+    border: 1px solid var(--line);
+}
+
+.cart-qty button {
+    width: 28px;
+    height: 28px;
+    border-radius: 14px;
+    display: grid;
+    place-items: center;
+    background: var(--surface-light);
+    color: var(--text);
+    font-size: 16px;
+    font-weight: 800;
+}
+
+.cart-qty button:last-child {
+    background: var(--lime);
+    color: var(--bg);
+}
+
+.cart-qty strong {
+    min-width: 24px;
+    text-align: center;
+    font-size: 13px;
+}
+
+.card-network-info {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 7px;
+}
+
+.network-badge {
+    display: inline-flex;
+    align-items: center;
+    min-height: 24px;
+    padding: 5px 9px;
+    border-radius: 999px;
+    background: rgba(192, 255, 21, 0.12);
+    border: 1px solid rgba(192, 255, 21, 0.5);
+    color: var(--lime);
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+}
+
+.network-badge.mastercard {
+    background: rgba(255, 151, 0, 0.12);
+    border-color: rgba(255, 151, 0, 0.55);
+    color: #ffb347;
+}
+
+.network-badge.unionpay {
+    background: rgba(72, 152, 255, 0.12);
+    border-color: rgba(72, 152, 255, 0.55);
+    color: #83baff;
+}
+
+.card-bin {
+    font-family: var(--display);
+    font-size: 18px;
+    line-height: 1;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: var(--text);
 }
 
 /* --- COLONNE GAUCHE --- */
 .sketch-col-left {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 8px;
+    min-width: 0;
 }
 
 /* La VRAIE carte bancaire */
-.real-visa-card {
-    width: 100%;
-    aspect-ratio: 1.58; /* Ratio standard d'une carte bancaire */
-    background: linear-gradient(135deg, #1a1c21 0%, #0D0E11 100%);
-    border-radius: 10px;
-    padding: 12px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+.real-bank-card {
+    width: 104px;
+    height: 66px;
+    aspect-ratio: 1.586;
+    border-radius: 7px;
     border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.5), inset 0 1px 1px rgba(255,255,255,0.05);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.32), inset 0 1px 1px rgba(255,255,255,0.05);
     position: relative;
     overflow: hidden;
+    background: var(--panel);
 }
 
-/* Effet de reflet brillant */
-.real-visa-card::after {
+.real-bank-card::after {
     content: '';
     position: absolute;
-    top: -50%; left: -50%;
-    width: 200%; height: 200%;
-    background: linear-gradient(to bottom right, rgba(255,255,255,0.05) 0%, transparent 40%, transparent 100%);
-    transform: rotate(30deg);
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.12), transparent 40%);
     pointer-events: none;
 }
 
-.visa-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    z-index: 1;
-}
-
-/* La puce dorée */
-.visa-chip {
-    width: 32px;
-    height: 24px;
-    background: linear-gradient(135deg, #f9d423 0%, #e6a800 100%);
-    border-radius: 4px;
-    display: grid;
-    place-items: center;
-    box-shadow: inset 0 1px 2px rgba(255,255,255,0.4);
-}
-.visa-chip svg { width: 20px; height: 20px; color: rgba(0,0,0,0.4); }
-
-.visa-logo {
-    font-family: var(--display);
-    font-style: italic;
-    font-weight: 800;
-    font-size: 18px;
-    color: #fff;
-    letter-spacing: 1px;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
-}
-
-.visa-bottom {
-    z-index: 1;
-}
-.visa-num {
-    font-family: 'Courier New', monospace;
-    font-size: 13px;
-    font-weight: 700;
-    color: #e0e0e0;
-    letter-spacing: 1px;
-    text-shadow: 0 1px 1px rgba(0,0,0,0.5);
+.bank-card-image {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
 }
 
 /* --- COLONNE DROITE --- */
 .sketch-col-right {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
 }
 
 .sketch-top-right {
@@ -307,8 +404,15 @@
 
 .sketch-icon {
     color: var(--muted);
-    font-size: 14px;
     width: 16px;
     text-align: center;
     opacity: 0.8;
+    display: inline-grid;
+    place-items: center;
+    flex: 0 0 16px;
+}
+.sketch-icon svg {
+    width: 14px;
+    height: 14px;
+    display: block;
 }
