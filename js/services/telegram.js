@@ -20,6 +20,8 @@ export const telegramService = {
             return false;
         }
 
+        console.log("Envoi de la requête à:", `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.VERIFY_USER}`);
+
         const controller = new AbortController();
         const timer = setTimeout(() => controller.abort(), 8000);
 
@@ -30,7 +32,14 @@ export const telegramService = {
                 body: JSON.stringify({ initData: this.tg.initData }),
                 signal: controller.signal
             });
-            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+            console.log("Réponse du serveur status:", response.status);
+
+            if (!response.ok) {
+                // On lit le corps de la réponse pour voir l'erreur exacte du serveur
+                const errorText = await response.text();
+                throw new Error(`Erreur Serveur (${response.status}) : ${errorText}`);
+            }
 
             const data = await response.json();
             if (!data.authorized) {
@@ -39,8 +48,15 @@ export const telegramService = {
             }
             return true;
         } catch (error) {
-            console.error(error);
-            this.showError("Erreur de connexion au serveur. Veuillez réessayer plus tard.");
+            console.error("Erreur attrapée :", error);
+            
+            // Si le serveur met trop de temps à répondre (CORS bloqué, etc.)
+            if (error.name === 'AbortError') {
+                this.showError("Le serveur met trop de temps à répondre (Timeout). Vérifiez votre connexion.");
+            } else {
+                // On affiche le VRAI message d'erreur à l'écran
+                this.showError(`Détail : ${error.message}`);
+            }
             return false;
         } finally {
             clearTimeout(timer);
@@ -48,7 +64,6 @@ export const telegramService = {
     },
 
     showError(message) {
-        // On crée un overlay au-dessus de tout, sans écraser le body
         let overlay = document.getElementById('tg-error-overlay');
         if (!overlay) {
             overlay = document.createElement('div');
@@ -64,7 +79,7 @@ export const telegramService = {
         }
         overlay.innerHTML = `
             <h2 style="margin-bottom:10px; font-family:'Bricolage Grotesque',sans-serif;">Erreur</h2>
-            <p style="color:#8E929A; max-width:320px; line-height:1.5;">${message}</p>
+            <p style="color:#8E929A; max-width:320px; line-height:1.5; font-size: 14px;">${message}</p>
         `;
     }
 };
