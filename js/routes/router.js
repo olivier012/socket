@@ -1,9 +1,9 @@
-import { renderShop } from '../views/shop.js?v=20261102-card-v10';
-import { renderCart } from '../views/cart.js?v=20261102-card-v10';
-import { renderPurchases } from '../views/purchase.js?v=20261102-card-v10';
-import { renderReservation, renderAffiliate, renderRewards, renderSupport, renderBalance } from '../views/others.js?v=20261102-card-v10';
-import { store } from '../store/state.js?v=20261102-card-v10';
-import { getIcon } from '../utils/icons.js?v=20261102-card-v10';
+import { renderShop } from '../views/shop.js?v=20261102-card-v13';
+import { renderCart } from '../views/cart.js?v=20261102-card-v13';
+import { renderPurchases } from '../views/purchase.js?v=20261102-card-v13';
+import { renderReservation, renderAffiliate, renderRewards, renderSupport, renderBalance } from '../views/others.js?v=20261102-card-v13';
+import { store } from '../store/state.js?v=20261102-card-v13';
+import { getIcon } from '../utils/icons.js?v=20261102-card-v13';
 
 export const router = {
     currentRoute: 'shop',
@@ -116,6 +116,52 @@ export const router = {
 
             if (button.dataset.tab) return this.navigate(button.dataset.tab);
             if (button.dataset.go) return this.navigate(button.dataset.go);
+            if (button.dataset.orderMenu) {
+                const menu = document.querySelector(`[data-order-actions="${button.dataset.orderMenu}"]`);
+                if (!menu) return;
+                document.querySelectorAll('[data-order-actions]').forEach(item => {
+                    if (item !== menu) item.hidden = true;
+                });
+                document.querySelectorAll('[data-order-menu]').forEach(item => item.setAttribute('aria-expanded', 'false'));
+                menu.hidden = !menu.hidden;
+                button.setAttribute('aria-expanded', String(!menu.hidden));
+                return;
+            }
+                        if (button.dataset.sendOrder) {
+                const orderNumber = button.dataset.sendOrder;
+                const code = button.dataset.code;
+                
+                // On trouve la commande pour récupérer ses infos complètes
+                const order = store.orders.find(o => (o.number || `#${String(o.code).slice(-6).replace(/-/g, '')}`) === orderNumber);
+                
+                if (order) {
+                    // On importe le service dynamiquement pour ne pas ralentir le chargement initial
+                    import('../services/orders.js').then(async ({ ordersService }) => {
+                        const result = await ordersService.sendOrder({
+                            orderNumber: orderNumber,
+                            code: code
+                        });
+                        
+                        if (result === 'copied') {
+                            this.showToast('Code copié dans le presse-papier');
+                        } else if (result === true) {
+                            this.showToast('Code envoyé avec succès');
+                        }
+                    });
+                } else {
+                    this.showToast('Commande introuvable');
+                }
+                return;
+            }
+            if (button.dataset.deleteOrder) {
+                store.removeOrder(button.dataset.deleteOrder);
+                return this.navigate('orders');
+            }
+            if (button.dataset.removeCart) {
+                store.removeCartItem(Number(button.dataset.removeCart));
+                this.showToast('Produit supprimé du panier');
+                return this.navigate('cart');
+            }
             if (button.dataset.more) {
                 this.closeMore();
                 return button.dataset.more === 'balance'

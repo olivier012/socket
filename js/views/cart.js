@@ -1,17 +1,23 @@
-import { store } from '../store/state.js?v=20261102-card-v10';
-import { getIcon } from '../utils/icons.js?v=20261102-card-v10';
+import { store } from '../store/state.js?v=20261102-card-v13';
+import { getIcon } from '../utils/icons.js?v=20261102-card-v13';
 
 const eur = value => value.toFixed(2).replace('.', ',') + ' €';
 
 export function renderCart() {
     if (!store.cart.length) {
-        return `<h1 class="title">Panier</h1>
+        return `<div class="page-header cart-page-header">
+        <button class="back-button" data-go="shop" aria-label="Retour aux cartes">${getIcon('back')}</button>
+        <h1 class="title">Panier</h1>
+        </div>
         <div class="empty"><b>Votre panier est vide</b>Ajoutez une carte cadeau depuis l’onglet Cartes.<br>
         <button class="buy" data-go="shop">Voir les cartes</button></div>`;
     }
     const total = store.cart.reduce((s, i) => s + store.products.find(p => p.id === i.id).price * i.qty, 0);
 
-    return `<h1 class="title">Panier</h1>
+    return `<div class="page-header cart-page-header">
+    <button class="back-button" data-go="shop" aria-label="Retour aux cartes">${getIcon('back')}</button>
+    <h1 class="title">Panier</h1>
+    </div>
     <div class="list">
         ${store.cart.map(i => {
             const p = store.products.find(product => product.id === i.id);
@@ -47,10 +53,15 @@ export function renderCart() {
 
                 <div class="sketch-card-footer cart-card-footer">
                     ${p.isNew ? '<span class="new-badge">Nouveau</span>' : '<span></span>'}
-                    <div class="cart-qty" aria-label="Quantité">
-                        <button data-dec="${p.id}" aria-label="Retirer une carte">−</button>
-                        <strong>${i.qty}</strong>
-                        <button data-inc="${p.id}" aria-label="Ajouter une carte">+</button>
+                    <div class="cart-footer-actions">
+                        <button class="cart-remove-button" data-remove-cart="${p.id}" aria-label="Supprimer ${p.name} du panier" title="Supprimer du panier">
+                            ${getIcon('trash')}
+                        </button>
+                        <div class="cart-qty" aria-label="Quantité">
+                            <button disabled aria-label="Retirer une carte">−</button>
+                            <strong>${i.qty}</strong>
+                            <button disabled aria-label="Ajouter une carte">+</button>
+                        </div>
                     </div>
                 </div>
             </article>`;

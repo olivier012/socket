@@ -40,19 +40,44 @@ export const store = {
         }
     },
 
+    removeCartItem(id) {
+        this.cart = this.cart.filter(item => item.id !== id);
+    },
+
     validatePurchase() {
         const total = this.cart.reduce((s, i) => s + this.products.find(p => p.id === i.id).price * i.qty, 0);
         if (total > this.wallet) return { success: false, message: 'Solde insuffisant' };
 
-        const time = new Date().toLocaleTimeString('fr-FR', { hour:'2-digit', minute:'2-digit' });
+        const purchasedAt = new Date();
+        const time = purchasedAt.toLocaleTimeString('fr-FR', { hour:'2-digit', minute:'2-digit' });
+        const date = purchasedAt.toLocaleDateString('fr-FR', { day:'2-digit', month:'short', year:'numeric' });
         this.cart.forEach(i => {
             for (let k = 0; k < i.qty; k++) {
-                this.orders.unshift({ id: i.id, code: this.generateCode(), time });
+                this.orders.unshift({
+                    id: i.id,
+                    code: this.generateCode(),
+                    time,
+                    date,
+                    number: this.generateOrderNumber()
+                });
             }
         });
         this.wallet -= total;
         this.cart = [];
         return { success: true };
+    },
+
+    removeOrder(number) {
+        this.orders = this.orders.filter(order => {
+            const orderNumber = order.number || `#${String(order.code).slice(-6).replace(/-/g, '')}`;
+            return orderNumber !== number;
+        });
+    },
+
+    generateOrderNumber() {
+        const timestamp = Date.now().toString().slice(-7);
+        const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+        return `#${timestamp}${random}`;
     },
 
     generateCode() {

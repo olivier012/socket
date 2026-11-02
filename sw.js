@@ -1,4 +1,4 @@
-const CACHE_NAME = 'socket-market-network-only-v10';
+const CACHE_NAME = 'socket-market-network-only-v13';
 
 self.addEventListener('install', event => {
     self.skipWaiting();

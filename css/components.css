@@ -104,6 +104,21 @@
 
 /* TITRES / VUES VIDES */
 .title { font-family:var(--display); font-size:26px; font-weight:800; margin:6px 0 14px; }
+.page-header { display:flex; align-items:center; }
+.cart-page-header { gap:10px; }
+.cart-page-header .title { margin:6px 0 14px; }
+.back-button {
+    width:38px;
+    height:38px;
+    flex:0 0 38px;
+    border-radius:19px;
+    display:grid;
+    place-items:center;
+    background:var(--panel);
+    border:1px solid var(--line);
+    color:var(--text);
+}
+.back-button svg { width:20px; height:20px; }
 .empty { text-align:center; color:var(--muted); padding:56px 20px; }
 .empty b { display:block; color:var(--text); font-size:18px; margin-bottom:6px; font-family:var(--display); }
 .empty button { margin-top:18px; }
@@ -223,6 +238,28 @@
     align-items: center;
 }
 
+.cart-footer-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.cart-remove-button {
+    width: 36px;
+    height: 36px;
+    display: grid;
+    place-items: center;
+    border-radius: 18px;
+    background: var(--bg);
+    border: 1px solid var(--line);
+    color: var(--text);
+}
+
+.cart-remove-button svg {
+    width: 17px;
+    height: 17px;
+}
+
 .cart-qty {
     height: 36px;
     display: inline-flex;
@@ -250,11 +287,157 @@
     background: var(--lime);
     color: var(--bg);
 }
+.cart-qty button:disabled {
+    cursor: not-allowed;
+    opacity: 0.62;
+}
 
 .cart-qty strong {
     min-width: 24px;
     text-align: center;
     font-size: 13px;
+}
+
+.purchases-page-header { gap: 10px; }
+.purchases-page-header .title { margin: 6px 0 14px; }
+
+.purchase-card {
+    gap: 10px;
+    overflow: visible;
+}
+
+.purchase-card-header {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 32px auto 36px;
+    align-items: center;
+    gap: 8px;
+}
+
+.purchase-order {
+    min-width: 0;
+    display: grid;
+    gap: 3px;
+}
+
+.purchase-order strong {
+    font-size: 14px;
+    line-height: 1.1;
+}
+
+.purchase-order span {
+    color: var(--muted);
+    font-size: 11px;
+}
+
+.delivery-badge {
+    width: 32px;
+    height: 32px;
+    display: grid;
+    place-items: center;
+    border-radius: 16px;
+    background: rgba(192, 255, 21, 0.12);
+    color: var(--lime);
+}
+
+.delivery-badge svg {
+    width: 18px;
+    height: 18px;
+}
+
+.purchase-price {
+    font-family: var(--display);
+    font-size: 18px;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.purchase-menu-button {
+    width: 36px;
+    height: 36px;
+    display: grid;
+    place-items: center;
+    border-radius: 18px;
+    background: var(--bg);
+    border: 1px solid var(--line);
+}
+
+.purchase-menu-button svg {
+    width: 18px;
+    height: 18px;
+}
+
+.purchase-card-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-top: 1px solid var(--line);
+    padding-top: 9px;
+    gap: 10px;
+}
+
+.purchase-card-body > div {
+    min-width: 0;
+    display: grid;
+    gap: 4px;
+}
+
+.purchase-card-body > div:last-child {
+    border-left: 1px solid var(--line);
+    padding-left: 10px;
+}
+
+.purchase-card-body span {
+    color: var(--muted);
+    font-size: 10px;
+}
+
+.purchase-card-body strong {
+    font-size: 12px;
+}
+
+.purchase-code {
+    width: 100%;
+    height: 32px;
+    overflow: hidden;
+    border-radius: 8px;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 11px;
+    font-weight: 800;
+    text-overflow: ellipsis;
+}
+
+.order-menu {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    border-top: 1px solid var(--line);
+    padding-top: 10px;
+}
+
+.order-menu[hidden] { display: none; }
+
+.order-menu button {
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    border-radius: 19px;
+    background: var(--lime);
+    color: var(--bg);
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.order-menu button.delete-order {
+    background: var(--bg);
+    border: 1px solid var(--line);
+    color: var(--text);
+}
+
+.order-menu button svg {
+    width: 16px;
+    height: 16px;
 }
 
 .card-network-info {
