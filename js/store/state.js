@@ -5,7 +5,8 @@ export const store = {
     open: false,
     cart: [],       // [{id, qty}]
     orders: [],     // [{id, code, time}]
-    rsv: [],        // [{id, date}]
+    rsv: [],        // [{bin, bank, level, region, ageMin, ageMax, quantity, total, createdAt, status}]
+    rsvOpen: false,
     slide: 2,
     timer: null,
 

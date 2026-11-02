@@ -1,9 +1,9 @@
-import { renderShop } from '../views/shop.js?v=20261102-card-v13';
-import { renderCart } from '../views/cart.js?v=20261102-card-v13';
-import { renderPurchases } from '../views/purchase.js?v=20261102-card-v13';
-import { renderReservation, renderAffiliate, renderRewards, renderSupport, renderBalance } from '../views/others.js?v=20261102-card-v13';
-import { store } from '../store/state.js?v=20261102-card-v13';
-import { getIcon } from '../utils/icons.js?v=20261102-card-v13';
+import { renderShop } from '../views/shop.js?v=20261102-card-v14';
+import { renderCart } from '../views/cart.js?v=20261102-card-v14';
+import { renderPurchases } from '../views/purchase.js?v=20261102-card-v14';
+import { renderReservation, renderAffiliate, renderRewards, renderSupport, renderBalance } from '../views/others.js?v=20261102-card-v14';
+import { store } from '../store/state.js?v=20261102-card-v14';
+import { getIcon } from '../utils/icons.js?v=20261102-card-v14';
 
 export const router = {
     currentRoute: 'shop',
@@ -116,6 +116,19 @@ export const router = {
 
             if (button.dataset.tab) return this.navigate(button.dataset.tab);
             if (button.dataset.go) return this.navigate(button.dataset.go);
+            if (button.hasAttribute('data-toggle-reservations')) {
+                store.rsvOpen = !store.rsvOpen;
+                const panel = document.getElementById('reservationList');
+                if (panel) panel.classList.toggle('open', store.rsvOpen);
+                button.setAttribute('aria-expanded', String(store.rsvOpen));
+                return;
+            }
+            if (button.dataset.deleteReservation) {
+                store.rsv.splice(Number(button.dataset.deleteReservation), 1);
+                store.rsvOpen = true;
+                this.showToast('Réservation annulée');
+                return this.navigate('rsv');
+            }
             if (button.dataset.orderMenu) {
                 const menu = document.querySelector(`[data-order-actions="${button.dataset.orderMenu}"]`);
                 if (!menu) return;
@@ -240,6 +253,12 @@ export const router = {
         });
 
         document.addEventListener('input', event => {
+            if (event.target.id === 'rquantity') {
+                const quantity = Math.max(1, Math.min(10, Number(event.target.value) || 1));
+                const total = document.getElementById('rtotal');
+                if (total) total.textContent = `${(quantity * 20).toFixed(2).replace('.', ',')} €`;
+                return;
+            }
             if (event.target.id !== 'q') return;
             store.q = event.target.value;
             const query = store.q.toLowerCase().trim();
@@ -254,10 +273,35 @@ export const router = {
         document.addEventListener('submit', event => {
             if (event.target.id !== 'rsvForm') return;
             event.preventDefault();
-            const date = new Date(document.getElementById('rd').value).toLocaleDateString('fr-FR');
-            store.rsv.unshift({ id: Number(document.getElementById('rp').value), date });
-            this.showToast('Réservation enregistrée');
-            this.navigate('rsv');
+            const submitButton = event.submitter;
+            if (submitButton?.classList.contains('loading')) return;
+            submitButton?.classList.add('loading');
+            if (submitButton) {
+                submitButton.disabled = true;
+                submitButton.innerHTML = '<span class="reservation-spinner"></span><span>Réservation en cours…</span>';
+            }
+            const quantity = Math.max(1, Math.min(10, Number(document.getElementById('rquantity').value) || 1));
+            let ageMin = Math.max(18, Math.min(99, Number(document.getElementById('rageMin').value) || 18));
+            let ageMax = Math.max(18, Math.min(99, Number(document.getElementById('rageMax').value) || 99));
+            if (ageMin > ageMax) [ageMin, ageMax] = [ageMax, ageMin];
+            const reservation = {
+                bin: document.getElementById('rb').value.trim(),
+                bank: document.getElementById('rbank').value,
+                level: document.getElementById('rlevel').value,
+                region: document.getElementById('rregion').value,
+                ageMin,
+                ageMax,
+                quantity,
+                total: quantity * 20,
+                createdAt: Date.now(),
+                status: 'pending'
+            };
+            setTimeout(() => {
+                store.rsv.unshift(reservation);
+                store.rsvOpen = true;
+                this.navigate('rsv');
+                this.showToast('Réservation enregistrée');
+            }, 700);
         });
 
         document.getElementById('sheet').addEventListener('click', event => {

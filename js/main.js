@@ -4,7 +4,7 @@ async function clearLegacyCaches() {
     if (!('caches' in window)) return;
     const cacheNames = await caches.keys();
     await Promise.all(cacheNames
-        .filter(name => name.startsWith('socket-market-') && name !== 'socket-market-network-only-v13')
+        .filter(name => name.startsWith('socket-market-') && name !== 'socket-market-network-only-v14')
         .map(name => caches.delete(name)));
 }
 
@@ -13,7 +13,7 @@ async function prepareAppUpdates() {
     if (!('serviceWorker' in navigator)) return;
 
     try {
-        const registration = await navigator.serviceWorker.register('./sw.js?v=20261102-card-v13');
+        const registration = await navigator.serviceWorker.register('./sw.js?v=20261102-card-v14');
         await registration.update();
     } catch (error) {
         console.warn('Mise à jour automatique non disponible:', error);
