@@ -7,6 +7,8 @@ export const store = {
     orders: [],     // [{id, code, time}]
     rsv: [],        // [{bin, bank, level, region, ageMin, ageMax, quantity, total, createdAt, status}]
     rsvOpen: false,
+    rechargeHistory: [],
+    rechargeHistoryOpen: false,
     slide: 2,
     timer: null,
 

@@ -70,6 +70,7 @@
 .sheet-in {
     width:100%; max-width:480px; margin:0 auto; background:var(--panel);
     border-radius:26px 26px 0 0; padding:22px 20px calc(24px + env(safe-area-inset-bottom,0px));
+    max-height:calc(100vh - 12px); overflow-y:auto; overscroll-behavior:contain;
 }
 .sheet h3 { font-family:var(--display); font-size:22px; margin-bottom:4px; }
 .sheet p { color:var(--muted); font-size:13px; margin-bottom:16px; }

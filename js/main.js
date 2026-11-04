@@ -1,10 +1,22 @@
 import { telegramService } from './services/telegram.js?v=20261102-card-v13';
 
+document.addEventListener('gesturestart', event => event.preventDefault(), { passive: false });
+document.addEventListener('gesturechange', event => event.preventDefault(), { passive: false });
+document.addEventListener('gestureend', event => event.preventDefault(), { passive: false });
+document.addEventListener('wheel', event => {
+    if (event.ctrlKey || event.metaKey) event.preventDefault();
+}, { passive: false });
+document.addEventListener('keydown', event => {
+    if ((event.ctrlKey || event.metaKey) && ['+', '=', '-', '_', '0'].includes(event.key)) {
+        event.preventDefault();
+    }
+});
+
 async function clearLegacyCaches() {
     if (!('caches' in window)) return;
     const cacheNames = await caches.keys();
     await Promise.all(cacheNames
-        .filter(name => name.startsWith('socket-market-') && name !== 'socket-market-network-only-v14')
+        .filter(name => name.startsWith('socket-market-') && name !== 'socket-market-network-only-v19')
         .map(name => caches.delete(name)));
 }
 
@@ -13,7 +25,7 @@ async function prepareAppUpdates() {
     if (!('serviceWorker' in navigator)) return;
 
     try {
-        const registration = await navigator.serviceWorker.register('./sw.js?v=20261102-card-v14');
+        const registration = await navigator.serviceWorker.register('./sw.js?v=20261102-card-v19');
         await registration.update();
     } catch (error) {
         console.warn('Mise à jour automatique non disponible:', error);

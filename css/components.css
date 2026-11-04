@@ -235,6 +235,167 @@
 .reservation-item-details b { color:var(--text); font-size:12px; }
 .reservation-delete { justify-self:end; color:#ff7b7b; font-size:12px; font-weight:700; }
 
+/* SOLDE / CRYPTO */
+.sheet.payment-sheet .sheet-in,
+.sheet-in:has(.payment-page-header) {
+    min-height:min(720px, calc(100vh - 24px));
+}
+.recharge-header,
+.payment-header {
+    height:52px; display:flex; align-items:center; justify-content:space-between; gap:10px;
+}
+.recharge-page-header,
+.payment-page-header {
+   display:grid; grid-template-columns:38px minmax(0,1fr) 38px; align-items:center; gap:10px;
+}
+.recharge-page-header {
+    position:sticky; top:-22px; z-index:4;
+    background:var(--panel); border-bottom:1px solid var(--line);
+    margin:-22px -20px 0; padding:12px 20px 10px;
+}
+.recharge-page-header .title,
+.payment-page-header .title { margin:0; text-align:center; font-size:24px; }
+.payment-page-header {
+    height:52px;
+    border-bottom:1px solid var(--line);
+    margin-bottom:12px;
+}
+.recharge-back, .recharge-history-button, .payment-back {
+    width:38px; height:38px; border-radius:19px; display:grid; place-items:center;
+    background:var(--bg); border:1px solid var(--line); color:var(--text);
+}
+.recharge-back svg, .payment-back svg { width:20px; height:20px; }
+.recharge-history-button { position:relative; }
+.recharge-history-button svg { width:21px; height:21px; }
+.recharge-history-button span {
+    position:absolute; top:-6px; right:-6px; min-width:18px; height:18px; padding:0 4px;
+    border-radius:9px; display:grid; place-items:center; background:var(--lime); color:var(--bg); font-size:10px; font-weight:800;
+}
+.recharge-history {
+    display:grid; gap:8px;
+}
+.recharge-history-heading {
+    height:42px; display:flex; align-items:center; justify-content:space-between; font-size:14px;
+}
+.recharge-history-heading span {
+    min-width:22px; height:22px; border-radius:11px; display:grid; place-items:center;
+    background:var(--lime); color:var(--bg); font-size:11px;
+}
+.recharge-history-empty {
+    padding:44px 20px; border-radius:14px; background:var(--bg);
+    color:var(--muted); text-align:center; font-size:13px;
+}
+.recharge-history-item {
+    min-height:64px; padding:10px; border-radius:14px; background:var(--bg);
+    display:grid; grid-template-columns:40px minmax(0,1fr) auto; align-items:center; gap:8px;
+}
+.recharge-history-item > div { display:grid; gap:3px; }
+.recharge-history-item strong { font-size:13px; }
+.recharge-history-item small { color:var(--muted); font-size:11px; }
+.recharge-history-status { color:#7da92a; font-size:11px; font-weight:700; }
+.recharge-heading { display:flex; align-items:center; gap:10px; }
+.recharge-heading h3, .payment-header h3 { margin:0; font-family:var(--display); font-size:20px; }
+.recharge-heading-icon, .payment-wallet {
+    width:38px; height:38px; border-radius:19px; display:grid; place-items:center;
+    background:rgba(255,93,93,.13); color:#ff6666;
+}
+.recharge-heading-icon svg, .payment-wallet svg { width:21px; height:21px; }
+.recharge-close, .payment-close {
+    width:38px; height:38px; border-radius:19px; display:grid; place-items:center;
+    background:var(--bg); border:1px solid var(--line); color:var(--text);
+}
+.recharge-close svg { width:18px; height:18px; transform:rotate(180deg); }
+.payment-close { font-size:26px; line-height:1; }
+.recharge-divider { height:1px; background:var(--line); margin:8px 0 14px; }
+.recharge-intro { padding:18px 2px 4px; }
+.recharge-intro h2 {
+    margin:0 0 5px; font-family:var(--display); font-size:20px; font-weight:800;
+}
+.recharge-intro p { margin:0; color:var(--muted); font-size:13px; line-height:1.45; }
+.current-balance {
+    min-height:68px; margin:12px 0 16px; padding:12px 14px; border-radius:14px;
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+    background:var(--lime); color:var(--bg);
+}
+.current-balance span { font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.4px; }
+.current-balance strong { font-family:var(--display); font-size:22px; }
+.recharge-label, .crypto-heading {
+    display:flex; justify-content:space-between; color:var(--muted); font-size:12px;
+    font-weight:700; text-transform:uppercase; letter-spacing:.6px;
+}
+.amounts { grid-template-columns:repeat(4,1fr); margin:8px 0 12px; }
+.amounts button { border:1px solid var(--line); color:var(--text); }
+.amounts button.active { background:var(--lime); border-color:var(--lime); color:var(--bg); }
+.custom-amount {
+    height:50px; margin-bottom:14px; padding:0 12px; border-radius:14px;
+    display:grid; grid-template-columns:1fr 74px 20px; align-items:center; gap:8px;
+    background:var(--bg); border:1px solid var(--line);
+}
+.custom-amount span { color:var(--muted); font-size:12px; }
+.custom-amount input {
+    min-width:0; height:38px; border-radius:10px; border:1px solid var(--line);
+    background:var(--panel); color:var(--text); text-align:right; padding:0 8px; font:inherit;
+}
+.custom-amount b { text-align:right; }
+.crypto-heading { padding:0 2px 6px; }
+.crypto-list { display:grid; gap:7px; }
+.crypto-row {
+    width:100%; height:58px; display:grid; grid-template-columns:40px minmax(80px,1fr) minmax(110px,auto) 18px;
+    align-items:center; gap:8px; padding:7px 10px; border-radius:14px;
+    background:var(--bg); border:1px solid var(--line); text-align:left; color:var(--text);
+}
+.crypto-icon {
+    width:38px; height:38px; border-radius:19px; display:grid; place-items:center;
+    background:var(--lime); color:var(--bg); font-family:var(--display); font-weight:800;
+}
+.crypto-btc { background:#f7931a; }
+.crypto-sol { background:linear-gradient(135deg,#9945ff,#14f195); }
+.crypto-usdt { background:#26a17b; }
+.crypto-usdc { background:#2775ca; }
+.crypto-dai { background:#f5ac37; }
+.crypto-name { display:grid; gap:2px; }
+.crypto-name strong { font-size:14px; }
+.crypto-name small { color:var(--muted); font-size:11px; }
+.crypto-network { color:var(--muted); font-size:11px; text-align:right; }
+.crypto-arrow { font-size:24px; color:var(--muted); text-align:right; }
+.payment-header { border-bottom:1px solid var(--line); margin-bottom:12px; }
+.payment-header h3 { flex:1; }
+.payment-status {
+    display:flex; align-items:center; gap:8px; height:34px; font-size:13px;
+}
+.payment-status span { width:9px; height:9px; border-radius:50%; background:#f4a62a; box-shadow:0 0 0 4px rgba(244,166,42,.08); }
+.payment-status b { color:#f4a62a; }
+.payment-status em { margin-left:auto; font-style:normal; color:#f4a62a; font-weight:700; }
+.payment-info { max-width:330px; margin:0 auto; }
+.demo-banner {
+    display:block; margin-bottom:10px; padding:8px; border-radius:10px;
+    background:rgba(244,166,42,.1); color:#f4a62a; text-align:center; font-size:10px;
+}
+.payment-qr {
+    width:190px; height:190px; margin:0 auto 10px; padding:10px;
+    border-radius:14px; background:#fff;
+}
+.payment-qr svg { width:100%; height:100%; fill:#111; shape-rendering:crispEdges; }
+.payment-network { display:flex; justify-content:center; align-items:center; gap:8px; font-size:13px; }
+.payment-network b { background:var(--lime); color:var(--bg); border-radius:10px; padding:3px 9px; }
+.payment-network span { color:var(--muted); }
+.payment-network strong { color:#8a9cff; letter-spacing:.5px; }
+.payment-divider { height:1px; background:var(--line); margin:12px 0; }
+.payment-info > label { display:block; margin:10px 0 5px; color:#7480d2; font-size:11px; font-weight:700; letter-spacing:.5px; }
+.payment-amount, .payment-address {
+    min-height:42px; padding:8px 0; display:flex; align-items:center; gap:8px;
+}
+.payment-amount strong { font-family:var(--display); font-size:23px; }
+.payment-amount span { color:var(--muted); font-weight:700; }
+.payment-amount button, .payment-address button {
+    width:36px; height:36px; margin-left:auto; display:grid; place-items:center;
+    border-radius:18px; color:#7480d2;
+}
+.payment-address strong {
+    min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+    color:#8a9cff; font-family:"Courier New",monospace; font-size:12px;
+}
+
 /* FAQ */
 .faq { padding:14px 16px; border-radius:var(--r); background:var(--panel); }
 .faq summary { font-weight:700; cursor:pointer; }

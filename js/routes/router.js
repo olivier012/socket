@@ -2,6 +2,7 @@ import { renderShop } from '../views/shop.js?v=20261102-card-v14';
 import { renderCart } from '../views/cart.js?v=20261102-card-v14';
 import { renderPurchases } from '../views/purchase.js?v=20261102-card-v14';
 import { renderReservation, renderAffiliate, renderRewards, renderSupport, renderBalance } from '../views/others.js?v=20261102-card-v14';
+import { renderRechargeSelection, renderCryptoPayment } from '../views/solde.js?v=20261102-card-v19';
 import { store } from '../store/state.js?v=20261102-card-v14';
 import { getIcon } from '../utils/icons.js?v=20261102-card-v14';
 
@@ -59,9 +60,7 @@ export const router = {
     },
 
     renderRecharge() {
-        document.getElementById('amounts').innerHTML = [5, 10, 20, 50]
-            .map(amount => `<button data-top="${amount}">${amount} €</button>`)
-            .join('');
+        document.getElementById('rechargeContent').innerHTML = renderRechargeSelection();
     },
 
     navigate(routeName) {
@@ -106,6 +105,28 @@ export const router = {
         toast.classList.add('show');
         clearTimeout(this.toastTimer);
         this.toastTimer = setTimeout(() => toast.classList.remove('show'), 2200);
+    },
+
+    startPaymentTimer() {
+        clearInterval(store.timer);
+        let seconds = 59 * 60 + 59;
+        store.timer = setInterval(() => {
+            seconds = Math.max(0, seconds - 1);
+            const timer = document.getElementById('paymentTimer');
+            if (!timer) {
+                clearInterval(store.timer);
+                return;
+            }
+            timer.textContent = `${String(Math.floor(seconds / 60)).padStart(2, '0')}:${String(seconds % 60).padStart(2, '0')}`;
+        }, 1000);
+    },
+
+    openRechargeSheet() {
+        clearInterval(store.timer);
+        store.rechargeHistoryOpen = false;
+        this.renderRecharge();
+        document.getElementById('sheet').classList.remove('payment-sheet');
+        document.getElementById('sheet').classList.add('open');
     },
 
     bindEvents() {
@@ -178,13 +199,51 @@ export const router = {
             if (button.dataset.more) {
                 this.closeMore();
                 return button.dataset.more === 'balance'
-                    ? document.getElementById('sheet').classList.add('open')
+                    ? this.openRechargeSheet()
                     : this.navigate(button.dataset.more);
             }
 
             if (button.id === 'plusBtn') return this.toggleMore();
-            if (button.id === 'closeSheet') return document.getElementById('sheet').classList.remove('open');
-            if (button.id === 'walletBtn') return document.getElementById('sheet').classList.add('open');
+            if (button.id === 'closeSheet') {
+                clearInterval(store.timer);
+                document.getElementById('sheet').classList.remove('open');
+                document.getElementById('sheet').classList.remove('payment-sheet');
+                return;
+            }
+            if (button.id === 'walletBtn') return this.openRechargeSheet();
+            if (button.hasAttribute('data-close-recharge')) {
+                document.getElementById('sheet').classList.remove('open');
+                return;
+            }
+            if (button.hasAttribute('data-toggle-recharge-history')) {
+                store.rechargeHistoryOpen = !store.rechargeHistoryOpen;
+                this.renderRecharge();
+                return;
+            }
+            if (button.hasAttribute('data-recharge-back')) {
+                clearInterval(store.timer);
+                document.getElementById('sheet').classList.remove('payment-sheet');
+                store.rechargeHistoryOpen = false;
+                this.renderRecharge();
+                return;
+            }
+
+            if (button.dataset.rechargeAmount) {
+                document.querySelectorAll('[data-recharge-amount]').forEach(item => item.classList.remove('active'));
+                button.classList.add('active');
+                const input = document.getElementById('customRechargeAmount');
+                if (input) input.value = button.dataset.rechargeAmount;
+                return;
+            }
+
+            if (button.dataset.openPayment) {
+                const input = document.getElementById('customRechargeAmount');
+                const amount = Math.max(1, Number(input?.value) || 10);
+                document.getElementById('rechargeContent').innerHTML = renderCryptoPayment(button.dataset.openPayment, amount);
+                document.getElementById('sheet').classList.add('payment-sheet');
+                this.startPaymentTimer();
+                return;
+            }
 
             if (button.dataset.add) {
                 store.addToCart(Number(button.dataset.add));
@@ -259,6 +318,12 @@ export const router = {
                 if (total) total.textContent = `${(quantity * 20).toFixed(2).replace('.', ',')} €`;
                 return;
             }
+            if (event.target.id === 'customRechargeAmount') {
+                document.querySelectorAll('[data-recharge-amount]').forEach(item => {
+                    item.classList.toggle('active', item.dataset.rechargeAmount === event.target.value);
+                });
+                return;
+            }
             if (event.target.id !== 'q') return;
             store.q = event.target.value;
             const query = store.q.toLowerCase().trim();
@@ -305,12 +370,18 @@ export const router = {
         });
 
         document.getElementById('sheet').addEventListener('click', event => {
-            if (event.target.id === 'sheet') event.currentTarget.classList.remove('open');
+            if (event.target.id === 'sheet') {
+                clearInterval(store.timer);
+                event.currentTarget.classList.remove('open');
+                event.currentTarget.classList.remove('payment-sheet');
+            }
         });
 
         document.addEventListener('keydown', event => {
             if (event.key === 'Escape') {
+                clearInterval(store.timer);
                 document.getElementById('sheet').classList.remove('open');
+                document.getElementById('sheet').classList.remove('payment-sheet');
                 this.closeMore();
             }
         });
