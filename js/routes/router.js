@@ -2,7 +2,7 @@ import { renderShop } from '../views/shop.js?v=20261102-card-v14';
 import { renderCart } from '../views/cart.js?v=20261102-card-v14';
 import { renderPurchases } from '../views/purchase.js?v=20261102-card-v14';
 import { renderReservation, renderAffiliate, renderRewards, renderSupport, renderBalance } from '../views/others.js?v=20261102-card-v14';
-import { renderRechargeSelection, renderCryptoPayment } from '../views/solde.js?v=20261102-card-v21';
+import { renderRechargeSelection, renderCryptoPayment } from '../views/solde.js?v=20261102-card-v25';
 import { store } from '../store/state.js?v=20261102-card-v14';
 import { getIcon } from '../utils/icons.js?v=20261102-card-v14';
 
@@ -65,6 +65,7 @@ export const router = {
 
     navigate(routeName) {
         if (!this.routes[routeName]) return;
+        if (routeName !== 'rew') store.rewardHistoryOpen = false;
         this.currentRoute = routeName;
         document.getElementById('app-content').innerHTML = this.routes[routeName]() ;
         this.renderNav();
@@ -224,6 +225,11 @@ export const router = {
                 this.renderRecharge();
                 return;
             }
+            if (button.hasAttribute('data-toggle-rewards-history')) {
+                store.rewardHistoryOpen = !store.rewardHistoryOpen;
+                this.navigate('rew');
+                return;
+            }
             if (button.hasAttribute('data-recharge-back')) {
                 document.getElementById('sheet').classList.remove('payment-sheet');
                 store.rechargeHistoryOpen = false;
@@ -289,6 +295,33 @@ export const router = {
             if (button.dataset.copy) {
                 navigator.clipboard?.writeText(button.dataset.copy).catch(() => {});
                 return this.showToast('Code copié');
+            }
+
+            if (button.dataset.shareAffiliate) {
+                const link = button.dataset.shareAffiliate;
+                const shareData = {
+                    title: 'Socket Market',
+                    text: 'Rejoins Socket Market avec mon lien de parrainage :',
+                    url: link
+                };
+                const telegramShareUrl = `https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent(shareData.text)}`;
+                const telegramWebApp = window.Telegram?.WebApp;
+                if (telegramWebApp?.openTelegramLink) {
+                    telegramWebApp.openTelegramLink(telegramShareUrl);
+                    return;
+                }
+                if (navigator.share) {
+                    navigator.share(shareData)
+                        .then(() => this.showToast('Lien partagé'))
+                        .catch(() => {});
+                } else if (navigator.clipboard) {
+                    navigator.clipboard.writeText(link)
+                        .then(() => this.showToast('Lien copié'))
+                        .catch(() => this.showToast(link));
+                } else {
+                    this.showToast(link);
+                }
+                return;
             }
 
             if (button.id === 'searchBtn') {

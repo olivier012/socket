@@ -28,8 +28,8 @@ export const telegramService = {
 
         // Si on n'est pas dans Telegram
         if (!this.tg || !this.tg.initData) {
-            this.showError("Veuillez ouvrir cette page depuis Telegram.");
-            return false;
+            console.info("Application ouverte hors de Telegram: démarrage en mode navigateur.");
+            return true;
         }
 
         console.log("Envoi de la requête à:", `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.VERIFY_USER}`);

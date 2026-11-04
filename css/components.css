@@ -410,6 +410,98 @@
 .faq p { color:var(--muted); font-size:13px; margin-top:8px; line-height:1.5; }
 .stat { display:block; }
 .stat .sub { font-size:12px; color:var(--muted); }
+.rewards-page-header {
+    display:grid; grid-template-columns:38px minmax(0,1fr) 38px; gap:10px;
+    align-items:center; margin-bottom:12px;
+}
+.rewards-page-header .title { margin:0; text-align:center; font-size:24px; }
+.rewards-history-button {
+    position:relative; width:38px; height:38px; border-radius:19px; display:grid; place-items:center;
+    background:var(--panel); border:1px solid var(--line); color:var(--text);
+}
+.rewards-history-button svg { width:20px; height:20px; }
+.rewards-history-button[aria-expanded="true"] {
+    background:rgba(192,255,21,.12); border-color:rgba(192,255,21,.32); color:var(--lime);
+}
+.daily-rewards-card { padding:14px; border-radius:16px; background:var(--panel); border:1px solid var(--line); }
+.daily-rewards-heading { display:flex; justify-content:space-between; gap:12px; }
+.daily-rewards-heading > div:first-child { display:grid; gap:5px; }
+.daily-rewards-heading b { display:flex; align-items:center; gap:7px; font-size:15px; }
+.daily-rewards-heading b svg { color:var(--lime); }
+.daily-rewards-heading span { color:var(--muted); font-size:11px; }
+.daily-rewards-series { display:grid; justify-items:end; align-content:start; }
+.daily-rewards-series span { color:var(--muted); font-size:9px; }
+.daily-rewards-series strong { color:#ffb94a; font-size:16px; }
+.daily-rewards-week {
+    display:grid; grid-template-columns:repeat(7,minmax(0,1fr)); gap:5px; margin-top:14px; overflow:hidden;
+}
+.daily-reward-day {
+    min-width:0; height:92px; padding:6px 2px; border-radius:12px; display:grid;
+    justify-items:center; align-content:start; gap:8px; background:#17191d; border:1px solid var(--line);
+}
+.daily-reward-day span { color:var(--muted); font-size:10px; }
+.daily-reward-day strong { font-size:11px; white-space:nowrap; }
+.daily-reward-day small { height:18px; font-size:12px; }
+.daily-reward-day.claimed { border-color:rgba(192,255,21,.32); }
+.daily-reward-day.claimed small { color:var(--lime); }
+.daily-reward-day.available { border-color:#ff9d3d; color:#ffb94a; }
+.daily-reward-day.locked { color:var(--muted); }
+.daily-rewards-next {
+    height:62px; margin-top:10px; border-radius:14px; background:var(--panel); border:1px solid var(--line);
+    display:flex; align-items:center; justify-content:center; gap:9px; color:#a9a0ff;
+}
+.daily-rewards-next b { font-size:13px; }
+.daily-rewards-gift { font-size:20px; }
+.rewards-points { margin-top:12px; }
+.rewards-history { display:grid; gap:8px; }
+.rewards-history-heading { height:42px; display:flex; align-items:center; justify-content:space-between; font-size:14px; }
+.rewards-history-heading span {
+    min-width:22px; height:22px; border-radius:11px; display:grid; place-items:center;
+    background:var(--lime); color:var(--bg); font-size:11px;
+}
+.rewards-history-item {
+    min-height:64px; padding:10px; border-radius:14px; background:var(--panel);
+    border:1px solid var(--line); display:grid; grid-template-columns:42px minmax(0,1fr) auto;
+    align-items:center; gap:9px;
+}
+.rewards-history-day {
+    width:42px; height:42px; border-radius:21px; display:grid; place-items:center;
+    background:rgba(192,255,21,.12); color:var(--lime); font-size:11px; font-weight:800;
+}
+.rewards-history-item > div { display:grid; gap:3px; }
+.rewards-history-item strong { font-size:13px; }
+.rewards-history-item small { color:var(--muted); font-size:11px; }
+.rewards-history-amount { color:var(--lime); font-size:13px; font-weight:800; }
+.affiliate-page-header {
+    display:grid; grid-template-columns:38px minmax(0,1fr) 38px; gap:10px;
+    align-items:center; margin-bottom:12px;
+}
+.affiliate-page-header .title { margin:0; text-align:center; font-size:24px; }
+.affiliate-card {
+    padding:16px; border-radius:var(--r); background:var(--panel); border:1px solid var(--line);
+}
+.affiliate-card-head { display:flex; align-items:center; gap:12px; margin-bottom:16px; }
+.affiliate-card-head h4 { font-family:var(--display); font-size:18px; margin-bottom:4px; }
+.affiliate-card-head .sub { font-size:12px; }
+.affiliate-link-label { display:block; margin-bottom:7px; color:var(--muted); font-size:12px; font-weight:700; }
+.affiliate-link-box {
+    min-height:52px; padding:8px 8px 8px 12px; border-radius:14px; background:var(--bg);
+    border:1px solid var(--line); display:flex; align-items:center; gap:8px;
+}
+.affiliate-link-box span {
+    min-width:0; flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+    color:var(--text); font-family:"Courier New",monospace; font-size:12px;
+}
+.affiliate-link-box button {
+    width:36px; height:36px; flex:0 0 36px; border-radius:18px; display:grid; place-items:center;
+    background:var(--panel); color:var(--lime);
+}
+.affiliate-link-box button svg { width:18px; height:18px; }
+.affiliate-share-button {
+    width:100%; height:48px; margin-top:12px; border-radius:24px; display:flex;
+    align-items:center; justify-content:center; gap:9px;
+    background:var(--lime); color:var(--bg); font-weight:800;
+}
 
 
 /* ========================================================= */

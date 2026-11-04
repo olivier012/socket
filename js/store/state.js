@@ -10,6 +10,7 @@ export const store = {
     rechargeHistory: [],
     rechargeHistoryOpen: false,
     pendingRecharges: [],
+    rewardHistoryOpen: false,
     slide: 2,
     timer: null,
 
