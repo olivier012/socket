@@ -2,7 +2,7 @@ import { renderShop } from '../views/shop.js?v=20261102-card-v14';
 import { renderCart } from '../views/cart.js?v=20261102-card-v14';
 import { renderPurchases } from '../views/purchase.js?v=20261102-card-v14';
 import { renderReservation, renderAffiliate, renderRewards, renderSupport, renderBalance } from '../views/others.js?v=20261102-card-v14';
-import { renderRechargeSelection, renderCryptoPayment } from '../views/solde.js?v=20261102-card-v19';
+import { renderRechargeSelection, renderCryptoPayment } from '../views/solde.js?v=20261102-card-v21';
 import { store } from '../store/state.js?v=20261102-card-v14';
 import { getIcon } from '../utils/icons.js?v=20261102-card-v14';
 
@@ -107,22 +107,27 @@ export const router = {
         this.toastTimer = setTimeout(() => toast.classList.remove('show'), 2200);
     },
 
-    startPaymentTimer() {
+    startPaymentTimer(assetId, amount) {
         clearInterval(store.timer);
-        let seconds = 59 * 60 + 59;
+        const asset = String(assetId).toUpperCase();
+        const pending = store.pendingRecharges.find(item => item.asset === asset && item.amount === amount && item.expiresAt > Date.now());
+        let seconds = pending
+            ? Math.max(0, Math.ceil((pending.expiresAt - Date.now()) / 1000))
+            : 3599;
         store.timer = setInterval(() => {
             seconds = Math.max(0, seconds - 1);
             const timer = document.getElementById('paymentTimer');
-            if (!timer) {
-                clearInterval(store.timer);
-                return;
-            }
-            timer.textContent = `${String(Math.floor(seconds / 60)).padStart(2, '0')}:${String(seconds % 60).padStart(2, '0')}`;
+            if (timer) timer.textContent = `${String(Math.floor(seconds / 60)).padStart(2, '0')}:${String(seconds % 60).padStart(2, '0')}`;
+            store.pendingRecharges.forEach(pending => {
+                const remaining = Math.max(0, Math.ceil((pending.expiresAt - Date.now()) / 1000));
+                document.querySelectorAll(`[data-recharge-history-timer="${pending.id}"]`).forEach(element => {
+                    element.textContent = `${String(Math.floor(remaining / 60)).padStart(2, '0')}:${String(remaining % 60).padStart(2, '0')}`;
+                });
+            });
         }, 1000);
     },
 
     openRechargeSheet() {
-        clearInterval(store.timer);
         store.rechargeHistoryOpen = false;
         this.renderRecharge();
         document.getElementById('sheet').classList.remove('payment-sheet');
@@ -205,7 +210,6 @@ export const router = {
 
             if (button.id === 'plusBtn') return this.toggleMore();
             if (button.id === 'closeSheet') {
-                clearInterval(store.timer);
                 document.getElementById('sheet').classList.remove('open');
                 document.getElementById('sheet').classList.remove('payment-sheet');
                 return;
@@ -221,7 +225,6 @@ export const router = {
                 return;
             }
             if (button.hasAttribute('data-recharge-back')) {
-                clearInterval(store.timer);
                 document.getElementById('sheet').classList.remove('payment-sheet');
                 store.rechargeHistoryOpen = false;
                 this.renderRecharge();
@@ -239,9 +242,20 @@ export const router = {
             if (button.dataset.openPayment) {
                 const input = document.getElementById('customRechargeAmount');
                 const amount = Math.max(1, Number(input?.value) || 10);
+                const asset = button.dataset.openPayment.toUpperCase();
+                const existing = store.pendingRecharges.find(item => item.asset === asset && item.amount === amount && item.expiresAt > Date.now());
+                if (!existing) {
+                    store.pendingRecharges.unshift({
+                        id: `${Date.now()}-${asset}`,
+                        asset,
+                        amount,
+                        date: 'En attente de confirmation',
+                        expiresAt: Date.now() + 3599 * 1000
+                    });
+                }
                 document.getElementById('rechargeContent').innerHTML = renderCryptoPayment(button.dataset.openPayment, amount);
                 document.getElementById('sheet').classList.add('payment-sheet');
-                this.startPaymentTimer();
+                this.startPaymentTimer(button.dataset.openPayment, amount);
                 return;
             }
 

@@ -50,11 +50,23 @@ function renderRechargeForm() {
 }
 
 function renderRechargeHistory() {
+    const pending = store.pendingRecharges.map(item => {
+        const remainingSeconds = Math.max(0, Math.ceil((item.expiresAt - Date.now()) / 1000));
+        const minutes = String(Math.floor(remainingSeconds / 60)).padStart(2, '0');
+        const seconds = String(remainingSeconds % 60).padStart(2, '0');
+        return `<article class="recharge-history-item recharge-history-pending" data-pending-recharge="${item.id}">
+            <span class="crypto-icon crypto-${item.asset.toLowerCase()}">${item.asset[0]}</span>
+            <div><strong>${item.asset} · ${item.amount.toFixed(2)} €</strong><small>${item.date}</small></div>
+            <span class="recharge-history-status recharge-history-pending-status">En attente <em data-recharge-history-timer="${item.id}">${minutes}:${seconds}</em></span>
+        </article>`;
+    }).join('');
+
     return `<div class="recharge-history">
         <div class="recharge-history-heading">
             <b>Historique des recharges</b>
-            <span>${store.rechargeHistory.length}</span>
+            <span>${store.pendingRecharges.length + store.rechargeHistory.length}</span>
         </div>
+        ${pending}
         ${store.rechargeHistory.length ? store.rechargeHistory.map(item => `
             <article class="recharge-history-item">
                 <span class="crypto-icon crypto-${item.asset.toLowerCase()}">${item.asset[0]}</span>
@@ -71,7 +83,7 @@ export function renderRechargeSelection() {
         <h1 class="title">Solde</h1>
         <button class="recharge-history-button" data-toggle-recharge-history aria-label="Historique des recharges" aria-expanded="${store.rechargeHistoryOpen}">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 7h8M8 11h8M8 15h5"/></svg>
-            ${store.rechargeHistory.length ? `<span>${store.rechargeHistory.length}</span>` : ''}
+            ${(store.pendingRecharges.length + store.rechargeHistory.length) ? `<span>${store.pendingRecharges.length + store.rechargeHistory.length}</span>` : ''}
         </button>
     </div>
     ${store.rechargeHistoryOpen ? renderRechargeHistory() : renderRechargeForm()}`;

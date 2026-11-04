@@ -9,6 +9,7 @@ export const store = {
     rsvOpen: false,
     rechargeHistory: [],
     rechargeHistoryOpen: false,
+    pendingRecharges: [],
     slide: 2,
     timer: null,
 

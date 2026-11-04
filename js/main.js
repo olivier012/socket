@@ -14,19 +14,22 @@ document.addEventListener('keydown', event => {
 
 async function clearLegacyCaches() {
     if (!('caches' in window)) return;
-    const cacheNames = await caches.keys();
-    await Promise.all(cacheNames
-        .filter(name => name.startsWith('socket-market-') && name !== 'socket-market-network-only-v19')
-        .map(name => caches.delete(name)));
+    try {
+        const cacheNames = await caches.keys();
+        await Promise.all(cacheNames
+            .filter(name => name.startsWith('socket-market-') && name !== 'socket-market-network-only-v21')
+            .map(name => caches.delete(name)));
+    } catch (error) {
+        console.warn('Nettoyage du cache indisponible:', error);
+    }
 }
 
 async function prepareAppUpdates() {
-    await clearLegacyCaches();
     if (!('serviceWorker' in navigator)) return;
 
     try {
-        const registration = await navigator.serviceWorker.register('./sw.js?v=20261102-card-v19');
-        await registration.update();
+        const registration = await navigator.serviceWorker.register('./sw.js?v=20261102-card-v21');
+        registration.update().catch(() => {});
     } catch (error) {
         console.warn('Mise à jour automatique non disponible:', error);
     }
@@ -40,10 +43,16 @@ function hidePreloader() {
 }
 
 async function startApp() {
+    const preloaderFallback = setTimeout(hidePreloader, 5000);
     try {
-        await prepareAppUpdates();
+        clearLegacyCaches();
+        prepareAppUpdates().catch(error => console.warn('Service worker indisponible:', error));
         const { router } = await import(`./routes/router.js?v=${Date.now()}`);
-        telegramService.init();
+        try {
+            telegramService.init();
+        } catch (error) {
+            console.warn('Initialisation Telegram limitée:', error);
+        }
         const isLocalPreview = ['localhost', '127.0.0.1'].includes(window.location.hostname);
         if (!isLocalPreview) {
             const ok = await telegramService.verifyUser();
@@ -55,9 +64,13 @@ async function startApp() {
         router.init();
     } catch (err) {
         console.error('Erreur au démarrage :', err);
-        telegramService.showError('Une erreur est survenue au démarrage. Réessayez.');
+        const detail = err instanceof Error && err.message
+            ? err.message
+            : 'Le chargement de l’application a échoué.';
+        telegramService.showError(`Erreur au démarrage : ${detail}`);
     } finally {
         // Quoi qu'il arrive, on retire le preloader
+        clearTimeout(preloaderFallback);
         hidePreloader();
     }
 }

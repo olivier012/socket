@@ -4,15 +4,27 @@ export const telegramService = {
     tg: window.Telegram?.WebApp,
 
     init() {
+        this.tg = window.Telegram?.WebApp || this.tg;
         if (this.tg) {
             this.tg.expand();
             this.tg.setHeaderColor('#0D0E11');
         }
     },
 
+    async waitForTelegram(timeoutMs = 3000) {
+        const startedAt = Date.now();
+        while (!window.Telegram?.WebApp && Date.now() - startedAt < timeoutMs) {
+            await new Promise(resolve => setTimeout(resolve, 100));
+        }
+        this.tg = window.Telegram?.WebApp || null;
+        return this.tg;
+    },
+
     async verifyUser() {
         const isLocalPreview = ['localhost', '127.0.0.1'].includes(window.location.hostname);
         if (isLocalPreview) return true;
+
+        await this.waitForTelegram();
 
         // Si on n'est pas dans Telegram
         if (!this.tg || !this.tg.initData) {

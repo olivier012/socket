@@ -293,6 +293,14 @@
 .recharge-history-item strong { font-size:13px; }
 .recharge-history-item small { color:var(--muted); font-size:11px; }
 .recharge-history-status { color:#7da92a; font-size:11px; font-weight:700; }
+.recharge-history-pending-status {
+    color:#f4a62a;
+    display:grid;
+    justify-items:end;
+    gap:2px;
+    text-align:right;
+}
+.recharge-history-pending-status em { font-style:normal; }
 .recharge-heading { display:flex; align-items:center; gap:10px; }
 .recharge-heading h3, .payment-header h3 { margin:0; font-family:var(--display); font-size:20px; }
 .recharge-heading-icon, .payment-wallet {
