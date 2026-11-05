@@ -1,13 +1,13 @@
-import { renderShop, renderShopProduct } from '../views/shop.js?v=20261102-card-v39';
-import { renderCart } from '../views/cart.js?v=20261102-card-v14';
-import { renderPurchases } from '../views/purchase.js?v=20261102-card-v14';
-import { renderReservation, renderBalance } from '../views/others.js?v=20261102-card-v30';
-import { renderAffiliate } from '../views/affiliate.js?v=20261102-card-v30';
-import { renderRewards } from '../views/rewards.js?v=20261102-card-v30';
-import { renderSupport } from '../views/support.js?v=20261102-card-v33';
-import { renderRechargeSelection, renderCryptoPayment } from '../views/solde.js?v=20261102-card-v25';
-import { store } from '../store/state.js?v=20261102-card-v39';
-import { getIcon } from '../utils/icons.js?v=20261102-card-v14';
+import { renderShop, renderShopProduct } from '../views/shop.js?v=20261102-card-v42';
+import { renderCart } from '../views/cart.js?v=20261102-card-v42';
+import { renderPurchases } from '../views/purchase.js?v=20261102-card-v42';
+import { renderReservation, renderBalance } from '../views/others.js?v=20261102-card-v42';
+import { renderAffiliate } from '../views/affiliate.js?v=20261102-card-v42';
+import { renderRewards } from '../views/rewards.js?v=20261102-card-v42';
+import { renderSupport } from '../views/support.js?v=20261102-card-v42';
+import { renderRechargeSelection, renderCryptoPayment } from '../views/solde.js?v=20261102-card-v42';
+import { store } from '../store/state.js?v=20261102-card-v42';
+import { getIcon } from '../utils/icons.js?v=20261102-card-v42';
 
 export const router = {
     currentRoute: 'shop',

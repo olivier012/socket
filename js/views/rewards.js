@@ -1,5 +1,5 @@
-import { store } from '../store/state.js?v=20261102-card-v34';
-import { getIcon } from '../utils/icons.js?v=20261102-card-v30';
+import { store } from '../store/state.js?v=20261102-card-v42';
+import { getIcon } from '../utils/icons.js?v=20261102-card-v42';
 
 export function renderRewards() {
     const pts = store.orders.length * 10, next = 100;
