@@ -1,9 +1,12 @@
 import { renderShop } from '../views/shop.js?v=20261102-card-v14';
 import { renderCart } from '../views/cart.js?v=20261102-card-v14';
 import { renderPurchases } from '../views/purchase.js?v=20261102-card-v14';
-import { renderReservation, renderAffiliate, renderRewards, renderSupport, renderBalance } from '../views/others.js?v=20261102-card-v14';
+import { renderReservation, renderBalance } from '../views/others.js?v=20261102-card-v30';
+import { renderAffiliate } from '../views/affiliate.js?v=20261102-card-v30';
+import { renderRewards } from '../views/rewards.js?v=20261102-card-v30';
+import { renderSupport } from '../views/support.js?v=20261102-card-v33';
 import { renderRechargeSelection, renderCryptoPayment } from '../views/solde.js?v=20261102-card-v25';
-import { store } from '../store/state.js?v=20261102-card-v14';
+import { store } from '../store/state.js?v=20261102-card-v33';
 import { getIcon } from '../utils/icons.js?v=20261102-card-v14';
 
 export const router = {
@@ -66,6 +69,11 @@ export const router = {
     navigate(routeName) {
         if (!this.routes[routeName]) return;
         if (routeName !== 'rew') store.rewardHistoryOpen = false;
+        if (routeName !== 'sup') {
+            store.supportNewOpen = false;
+            store.supportTab = 'assistance';
+            store.supportTicketOpen = null;
+        }
         this.currentRoute = routeName;
         document.getElementById('app-content').innerHTML = this.routes[routeName]() ;
         this.renderNav();
@@ -136,17 +144,57 @@ export const router = {
     },
 
     bindEvents() {
+        window.supportAction = action => {
+            if (action === 'new') store.supportNewOpen = true;
+            if (action === 'close') store.supportNewOpen = false;
+            if (action === 'closeChat') store.supportTicketOpen = null;
+            if (action === 'assistance' || action === 'history' || action === 'policy') {
+                store.supportTab = action;
+                store.supportNewOpen = false;
+                store.supportTicketOpen = null;
+            }
+            this.navigate('sup');
+        };
+
         document.addEventListener('click', event => {
             const button = event.target.closest('button');
             if (!event.target.closest('#more') && !(button && button.id === 'plusBtn')) this.closeMore();
             if (!button) return;
 
+            if (button.getAttribute('data-support-tab') !== null) {
+                store.supportTab = button.getAttribute('data-support-tab');
+                store.supportNewOpen = false;
+                this.navigate('sup');
+                return;
+            }
+            if (button.getAttribute('data-support-new') !== null) {
+                store.supportNewOpen = true;
+                this.navigate('sup');
+                return;
+            }
+            if (button.getAttribute('data-support-new-close') !== null) {
+                store.supportNewOpen = false;
+                this.navigate('sup');
+                return;
+            }
+            if (button.getAttribute('data-support-chat-close') !== null) {
+                store.supportTicketOpen = null;
+                store.supportTab = 'history';
+                this.navigate('sup');
+                return;
+            }
+            if (button.dataset.openSupportTicket) {
+                store.supportTicketOpen = button.dataset.openSupportTicket;
+                store.supportTab = 'history';
+                this.navigate('sup');
+                return;
+            }
             if (button.dataset.tab) return this.navigate(button.dataset.tab);
             if (button.dataset.go) return this.navigate(button.dataset.go);
             if (button.hasAttribute('data-toggle-reservations')) {
                 store.rsvOpen = !store.rsvOpen;
                 const panel = document.getElementById('reservationList');
-                if (panel) panel.classList.toggle('open', store.rsvOpen);
+                panel?.classList.toggle('open', store.rsvOpen);
                 button.setAttribute('aria-expanded', String(store.rsvOpen));
                 return;
             }
@@ -347,7 +395,32 @@ export const router = {
                 return this.navigate('orders');
             }
 
-            if (button.dataset.support) return this.showToast('Le support sera disponible prochainement');
+            if (button.hasAttribute('data-support')) {
+                const subject = document.getElementById('supportSubject');
+                const order = document.getElementById('supportOrder');
+                const message = document.getElementById('supportMessage');
+                if (!subject?.value || !message?.value.trim()) {
+                    return this.showToast('Remplissez tous les champs');
+                }
+                const ticket = {
+                    id: `#${String(Date.now()).slice(-6)}`,
+                    subject: subject.value.trim(),
+                    order: order?.value.trim() || '',
+                    message: message.value.trim(),
+                    status: 'En attente',
+                    date: new Date().toLocaleDateString('fr-FR', { day:'2-digit', month:'short' }),
+                    messages: [{
+                        author: 'user',
+                        text: message.value.trim(),
+                        time: new Date().toLocaleTimeString('fr-FR', { hour:'2-digit', minute:'2-digit' })
+                    }]
+                };
+                store.supportTickets.unshift(ticket);
+                store.supportNewOpen = false;
+                store.supportTab = 'history';
+                this.navigate('sup');
+                return this.showToast('Ticket créé');
+            }
 
             const topup = button.dataset.top;
             if (topup) {
@@ -383,6 +456,22 @@ export const router = {
         });
 
         document.addEventListener('submit', event => {
+            if (event.target.id === 'supportChatForm') {
+                event.preventDefault();
+                const input = document.getElementById('supportChatInput');
+                const text = input?.value.trim();
+                if (!text) return;
+                const ticket = store.supportTickets.find(item => item.id === store.supportTicketOpen);
+                if (!ticket) return;
+                ticket.messages ||= [{ author: 'user', text: ticket.message, time: ticket.date }];
+                ticket.messages.push({
+                    author: 'user',
+                    text,
+                    time: new Date().toLocaleTimeString('fr-FR', { hour:'2-digit', minute:'2-digit' })
+                });
+                this.navigate('sup');
+                return;
+            }
             if (event.target.id !== 'rsvForm') return;
             event.preventDefault();
             const submitButton = event.submitter;

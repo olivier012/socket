@@ -11,6 +11,10 @@ export const store = {
     rechargeHistoryOpen: false,
     pendingRecharges: [],
     rewardHistoryOpen: false,
+    supportTab: 'assistance',
+    supportNewOpen: false,
+    supportTicketOpen: null,
+    supportTickets: [],
     slide: 2,
     timer: null,
 
