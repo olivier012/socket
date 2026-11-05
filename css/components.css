@@ -613,14 +613,16 @@
 }
 .affiliate-page-header .title { margin:0; text-align:center; font-size:24px; }
 .affiliate-card {
+    width:100%; min-width:0; overflow:hidden;
     padding:16px; border-radius:var(--r); background:var(--panel); border:1px solid var(--line);
 }
-.affiliate-card-head { display:flex; align-items:center; gap:12px; margin-bottom:16px; }
+.affiliate-card-head { width:100%; min-width:0; display:flex; align-items:center; gap:12px; margin-bottom:16px; }
+.affiliate-card-head > div:last-child { min-width:0; }
 .affiliate-card-head h4 { font-family:var(--display); font-size:18px; margin-bottom:4px; }
-.affiliate-card-head .sub { font-size:12px; }
+.affiliate-card-head .sub { font-size:12px; line-height:1.35; }
 .affiliate-link-label { display:block; margin-bottom:7px; color:var(--muted); font-size:12px; font-weight:700; }
 .affiliate-link-box {
-    min-height:52px; padding:8px 8px 8px 12px; border-radius:14px; background:var(--bg);
+    width:100%; min-width:0; min-height:52px; padding:8px 8px 8px 12px; border-radius:14px; background:var(--bg);
     border:1px solid var(--line); display:flex; align-items:center; gap:8px;
 }
 .affiliate-link-box span {

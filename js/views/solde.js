@@ -1,5 +1,6 @@
-import { store } from '../store/state.js?v=20261102-card-v42';
-import { getIcon } from '../utils/icons.js?v=20261102-card-v14';
+
+import { store } from '../store/state.js?v=20261102-card-v44';
+import { getIcon } from '../utils/icons.js?v=20261102-card-v44';
 
 function renderRechargeForm() {
     const currentBalance = new Intl.NumberFormat('fr-FR', {

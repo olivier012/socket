@@ -1,5 +1,5 @@
-import { store } from '../store/state.js?v=20261102-card-v42';
-import { getIcon } from '../utils/icons.js?v=20261102-card-v13';
+import { store } from '../store/state.js?v=20261102-card-v44';
+import { getIcon } from '../utils/icons.js?v=20261102-card-v44';
 
 const eur = value => value.toFixed(2).replace('.', ',') + ' €';
 

@@ -1,5 +1,6 @@
-import { store } from '../store/state.js?v=20261102-card-v42';
-import { getIcon } from '../utils/icons.js?v=20261102-card-v42';
+
+import { store } from '../store/state.js?v=20261102-card-v44';
+import { getIcon } from '../utils/icons.js?v=20261102-card-v44';
 
 export function renderSupport() {
     if (store.supportTicketOpen) {

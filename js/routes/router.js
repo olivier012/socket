@@ -1,13 +1,14 @@
-import { renderShop, renderShopProduct } from '../views/shop.js?v=20261102-card-v42';
-import { renderCart } from '../views/cart.js?v=20261102-card-v42';
-import { renderPurchases } from '../views/purchase.js?v=20261102-card-v42';
-import { renderReservation, renderBalance } from '../views/others.js?v=20261102-card-v42';
-import { renderAffiliate } from '../views/affiliate.js?v=20261102-card-v42';
-import { renderRewards } from '../views/rewards.js?v=20261102-card-v42';
-import { renderSupport } from '../views/support.js?v=20261102-card-v42';
-import { renderRechargeSelection, renderCryptoPayment } from '../views/solde.js?v=20261102-card-v42';
-import { store } from '../store/state.js?v=20261102-card-v42';
-import { getIcon } from '../utils/icons.js?v=20261102-card-v42';
+
+import { renderShop, renderShopProduct } from '../views/shop.js?v=20261102-card-v44';
+import { renderCart } from '../views/cart.js?v=20261102-card-v44';
+import { renderPurchases } from '../views/purchase.js?v=20261102-card-v44';
+import { renderReservation, renderBalance } from '../views/others.js?v=20261102-card-v44';
+import { renderAffiliate } from '../views/affiliate.js?v=20261102-card-v44';
+import { renderRewards } from '../views/rewards.js?v=20261102-card-v44';
+import { renderSupport } from '../views/support.js?v=20261102-card-v44';
+import { renderRechargeSelection, renderCryptoPayment } from '../views/solde.js?v=20261102-card-v44';
+import { store } from '../store/state.js?v=20261102-card-v44';
+import { getIcon } from '../utils/icons.js?v=20261102-card-v44';
 
 export const router = {
     currentRoute: 'shop',
@@ -142,6 +143,7 @@ export const router = {
         this.renderRecharge();
         document.getElementById('sheet').classList.remove('payment-sheet');
         document.getElementById('sheet').classList.add('open');
+        document.body.classList.add('recharge-open');
     },
 
     bindEvents() {
@@ -262,11 +264,13 @@ export const router = {
             if (button.id === 'closeSheet') {
                 document.getElementById('sheet').classList.remove('open');
                 document.getElementById('sheet').classList.remove('payment-sheet');
+                document.body.classList.remove('recharge-open');
                 return;
             }
             if (button.id === 'walletBtn') return this.openRechargeSheet();
             if (button.hasAttribute('data-close-recharge')) {
                 document.getElementById('sheet').classList.remove('open');
+                document.body.classList.remove('recharge-open');
                 return;
             }
             if (button.hasAttribute('data-toggle-recharge-history')) {
@@ -436,6 +440,7 @@ export const router = {
             if (topup) {
                 store.wallet += Number(topup);
                 document.getElementById('sheet').classList.remove('open');
+                document.body.classList.remove('recharge-open');
                 this.navigate(this.currentRoute);
                 return this.showToast(`${topup} € ajoutés à votre solde`);
             }
@@ -542,6 +547,7 @@ export const router = {
                 clearInterval(store.timer);
                 event.currentTarget.classList.remove('open');
                 event.currentTarget.classList.remove('payment-sheet');
+                document.body.classList.remove('recharge-open');
             }
         });
 
@@ -550,6 +556,7 @@ export const router = {
                 clearInterval(store.timer);
                 document.getElementById('sheet').classList.remove('open');
                 document.getElementById('sheet').classList.remove('payment-sheet');
+                document.body.classList.remove('recharge-open');
                 this.closeMore();
             }
         });
