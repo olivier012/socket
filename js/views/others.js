@@ -1,4 +1,4 @@
-import { store } from '../store/state.js?v=20261102-card-v33';
+import { store } from '../store/state.js?v=20261102-card-v34';
 import { getIcon } from '../utils/icons.js?v=20261102-card-v30';
 
 const eur = value => value.toFixed(2).replace('.', ',') + ' €';

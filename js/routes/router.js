@@ -1,4 +1,4 @@
-import { renderShop } from '../views/shop.js?v=20261102-card-v14';
+import { renderShop, renderShopProduct } from '../views/shop.js?v=20261102-card-v39';
 import { renderCart } from '../views/cart.js?v=20261102-card-v14';
 import { renderPurchases } from '../views/purchase.js?v=20261102-card-v14';
 import { renderReservation, renderBalance } from '../views/others.js?v=20261102-card-v30';
@@ -6,7 +6,7 @@ import { renderAffiliate } from '../views/affiliate.js?v=20261102-card-v30';
 import { renderRewards } from '../views/rewards.js?v=20261102-card-v30';
 import { renderSupport } from '../views/support.js?v=20261102-card-v33';
 import { renderRechargeSelection, renderCryptoPayment } from '../views/solde.js?v=20261102-card-v25';
-import { store } from '../store/state.js?v=20261102-card-v33';
+import { store } from '../store/state.js?v=20261102-card-v39';
 import { getIcon } from '../utils/icons.js?v=20261102-card-v14';
 
 export const router = {
@@ -68,6 +68,7 @@ export const router = {
 
     navigate(routeName) {
         if (!this.routes[routeName]) return;
+        if (routeName !== 'shop') store.shopSearchOpen = false;
         if (routeName !== 'rew') store.rewardHistoryOpen = false;
         if (routeName !== 'sup') {
             store.supportNewOpen = false;
@@ -333,6 +334,20 @@ export const router = {
                 store.limit = Number(button.dataset.limit);
                 return this.navigate('shop');
             }
+            if (button.dataset.newOnly !== undefined) {
+                store.newOnly = button.dataset.newOnly === 'true';
+                return this.navigate('shop');
+            }
+            if (button.hasAttribute('data-close-shop-search')) {
+                store.shopSearchOpen = false;
+                return this.navigate('shop');
+            }
+            if (button.hasAttribute('data-reset-shop-filter')) {
+                store.shopFilters = { origin:'', bin:'', ageMin:'', ageMax:'', bank:'', network:'', city:'' };
+                store.q = '';
+                store.shopSearchOpen = false;
+                return this.navigate('shop');
+            }
 
             if (button.dataset.slide) {
                 store.slide = Number(button.dataset.slide);
@@ -373,13 +388,8 @@ export const router = {
             }
 
             if (button.id === 'searchBtn') {
-                store.open = !store.open;
+                store.shopSearchOpen = true;
                 this.navigate('shop');
-                if (store.open) {
-                    const input = document.getElementById('q');
-                    input?.focus();
-                    input?.setSelectionRange(input.value.length, input.value.length);
-                }
                 return;
             }
 
@@ -447,15 +457,37 @@ export const router = {
             if (event.target.id !== 'q') return;
             store.q = event.target.value;
             const query = store.q.toLowerCase().trim();
-            const list = store.products.filter(product =>
-                (product.name + ' ' + product.cat + ' ' + product.zone).toLowerCase().includes(query)
-            ).slice(0, store.limit);
+            const list = store.products.filter(product => {
+                const text = (product.name + ' ' + product.cat + ' ' + product.zone).toLowerCase();
+                return text.includes(query)
+                    && (!store.newOnly || product.isNew)
+                    && (!store.shopFilters.origin || product.name === store.shopFilters.origin)
+                    && (!store.shopFilters.bin || (product.card?.firstSix || '').startsWith(store.shopFilters.bin))
+                    && (!store.shopFilters.bank || (product.card?.bank || '').toLowerCase().includes(store.shopFilters.bank.toLowerCase()))
+                    && (!store.shopFilters.network || product.card?.network === store.shopFilters.network)
+                    && (!store.shopFilters.city || (product.zone || '').toLowerCase().includes(store.shopFilters.city.toLowerCase()));
+            }).slice(0, store.limit);
             document.getElementById('plist').innerHTML = list.length
                 ? list.map(product => renderShopProduct(product)).join('')
                 : '<div class="empty"><b>Aucun résultat</b>Essayez le nom d’une marque ou d’un opérateur.</div>';
         });
 
         document.addEventListener('submit', event => {
+            if (event.target.id === 'shopSearchForm') {
+                event.preventDefault();
+                store.shopFilters = {
+                    origin: document.getElementById('filterOrigin')?.value || '',
+                    bin: document.getElementById('filterBin')?.value.trim() || '',
+                    ageMin: document.getElementById('filterAgeMin')?.value || '',
+                    ageMax: document.getElementById('filterAgeMax')?.value || '',
+                    bank: document.getElementById('filterBank')?.value.trim() || '',
+                    network: document.getElementById('filterNetwork')?.value || '',
+                    city: document.getElementById('filterCity')?.value.trim() || ''
+                };
+                store.shopSearchOpen = false;
+                this.navigate('shop');
+                return;
+            }
             if (event.target.id === 'supportChatForm') {
                 event.preventDefault();
                 const input = document.getElementById('supportChatInput');
@@ -523,12 +555,3 @@ export const router = {
         });
     }
 };
-
-function renderShopProduct(product) {
-    return `<article class="card">
-        <div class="logo" style="background:${product.color}">${product.ini}</div>
-        <div><h4>${product.name}</h4><div class="sub">${product.cat}, valeur ${product.value.toFixed(2).replace('.', ',')} €</div></div>
-        <div><button class="buy" data-add="${product.id}">+ Ajouter</button><div class="when">${product.ago}</div></div>
-        <div class="info"><span>${getIcon('globe')}${product.zone}</span><span>${getIcon('bolt')}Livraison immédiate</span><span class="price">${product.price.toFixed(2).replace('.', ',')} €</span></div>
-    </article>`;
-}

@@ -1,11 +1,11 @@
 
-import { store } from '../store/state.js?v=20261102-card-v33';
+import { store } from '../store/state.js?v=20261102-card-v39';
 import { getIcon } from '../utils/icons.js?v=20261102-card-v13';
 
 const eur = value => value.toFixed(2).replace('.', ',') + ' €';
 const CAT = { jeux: 'Jeux', streaming: 'Streaming', recharge: 'Recharge téléphone' };
 
-function productCard(p) {
+export function renderShopProduct(p) {
     const card = p.card || { bank:'Unknown', network:'Unknown', firstSix:'000000', image:'', tier:'Unknown' };
     
     return `<article class="sketch-card">
@@ -61,10 +61,62 @@ function productCard(p) {
 }
 
 export function renderShop() {
+    if (store.shopSearchOpen) {
+        const filters = store.shopFilters;
+        const origins = [...new Set(store.products.map(p => p.name).filter(Boolean))];
+        const banks = [...new Set(store.products.map(p => p.card?.bank).filter(Boolean))];
+        const networks = [...new Set(store.products.map(p => p.card?.network).filter(Boolean))];
+
+        return `
+        <div class="page-header shop-search-header">
+            <button type="button" class="back-button" data-close-shop-search aria-label="Retour aux cartes">${getIcon('back')}</button>
+            <h1 class="title">Recherche</h1>
+            <span></span>
+        </div>
+        <form class="shop-search-form" id="shopSearchForm">
+            <div class="shop-search-actions shop-search-actions-top">
+                <button type="button" class="shop-filter-reset" data-reset-shop-filter>Réinitialiser</button>
+                <button type="submit" class="shop-filter-apply">Afficher les résultats</button>
+            </div>
+            <div class="reservation-field">
+                <label for="filterOrigin">Base d'origine</label>
+                <select id="filterOrigin"><option value="">Toutes les origines</option>${origins.map(origin => `<option value="${origin}" ${filters.origin === origin ? 'selected' : ''}>${origin}</option>`).join('')}</select>
+            </div>
+            <div class="reservation-field">
+                <label for="filterBin">BIN</label>
+                <input id="filterBin" type="text" inputmode="numeric" maxlength="12" value="${filters.bin}" placeholder="Ex : 426881">
+            </div>
+            <div class="reservation-age">
+                <span>Âge</span>
+                <div><input id="filterAgeMin" type="number" min="18" max="99" value="${filters.ageMin}" placeholder="Min"><span>—</span><input id="filterAgeMax" type="number" min="18" max="99" value="${filters.ageMax}" placeholder="Max"></div>
+            </div>
+            <div class="reservation-field">
+                <label for="filterBank">Banque</label>
+                <input id="filterBank" type="text" list="shopBanks" value="${filters.bank}" placeholder="Toutes les banques" autocomplete="off">
+                <datalist id="shopBanks">${banks.map(bank => `<option value="${bank}"></option>`).join('')}</datalist>
+            </div>
+            <div class="reservation-field">
+                <label for="filterNetwork">Marque</label>
+                <select id="filterNetwork"><option value="">Toutes les marques</option>${networks.map(network => `<option value="${network}" ${filters.network === network ? 'selected' : ''}>${network}</option>`).join('')}</select>
+            </div>
+            <div class="reservation-field">
+                <label for="filterCity">Ville</label>
+                <input id="filterCity" type="text" value="${filters.city}" placeholder="Ville, région...">
+            </div>
+        </form>`;
+    }
+
     const q = store.q.toLowerCase().trim();
-    const all = store.products.filter(p =>
-        (p.name + ' ' + p.cat + ' ' + p.zone).toLowerCase().includes(q)
-    );
+    const all = store.products.filter(p => {
+        const matchesText = (p.name + ' ' + p.cat + ' ' + p.zone).toLowerCase().includes(q);
+        const matchesNew = !store.newOnly || p.isNew;
+        const matchesOrigin = !store.shopFilters.origin || p.name === store.shopFilters.origin;
+        const matchesBin = !store.shopFilters.bin || (p.card?.firstSix || '').startsWith(store.shopFilters.bin);
+        const matchesBank = !store.shopFilters.bank || (p.card?.bank || '').toLowerCase().includes(store.shopFilters.bank.toLowerCase());
+        const matchesNetwork = !store.shopFilters.network || p.card?.network === store.shopFilters.network;
+        const matchesCity = !store.shopFilters.city || (p.zone || '').toLowerCase().includes(store.shopFilters.city.toLowerCase());
+        return matchesText && matchesNew && matchesOrigin && matchesBin && matchesBank && matchesNetwork && matchesCity;
+    });
     const list = all.slice(0, store.limit);
 
     return `
@@ -102,10 +154,11 @@ export function renderShop() {
         <div class="view">
             <span>Affichage</span>
             ${[30, 60, 100, 0].map(n => `<button class="${store.limit === (n || 999) ? 'on' : ''}" data-limit="${n || 999}">${n || 'Tout'}</button>`).join('')}
+            <button class="${store.newOnly ? 'on' : ''}" data-new-only="${store.newOnly ? 'false' : 'true'}">Nouveau</button>
         </div>
 
         <div class="list" id="plist">
-            ${list.map(productCard).join('') || `<div class="empty"><b>Aucun résultat</b>Essayez le nom d’une marque ou d’un opérateur.</div>`}
+            ${list.map(renderShopProduct).join('') || `<div class="empty"><b>Aucun résultat</b>Essayez le nom d’une marque ou d’un opérateur.</div>`}
         </div>
     `;
 }

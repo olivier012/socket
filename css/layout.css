@@ -1,7 +1,7 @@
 .app {
     max-width: 480px;
     margin: 0 auto;
-    padding: 16px 16px calc(112px + env(safe-area-inset-bottom,0px));
+    padding: 72px 16px calc(112px + env(safe-area-inset-bottom,0px));
 }
 
 /* HEADER */
@@ -88,6 +88,80 @@
     transition:.25s; pointer-events:none; white-space:nowrap;
 }
 .toast.show { opacity:1; transform:translate(-50%,0); }
+
+.app-announcement {
+    position:fixed;
+    top:calc(env(safe-area-inset-top,0px) + 8px);
+    left:50%;
+    transform:translateX(-50%);
+    width:min(448px, calc(100% - 24px));
+    min-height:48px;
+    z-index:55;
+    border:1px solid rgba(192,255,21,.38);
+    border-radius:16px;
+    background:linear-gradient(135deg, rgba(192,255,21,.16), rgba(35,38,43,.96) 22%, rgba(23,25,29,.98));
+    color:var(--text);
+    box-shadow:
+        0 14px 34px rgba(0,0,0,.38),
+        inset 0 1px 0 rgba(255,255,255,.06),
+        0 0 18px rgba(192,255,21,.08);
+    backdrop-filter:blur(16px);
+    -webkit-backdrop-filter:blur(16px);
+    display:flex;
+    align-items:center;
+    gap:11px;
+    padding:8px 11px 8px 8px;
+}
+.app-announcement strong {
+    height:32px;
+    min-width:74px;
+    border-radius:11px;
+    background:var(--lime);
+    color:var(--bg);
+    font-size:10px;
+    line-height:32px;
+    text-align:center;
+    text-transform:uppercase;
+    letter-spacing:.7px;
+    box-shadow:0 6px 14px rgba(192,255,21,.16);
+}
+.app-announcement span,
+.app-announcement .announcement-copy {
+    min-width:0;
+    flex:1;
+    font-size:12px;
+    line-height:1.25;
+    font-weight:700;
+    letter-spacing:.1px;
+    transition:opacity .18s ease, transform .18s ease;
+}
+.app-announcement span.changing,
+.app-announcement .announcement-copy.changing {
+    opacity:0;
+    transform:translateY(4px);
+}
+.app-announcement .announcement-copy {
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    gap:1px;
+}
+.app-announcement .announcement-copy b {
+    font-size:12px;
+    line-height:1.1;
+}
+.app-announcement .announcement-copy small {
+    color:rgba(255,255,255,.68);
+    font-size:10px;
+    line-height:1.15;
+    font-weight:500;
+}
+.app-announcement[data-announcement="1"] strong {
+    background:#8f9cff;
+}
+.app-announcement[data-announcement="2"] strong {
+    background:#ffcf70;
+}
 
 @media (prefers-reduced-motion:reduce) {
     * { animation:none!important; transition:none!important; }

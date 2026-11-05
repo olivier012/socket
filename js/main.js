@@ -1,4 +1,5 @@
 import { telegramService } from './services/telegram.js?v=20261102-card-v13';
+import { renderAnnouncement, startAnnouncements } from './views/annonce.js?v=20261102-card-v42';
 
 document.addEventListener('gesturestart', event => event.preventDefault(), { passive: false });
 document.addEventListener('gesturechange', event => event.preventDefault(), { passive: false });
@@ -17,7 +18,7 @@ async function clearLegacyCaches() {
     try {
         const cacheNames = await caches.keys();
         await Promise.all(cacheNames
-            .filter(name => name.startsWith('socket-market-') && name !== 'socket-market-network-only-v33')
+            .filter(name => name.startsWith('socket-market-') && name !== 'socket-market-network-only-v42')
             .map(name => caches.delete(name)));
     } catch (error) {
         console.warn('Nettoyage du cache indisponible:', error);
@@ -28,7 +29,7 @@ async function prepareAppUpdates() {
     if (!('serviceWorker' in navigator)) return;
 
     try {
-        const registration = await navigator.serviceWorker.register('./sw.js?v=20261102-card-v33');
+        const registration = await navigator.serviceWorker.register('./sw.js?v=20261102-card-v42');
         registration.update().catch(() => {});
     } catch (error) {
         console.warn('Mise à jour automatique non disponible:', error);
@@ -75,4 +76,7 @@ async function startApp() {
     }
 }
 
+const announcement = document.getElementById('appAnnouncement');
+if (announcement) announcement.innerHTML = renderAnnouncement();
+startAnnouncements();
 startApp();

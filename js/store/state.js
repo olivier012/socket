@@ -3,6 +3,17 @@ export const store = {
     limit: 30,
     q: '',
     open: false,
+    shopSearchOpen: false,
+    newOnly: false,
+    shopFilters: {
+        origin: '',
+        bin: '',
+        ageMin: '',
+        ageMax: '',
+        bank: '',
+        network: '',
+        city: ''
+    },
     cart: [],       // [{id, qty}]
     orders: [],     // [{id, code, time}]
     rsv: [],        // [{bin, bank, level, region, ageMin, ageMax, quantity, total, createdAt, status}]

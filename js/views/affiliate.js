@@ -1,4 +1,4 @@
-import { store } from '../store/state.js?v=20261102-card-v33';
+import { store } from '../store/state.js?v=20261102-card-v34';
 import { getIcon } from '../utils/icons.js?v=20261102-card-v30';
 
 const eur = value => value.toFixed(2).replace('.', ',') + ' €';
@@ -28,7 +28,7 @@ export function renderAffiliate() {
                 Partager
             </button>
         </article>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div class="affiliate-stats">
             <article class="card stat"><div class="sub">Filleuls</div><div class="price">0</div></article>
             <article class="card stat"><div class="sub">Gains</div><div class="price">${eur(0)}</div></article>
         </div>

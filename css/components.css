@@ -66,12 +66,36 @@
 .searchbar input::placeholder { color:var(--muted); }
 
 /* FILTRE AFFICHAGE */
-.view { display:flex; align-items:center; gap:8px; margin:16px 0 12px; font-size:13px; color:var(--muted); }
+.view { display:flex; align-items:center; flex-wrap:wrap; gap:8px; margin:16px 0 12px; font-size:13px; color:var(--muted); }
 .view button {
     height:32px; padding:0 13px; border-radius:16px; background:var(--panel);
     color:var(--muted); font-size:13px; font-weight:500;
 }
 .view button.on { background:var(--lime); color:var(--bg); font-weight:700; }
+.view button[data-new-only] {
+    border:1px solid var(--line);
+    background:var(--panel);
+    min-width:76px;
+    transition:transform .2s, background .2s, box-shadow .2s, border-color .2s;
+}
+.view button[data-new-only].on {
+    border-color:var(--lime);
+    box-shadow:0 0 0 2px rgba(192,255,21,.18), 0 6px 18px rgba(192,255,21,.12);
+    animation:new-filter-block .65s ease-out;
+}
+@keyframes new-filter-block {
+    0% { transform:scale(.92); }
+    55% { transform:scale(1.08); }
+    100% { transform:scale(1); }
+}
+.shop-search-header { margin-bottom:14px; }
+.shop-search-actions-top { margin-bottom:4px; }
+.shop-search-form { display:grid; gap:10px; }
+.shop-search-form .reservation-field { grid-template-columns:105px minmax(0,1fr); }
+.shop-search-actions { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:6px; }
+.shop-search-actions button { height:48px; border-radius:24px; font-weight:800; }
+.shop-filter-reset { border:1px solid var(--line); background:var(--panel); color:var(--text); }
+.shop-filter-apply { background:var(--lime); color:var(--bg); }
 
 /* CARTES PRODUIT (Génériques) */
 .list { display:grid; gap:12px; }
@@ -602,6 +626,9 @@
 .affiliate-link-box span {
     min-width:0; flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
     color:var(--text); font-family:"Courier New",monospace; font-size:12px;
+}
+.affiliate-stats {
+    display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:12px; width:100%;
 }
 .affiliate-link-box button {
     width:36px; height:36px; flex:0 0 36px; border-radius:18px; display:grid; place-items:center;
